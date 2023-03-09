@@ -16,14 +16,19 @@ DEBUG = True
 
 # Connect to development database (POSTGRES)
 SQLALCHEMY_DATABASE_URI = f'postgresql://{dbUsername}:{dbPassword}@{dbHost}:{dbPort}/{dbName}'
+SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 # # Connect to production database
 # SQLALCHEMY_DATABASE_URI = f'postgresql+pg8000://{dbUsername}:{dbPassword}@{dbHost}:{dbPort}/{dbName}'
-
 # # Connect to development database
 # # SQLALCHEMY_DATABASE_URI = f'postgresql+psycopg://{dbUsername}:{dbPassword}@{dbHost}:{dbPort}/{dbName}'
 
-SQLALCHEMY_TRACK_MODIFICATIONS = False
+# Application Configuration
+SECRET_KEY = os.getenv("SECRET_KEY")
+DEBUG = os.getenv("ENVIRONEMENT") == "DEV"
+APPLICATION_ROOT = os.getenv("API_APPLICATION_ROOT", "/api")
+HOST = os.getenv("APPLICATION_HOST")
+PORT = int(os.getenv("APPLICATION_PORT", "3000"))
 
 if DEBUG:
     logging.basicConfig(

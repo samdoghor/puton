@@ -1,9 +1,10 @@
 import os
-from flask import Flask, jsonify, request, Response
+from flask import Blueprint, Flask, jsonify, request, Response
 from flask_migrate import Migrate
 import json
 
-# from models import db_setup
+from flask_restful import Api
+
 import config
 import routes
 from models import db
@@ -14,7 +15,6 @@ app = Flask(__name__)
 SECRET_KEY = os.urandom(32)
 app = Flask(__name__)
 app.config['SECRET_KEY'] = SECRET_KEY
-# db = db_setup(app)
 
 app.debug = config.DEBUG
 app.config["SQLALCHEMY_DATABASE_URI"] = config.SQLALCHEMY_DATABASE_URI
@@ -22,11 +22,13 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = config.SQLALCHEMY_TRACK_MODIFICAT
 db.init_app(app)
 db.app = app
 migrate = Migrate(app, db)
+api = Api(app)
 
+for blueprint in vars(routes).values():
+    if isinstance(blueprint, Blueprint):
+        app.register_blueprint(blueprint, url_prefix=config.APPLICATION_ROOT)
 
 """ Error handling """
-
-
 # error handler for 422
 @app.errorhandler(422)
 def unprocessable(error):
@@ -90,6 +92,6 @@ def internal_server_error(error):
 
 if __name__ == "__main__":
     app.debug = config.DEBUG
-    app.run(host=config.dbHost, port=config.dbPort)
+    app.run(host=config.HOST, port=config.PORT)
 
 # app.run()

@@ -1,24 +1,24 @@
 """
-Define the User model
+Define the Custommer model
 """
 # imports
 from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 from . import db
 
-class User(db.Model):
+class Customer(db.Model):
 
-    """ The User model """
+    """ The Customer model """
 
-    __tablename__ = "users"
+    __tablename__ = "customers"
 
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(32), nullable=False, unique=True)
     first_name = db.Column(db.String(300))
     last_name = db.Column(db.String(300))
     email = db.Column(db.String(100), nullable=False, unique=True)
-    phone = db.Column(db.String(15))
     password = db.Column(db.Text(), nullable=False)
+    phone = db.Column(db.String(15))
     country = db.Column(db.String(50))
     state = db.Column(db.String(70))
     city = db.Column(db.String(50))

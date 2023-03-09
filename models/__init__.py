@@ -2,7 +2,7 @@ from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
 
-from .user import User
+from .customer import Customer
 # def db_setup(app):
 #     app.config.from_object('config')
 #     db.app = app

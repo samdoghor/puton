@@ -1,1 +1,1 @@
-from .user import UserBlueprint
+from .customer import CustomerBlueprint
