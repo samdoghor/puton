@@ -1,9 +1,12 @@
 """ Defines the Customer repository """
 import sys
-from sqlalchemy import or_, and_
+
+from flask import jsonify
+from sqlalchemy import or_
+from sqlalchemy.exc import IntegrityError
+
 from models import Customer
 from utils.errors import DataNotFound, DuplicateData, InternalServerError
-from sqlalchemy.exc import IntegrityError, DataError
 
 
 class CustomerRepository:
@@ -17,7 +20,12 @@ class CustomerRepository:
             new_customer = Customer(username=username, first_name=first_name, last_name=last_name, email=email, phone=phone, country=country, state=state, city=city, street_name=street_name, zipcode=zipcode)
             new_customer.set_password(password)
 
-            return new_customer.save()
+            customer = new_customer.save() 
+
+            return jsonify({
+                "First Name": customer.first_name,
+                "Last Name": customer.last_name,
+            })
         
         except IntegrityError as e:
             message = e.orig.diag.message_detail
@@ -85,3 +93,17 @@ class CustomerRepository:
             customer.first_name = args['first_name']
 
         return customer.save()
+    
+    @staticmethod
+    def delete(customer_id):
+        """ Delete a customer by id """
+        if not customer_id:
+            raise DataNotFound(f"Store not found")
+        try:
+            query = Customer.query.filter(Customer.id == customer_id).first()
+            if not query:
+                raise DataNotFound(f"Customer Detail with {customer_id} not found")
+            return query.delete()
+        except DataNotFound as e:
+            print(sys.exc_info())
+            raise DataNotFound(f"Customer with {customer_id} not found")
