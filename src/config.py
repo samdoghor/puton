@@ -2,6 +2,7 @@
 import datetime
 import logging
 import os
+
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -17,11 +18,6 @@ DEBUG = True
 # Connect to development database (POSTGRES)
 SQLALCHEMY_DATABASE_URI = f'postgresql://{dbUsername}:{dbPassword}@{dbHost}:{dbPort}/{dbName}'
 SQLALCHEMY_TRACK_MODIFICATIONS = False
-
-# # Connect to production database
-# SQLALCHEMY_DATABASE_URI = f'postgresql+pg8000://{dbUsername}:{dbPassword}@{dbHost}:{dbPort}/{dbName}'
-# # Connect to development database
-# # SQLALCHEMY_DATABASE_URI = f'postgresql+psycopg://{dbUsername}:{dbPassword}@{dbHost}:{dbPort}/{dbName}'
 
 # Application Configuration
 SECRET_KEY = os.getenv("SECRET_KEY")

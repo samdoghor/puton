@@ -7,9 +7,10 @@ from datetime import datetime
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from . import db
+from .abc import BaseModel, MetaBaseModel
 
 
-class Customer(db.Model):
+class Customer(db.Model, BaseModel, metaclass=MetaBaseModel):
 
     """ The Customer model """
 

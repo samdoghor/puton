@@ -1,36 +1,44 @@
 import os
-from flask import Blueprint, Flask, jsonify, request, Response
-from flask_migrate import Migrate
-import json
 
+from flasgger import Swagger
+from flask import Blueprint, Flask, jsonify
+from flask_migrate import Migrate
 from flask_restful import Api
 
 import config
 import routes
 from models import db
 
-app = Flask(__name__)
-
 # configurations
 SECRET_KEY = os.urandom(32)
-app = Flask(__name__)
-app.config['SECRET_KEY'] = SECRET_KEY
+server = Flask(__name__)
+server.config['SECRET_KEY'] = SECRET_KEY
 
-app.debug = config.DEBUG
-app.config["SQLALCHEMY_DATABASE_URI"] = config.SQLALCHEMY_DATABASE_URI
-app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = config.SQLALCHEMY_TRACK_MODIFICATIONS  # noqa
-db.init_app(app)
-db.app = app
-migrate = Migrate(app, db)
-api = Api(app)
+server.config["SWAGGER"] = {
+    "swagger_version": "2.0",
+    "title": "Gomerce API",
+    'uiversion': 3,
+    "static_url_path": "/apidocs",
+    'openapi': '3.0.1'
+}
+Swagger(server)
+
+server.debug = config.DEBUG
+server.config["SQLALCHEMY_DATABASE_URI"] = config.SQLALCHEMY_DATABASE_URI
+server.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = config.SQLALCHEMY_TRACK_MODIFICATIONS
+db.init_app(server)
+db.app = server
+migrate = Migrate(server, db)
+api = Api(server)
 
 for blueprint in vars(routes).values():
     if isinstance(blueprint, Blueprint):
-        app.register_blueprint(blueprint, url_prefix=config.APPLICATION_ROOT)
+        server.register_blueprint(
+            blueprint, url_prefix=config.APPLICATION_ROOT)
 
 """ Error handling """
 # error handler for 422
-@app.errorhandler(422)
+@server.errorhandler(422)
 def unprocessable(error):
     return jsonify({
         "success": False,
@@ -39,7 +47,7 @@ def unprocessable(error):
     }), 422
 
 # error handler for 400
-@app.errorhandler(400)
+@server.errorhandler(400)
 def bad_request(error):
     print(error)
     return jsonify({
@@ -50,7 +58,7 @@ def bad_request(error):
 
 
 # error handler for 401
-@app.errorhandler(401)
+@server.errorhandler(401)
 def unauthorized(error):
     return jsonify({
         "success": False,
@@ -60,7 +68,7 @@ def unauthorized(error):
 
 
 # error handler for 403
-@app.errorhandler(403)
+@server.errorhandler(403)
 def forbidden(error):
     return jsonify({
         "success": False,
@@ -70,7 +78,7 @@ def forbidden(error):
 
 
 # error handler for 404
-@app.errorhandler(404)
+@server.errorhandler(404)
 def not_found(error):
     return jsonify({
         "success": False,
@@ -80,7 +88,7 @@ def not_found(error):
 
 
 # error handler for 500
-@app.errorhandler(500)
+@server.errorhandler(500)
 def internal_server_error(error):
     print({"error": error})
     return jsonify({
@@ -91,7 +99,5 @@ def internal_server_error(error):
 
 
 if __name__ == "__main__":
-    app.debug = config.DEBUG
-    app.run(host=config.HOST, port=config.PORT)
-
-# app.run()
+    server.debug = config.DEBUG
+    server.run(host=config.HOST, port=config.PORT)
