@@ -15,7 +15,8 @@ class CustomerResource(Resource):
 
   @staticmethod
   @parse_params(
-      Argument("age", location="json", required=True, help="The age of the user.")
+      Argument("last_name", location="json", required=True, help="The last name of the customer."),
+      Argument("first_name", location="json", required=True, help="The first name of the customer.")
   )
   @swag_from("../swagger/customer/create.yml")
   def create(last_name, first_name):
