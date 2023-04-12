@@ -18,7 +18,7 @@ class CustomerResource(Resource):
       Argument("last_name", location="json", required=True, help="The last name of the customer."),
       Argument("first_name", location="json", required=True, help="The first name of the customer.")
   )
-  @swag_from("../swagger/customer/create.yml")
+#   @swag_from("../swagger/customer/create.yml")
   def create(last_name, first_name):
       """ Create an customer based on the sent information """
       customer = CustomerRepository.create(last_name=last_name, first_name=first_name)
@@ -26,7 +26,7 @@ class CustomerResource(Resource):
       return jsonify({"customer": customer.json})
 
   @staticmethod
-  @swag_from("../swagger/customer/read_one.yml")
+#   @swag_from("../swagger/customer/read_one.yml")
   def read_one(customer_id):
       """ Return a customer key information based on their id """
       customer = CustomerRepository.read_one(customer_id=customer_id)
@@ -47,7 +47,7 @@ class CustomerResource(Resource):
       return jsonify({"Customer": customer_data.json})
 
   @staticmethod
-  @swag_from("../swagger/customer/read_all.yml")
+#   @swag_from("../swagger/customer/read_all.yml")
   def read_all():
       """ Return customers key information based """
       customers = CustomerRepository.read_all()
@@ -75,7 +75,7 @@ class CustomerResource(Resource):
   @parse_params(
       Argument("age", location="json", required=True, help="The age of the user.")
   )
-  @swag_from("../swagger/customer/uodate.yml")
+#   @swag_from("../swagger/customer/update.yml")
   def update(id, **args):
       """ Update an customer based on the sent information """
       repository = CustomerRepository()
@@ -87,7 +87,7 @@ class CustomerResource(Resource):
   @parse_params(
       Argument("age", location="json", required=True, help="The age of the user.")
   )
-  @swag_from("../swagger/customer/delete.yml")
+#   @swag_from("../swagger/customer/delete.yml")
   def delete(id):
       """ Update an customer based on the sent information """
       repository = CustomerRepository()

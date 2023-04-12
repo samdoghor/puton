@@ -38,7 +38,7 @@ class CustomerRepository:
         customer = self.get(id)
         customer.age = args
 
-        return customer.save()
+        return customer.update()
 
     def delete(self, id):
         """ Delete a user """

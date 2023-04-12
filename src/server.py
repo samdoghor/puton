@@ -16,10 +16,10 @@ server.config['SECRET_KEY'] = SECRET_KEY
 
 server.config["SWAGGER"] = {
     "swagger_version": "2.0",
-    "title": "Gomerce API",
+    "title": "MSB API",
     'uiversion': 3,
     "static_url_path": "/apidocs",
-    'openapi': '3.0.1'
+    'openapi': '3.0.0'
 }
 Swagger(server)
 
