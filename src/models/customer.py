@@ -1,5 +1,5 @@
 """
-Define the Custommer model
+Define the Customer model
 """
 # imports
 from datetime import datetime

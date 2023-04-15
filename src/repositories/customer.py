@@ -1,21 +1,17 @@
 """ Defines the Customer repository """
-import sys
 
+import os
 from flask import jsonify
-from sqlalchemy import or_
-from sqlalchemy.exc import IntegrityError
-
 from models import Customer
 
 
 class CustomerRepository:
     """ The repository for the customer model """
 
-    @staticmethod
-    def create(username, first_name, last_name, email, password, phone, country, state, city, street_name, zipcode):
+    def create(username, first_name, last_name, email, phone, country, state, city, street_name, zipcode):
         """ Create a new customer """
         customer = Customer(username=username, first_name=first_name, last_name=last_name, email=email, phone=phone, country=country, state=state, city=city, street_name=street_name, zipcode=zipcode)
-        customer.set_password(password)
+        customer.set_password('')
 
         return customer.save()
 
@@ -33,17 +29,14 @@ class CustomerRepository:
 
         return customers
 
-    def update(self, id, **args):
-        """ Update a user's details """
-        customer = self.get(id)
-        customer.age = args
+    def update(customer_id, **args):
+        """ Update a customer details """
+        customer = Customer.query.filter_by(id=customer_id).first()
 
         return customer.update()
 
-    def delete(self, id):
-        """ Delete a user """
-        customer = self.get(id)
+    def delete(customer_id):
+        """ Delete a customer """
+        customer = Customer.query.filter_by(id=customer_id).first()
 
         return customer.delete()
-
-
