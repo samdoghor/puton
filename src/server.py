@@ -1,7 +1,5 @@
-import os
-
 from flasgger import Swagger
-from flask import Blueprint, Flask, jsonify
+from flask import Blueprint, Flask, jsonify, request
 from flask_migrate import Migrate
 from flask_restful import Api
 
@@ -10,9 +8,8 @@ import routes
 from models import db
 
 # configurations
-SECRET_KEY = os.urandom(32)
 server = Flask(__name__)
-server.config['SECRET_KEY'] = SECRET_KEY
+server.config['SECRET_KEY'] = config.SECRET_KEY
 
 server.config["SWAGGER"] = {
     "swagger_version": "2.0",
@@ -35,11 +32,15 @@ for blueprint in vars(routes).values():
     if isinstance(blueprint, Blueprint):
         server.register_blueprint(
             blueprint, url_prefix=config.APPLICATION_ROOT)
+        
 
 """ Error handling """
 # error handler for 422
+
+
 @server.errorhandler(422)
 def unprocessable(error):
+    print(error)
     return jsonify({
         "success": False,
         "error": 422,
@@ -47,6 +48,8 @@ def unprocessable(error):
     }), 422
 
 # error handler for 400
+
+
 @server.errorhandler(400)
 def bad_request(error):
     print(error)
@@ -60,6 +63,7 @@ def bad_request(error):
 # error handler for 401
 @server.errorhandler(401)
 def unauthorized(error):
+    print(error)
     return jsonify({
         "success": False,
         "error": 401,
@@ -70,6 +74,7 @@ def unauthorized(error):
 # error handler for 403
 @server.errorhandler(403)
 def forbidden(error):
+    print(error)
     return jsonify({
         "success": False,
         "error": 403,
@@ -80,6 +85,7 @@ def forbidden(error):
 # error handler for 404
 @server.errorhandler(404)
 def not_found(error):
+    print(error)
     return jsonify({
         "success": False,
         "error": 404,

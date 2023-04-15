@@ -59,7 +59,7 @@ python src/server.py
 
 ## Contributing
 
-See the CONTRIBUTING.md file for details on how to contribute.
+See the [CONTRIBUTING](CONTRIBUTING.md) file for details on how to contribute.
 
 ## Contact
 

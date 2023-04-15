@@ -1,8 +1,7 @@
 """
 Define the resources for the Customer
 """
-from flasgger import swag_from
-from flask import jsonify
+from flask import jsonify, request
 from flask_restful import Resource
 from flask_restful.reqparse import Argument
 
@@ -11,86 +10,118 @@ from utils.parse_params import parse_params
 
 
 class CustomerResource(Resource):
-  """ methods relative to the customer """
+    """ methods relative to the customer """
 
-  @staticmethod
-  @parse_params(
-      Argument("last_name", location="json", required=True, help="The last name of the customer."),
-      Argument("first_name", location="json", required=True, help="The first name of the customer.")
-  )
+    @staticmethod
+    @parse_params(
+        Argument("username", location="json",
+                 help="The username of the customer."),
+        Argument("first_name", location="json",
+                 help="The first_name of the customer."),
+        Argument("last_name", location="json",
+                 help="The last_name of the customer."),
+        Argument("email", location="json",
+                 help="The email of the customer."),
+        Argument("phone", location="json",
+                 help="The phone of the customer."),
+        Argument("country", location="json",
+                 help="The country of the customer."),
+        Argument("state", location="json",
+                 help="The state of the customer."),
+        Argument("city", location="json",
+                 help="The city of the customer."),
+        Argument("street_name", location="json",
+                 help="The street_name of the customer."),
+        Argument("zipcode", location="json",
+                 help="The zipcode of the customer.")                
+    )
 #   @swag_from("../swagger/customer/create.yml")
-  def create(last_name, first_name):
-      """ Create an customer based on the sent information """
-      customer = CustomerRepository.create(last_name=last_name, first_name=first_name)
+    def create(username, first_name, last_name, email, phone, country, state, city, street_name, zipcode):
+        """ Create an customer based on the sent information """
+        customer = CustomerRepository
+        customer.create(username=username, first_name=first_name, last_name=last_name, email=email, phone=phone, country=country, state=state, city=city, street_name=street_name, zipcode=zipcode)
 
-      return jsonify({"customer": customer.json})
+        return jsonify({"Message": f"Customer was created successfully",
+                        
+                        "Username": customer.username,
+                        "First Name": customer.first_name,
+                        "Last Name": customer.last_name,
+                        "Email Address": customer.email,
+                        "Phone Number": customer.phone,
+                        "Country": customer.country,
+                        "State": customer.state,
+                        "City": customer.city,
+                        "Street Name": customer.street_name,
+                        "Zipcode": customer.zipcode
+                        })
 
-  @staticmethod
+    @staticmethod
 #   @swag_from("../swagger/customer/read_one.yml")
-  def read_one(customer_id):
-      """ Return a customer key information based on their id """
-      customer = CustomerRepository.read_one(customer_id=customer_id)
+    def read_one(customer_id):
+        """ Return a customer key information based on their id """
+        customer = CustomerRepository.read_one(customer_id=customer_id)
 
-      customer_data = jsonify({
-          "Username": customer.username,
-          "First Name": customer.first_name,
-          "Last Name": customer.last_name,
-          "Email Address": customer.email,
-          "Phone Number": customer.phone,
-          "Country": customer.country,
-          "State": customer.state,
-          "City": customer.city,
-          "Street Name": customer.street_name,
-          "Zipcode": customer.zipcode
+        customer_data = jsonify({
+            "Username": customer.username,
+            "First Name": customer.first_name,
+            "Last Name": customer.last_name,
+            "Email Address": customer.email,
+            "Phone Number": customer.phone,
+            "Country": customer.country,
+            "State": customer.state,
+            "City": customer.city,
+            "Street Name": customer.street_name,
+            "Zipcode": customer.zipcode
         })
 
-      return jsonify({"Customer": customer_data.json})
+        return jsonify({
+            "Message": f"Customer with id {customer_id} was retrieved successfully",
 
-  @staticmethod
+            "Customer": customer_data.json
+            })
+
+    @staticmethod
 #   @swag_from("../swagger/customer/read_all.yml")
-  def read_all():
-      """ Return customers key information based """
-      customers = CustomerRepository.read_all()
+    def read_all():
+        """ Return customers key information based """
+        customers = CustomerRepository.read_all()
 
-      customers_data = []
-      
-      for  x in customers:
-        customers_data.append({
-            "Username": x.username,
-            "First Name": x.first_name,
-            "Last Name": x.last_name,
-            "Email Address": x.email,
-            "Phone Number": x.phone,
-            "Country": x.country,
-            "State": x.state,
-            "City": x.city,
-            "Street Name": x.street_name,
-            "Zipcode": x.zipcode
-        })
+        customers_data = []
 
-      return jsonify({"Customers": customers_data})
+        for x in customers:
+            customers_data.append({
+                "Username": x.username,
+                "First Name": x.first_name,
+                "Last Name": x.last_name,
+                "Email Address": x.email,
+                "Phone Number": x.phone,
+                "Country": x.country,
+                "State": x.state,
+                "City": x.city,
+                "Street Name": x.street_name,
+                "Zipcode": x.zipcode
+            })
 
+        return jsonify({
+            "Message": f"Customers list was succesfully retrieved",
 
-  @staticmethod
-  @parse_params(
-      Argument("age", location="json", required=True, help="The age of the user.")
-  )
+            "Customers": customers_data
+            })
+
+    @staticmethod
 #   @swag_from("../swagger/customer/update.yml")
-  def update(id, **args):
-      """ Update an customer based on the sent information """
-      repository = CustomerRepository()
-      customer = repository.update(id=id)
+    def update(customer_id, **args):
+        """ Update an customer based on the sent information """
+        customer = CustomerRepository
+        customer.update(customer_id=customer_id)
 
-      return jsonify({"customer": customer.json})
-  
-  @staticmethod
-  @parse_params(
-      Argument("age", location="json", required=True, help="The age of the user.")
-  )
+        return jsonify({"Message": f"Customer with user id {customer_id} was updated successfully"})
+
+    @staticmethod
 #   @swag_from("../swagger/customer/delete.yml")
-  def delete(id):
-      """ Update an customer based on the sent information """
-      repository = CustomerRepository()
-      customer = repository.delete(id=id)
+    def delete(customer_id):
+        """ Delete an customer based on the sent information """
+        customer = CustomerRepository
+        customer.delete(customer_id=customer_id)
 
-      return jsonify({"customer": customer.json})
+        return jsonify({"Message": f"Customer with id {customer_id} was deleted successfully"})

@@ -81,3 +81,4 @@ class BaseModel:
     def delete(self):
         db.session.delete(self)
         db.session.commit()
+        return self
