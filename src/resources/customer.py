@@ -13,28 +13,6 @@ class CustomerResource(Resource):
     """ methods relative to the customer """
 
     @staticmethod
-    @parse_params(
-        Argument("username", location="json",
-                 help="The username of the customer."),
-        Argument("first_name", location="json",
-                 help="The first_name of the customer."),
-        Argument("last_name", location="json",
-                 help="The last_name of the customer."),
-        Argument("email", location="json",
-                 help="The email of the customer."),
-        Argument("phone", location="json",
-                 help="The phone of the customer."),
-        Argument("country", location="json",
-                 help="The country of the customer."),
-        Argument("state", location="json",
-                 help="The state of the customer."),
-        Argument("city", location="json",
-                 help="The city of the customer."),
-        Argument("street_name", location="json",
-                 help="The street_name of the customer."),
-        Argument("zipcode", location="json",
-                 help="The zipcode of the customer.")                
-    )
 #   @swag_from("../swagger/customer/create.yml")
     def create(username, first_name, last_name, email, phone, country, state, city, street_name, zipcode):
         """ Create an customer based on the sent information """
