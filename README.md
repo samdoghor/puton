@@ -17,7 +17,7 @@ source env/bin/activate
 
 - Install dependencies using pipenv:
 
-```Copy code
+```bash Copy code
 pipenv install
 ```
 
@@ -35,19 +35,19 @@ set FLASK_APP=src/server.py
 
 - To enable auto-restart when changes are detected, set debug to true:
 
-```arduino Copy code
+```bash Copy code
 export FLASK_DEBUG=True
 ```
 
 On Mac, use the following command instead:
 
-```arduino Copy code
+```bash Copy code
 set FLASK_DEBUG=True
 ```
 
 - Create necessary tables in the database by running:
 
-```Copy code
+```bash Copy code
 flask db upgrade
 ```
 

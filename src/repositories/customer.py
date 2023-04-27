@@ -1,42 +1,45 @@
 """ Defines the Customer repository """
 
-import os
-from flask import jsonify
 from models import Customer
+from utils.errors import DataNotFound
 
 
 class CustomerRepository:
     """ The repository for the customer model """
 
-    def create(username, first_name, last_name, email, phone, country, state, city, street_name, zipcode):
+    def create(self, **args):
         """ Create a new customer """
-        customer = Customer(username=username, first_name=first_name, last_name=last_name, email=email, phone=phone, country=country, state=state, city=city, street_name=street_name, zipcode=zipcode)
+        customer = Customer(username=args['username'], first_name=args['first_name'], last_name=args['last_name'], email=args['email'], phone=args['phone'], country=args['country'], state=args['state'], city=args['city'], street_name=args['street_name'], zipcode=args['zipcode'])
         customer.set_password('')
-
-        return customer.save()
-
-    @staticmethod
-    def read_one(customer_id):
-        """ Query a customer by id """
-        customer = Customer.query.filter_by(id=customer_id).first()
 
         return customer
 
-    @staticmethod
-    def read_all():
+    def read_one(self, customer_id):
+        """ Query a customer by id """
+
+        if customer_id is None:
+             raise DataNotFound(f"Customer not found, no detail provided")
+        
+        try:
+            customer = Customer.query.filter_by(id=customer_id).first()
+            return customer
+        except:
+            raise DataNotFound(f"Customer with {customer_id} not found")
+
+    def read_all(self):
         """ Query all customer """
         customers = Customer.query.all()
 
         return customers
 
-    def update(customer_id, **args):
+    def update(self, customer_id, **args):
         """ Update a customer details """
         customer = Customer.query.filter_by(id=customer_id).first()
 
-        return customer.update()
+        return customer
 
-    def delete(customer_id):
+    def delete(self, customer_id):
         """ Delete a customer """
         customer = Customer.query.filter_by(id=customer_id).first()
 
-        return customer.delete()
+        return customer

@@ -27,7 +27,7 @@ sqlalchemy = "==2.0.5.post1"
 tomli = "==2.0.1"
 typing-extensions = "==4.5.0"
 werkzeug = "==2.2.3"
-flasgger = "*"
+flasgger = "==0.9.5"
 
 [dev-packages]
 
