@@ -14,11 +14,12 @@ server.config['SECRET_KEY'] = config.SECRET_KEY
 server.config["SWAGGER"] = {
     "swagger_version": "2.0",
     "title": "MSB API",
-    'uiversion': 3,
+    "uiversion": 3,
     "static_url_path": "/apidocs",
-    'openapi': '3.0.0'
 }
-Swagger(server)
+swagger_config = Swagger.DEFAULT_CONFIG.copy()
+swagger_config["openapi"] = "3.0.2"
+swagger = Swagger(server, config=swagger_config)
 
 server.debug = config.DEBUG
 server.config["SQLALCHEMY_DATABASE_URI"] = config.SQLALCHEMY_DATABASE_URI
@@ -32,7 +33,22 @@ for blueprint in vars(routes).values():
     if isinstance(blueprint, Blueprint):
         server.register_blueprint(
             blueprint, url_prefix=config.APPLICATION_ROOT)
-        
+
+# homepage
+@server.route('/')
+def index():
+        """ Create an customer based on the sent information """
+
+        server = jsonify ({
+            "App Name": "MSB App",
+            "Current URL" : f"{request.url}",
+            "Endpoints Access" : "http://127.0.0.1:3303/api/[endpoints]",
+            "Message": "The server is up and running",
+            "Version" : "1.0.0"
+        })
+
+        return server 
+
 
 """ Error handling """
 # error handler for 422
