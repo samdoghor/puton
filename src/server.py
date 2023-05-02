@@ -18,8 +18,8 @@ server.config["SWAGGER"] = {
     "static_url_path": "/apidocs",
 }
 swagger_config = Swagger.DEFAULT_CONFIG.copy()
-swagger_config["openapi"] = "3.0.2"
-swagger = Swagger(server, config=swagger_config)
+swagger_config["openapi"] = "3.0.3"
+Swagger(server, config=swagger_config)
 
 server.debug = config.DEBUG
 server.config["SQLALCHEMY_DATABASE_URI"] = config.SQLALCHEMY_DATABASE_URI
