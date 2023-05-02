@@ -57,6 +57,12 @@ flask db upgrade
 python src/server.py
 ```
 
+## Data source
+
+The statistics, fixtures, and other data used by MBS are obtained from the API-FOOTBALL platform [https://www.api-football.com/](https://www.api-football.com/). This API provides up-to-date information on a wide range of soccer leagues and matches from around the world.
+
+To use the API in your own projects, you will need to sign up for an API key on the API-FOOTBALL website. Once you have an API key, you can set it in the `.env` file under the `API-FOOTBALL-KEY` variable.
+
 ## Contributing
 
 See the [CONTRIBUTING](CONTRIBUTING.md) file for details on how to contribute.
