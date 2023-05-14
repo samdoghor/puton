@@ -2,21 +2,16 @@
 import datetime
 import logging
 import os
+import sqlite3
 
 from dotenv import load_dotenv
 
 load_dotenv()
-dbUsername = os.getenv('DB_USERNAME')
-dbPassword = os.getenv('DB_PASSWORD')
-dbHost = os.getenv('DB_HOST')
-dbPort = os.getenv('DB_PORT')
-dbName = os.getenv('DB_NAME')
-
 # Enable debug mode.
 DEBUG = True
 
-# Connect to development database (POSTGRES)
-SQLALCHEMY_DATABASE_URI = f'postgresql://{dbUsername}:{dbPassword}@{dbHost}:{dbPort}/{dbName}'
+# Connect to development database (SQLite)
+SQLALCHEMY_DATABASE_URI = 'sqlite:///../../mbs.db'
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 # Application Configuration
