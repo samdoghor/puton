@@ -22,7 +22,6 @@ SQLALCHEMY_TRACK_MODIFICATIONS = False
 # Application Configuration
 SECRET_KEY = os.getenv("SECRET_KEY")
 ENVIRONMENT = os.getenv("ENVIRONMENT") == "DEV"
-APPLICATION_ROOT = os.getenv("API_APPLICATION_ROOT", "/api")
 HOST = os.getenv("APPLICATION_HOST")
 PORT = int(os.getenv("APPLICATION_PORT", "3000"))
 
