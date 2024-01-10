@@ -1,6 +1,6 @@
 # MBS
 
-MBS is a sports betting app that uses the Martingale system with smart algorithms to adjust bet amounts, customizable limits, win/loss thresholds, detailed analytics, and advanced security features. It improves the traditional Martingale system for fewer losses and increased winning streaks. [Read More](MARTINGALE.MD)
+Puton is a sports betting app that uses the Martingale system with smart algorithms to adjust bet amounts, customizable limits, win/loss thresholds, detailed analytics, and advanced security features. It improves the traditional Martingale system for fewer losses and increased winning streaks. [Read More](MARTINGALE.md)
 
 ## Installation
 
