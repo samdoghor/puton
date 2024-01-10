@@ -40,3 +40,4 @@ else:
         pid:%(process)s module:%(module)s %(message)s",
         datefmt="%H:%M:%S",
     )
+

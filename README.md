@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # MBS
 
 Puton is a sports betting app that uses the Martingale system with smart algorithms to adjust bet amounts, customizable limits, win/loss thresholds, detailed analytics, and advanced security features. It improves the traditional Martingale system for fewer losses and increased winning streaks. [Read More](MARTINGALE.md)
@@ -84,3 +85,6 @@ While the Martingale betting system may be a popular strategy, it is crucial to 
 - Losses and Risk: While the Martingale system can offer short-term wins, it is vital to understand that no betting system can guarantee consistent profits. A losing streak can result in substantial financial losses, especially if the required bet sizes exceed your bankroll or the table limits imposed by the casino. It is crucial to approach gambling with a realistic mindset, acknowledging the possibility of losses.
 
 - No Liability: As the user of the Martingale system or any other betting strategy, you acknowledge that the outcomes of your gambling activities are solely your responsibility. No one can be held accountable or responsible for any losses incurred while using the Martingale system or any other betting strategy. It is essential to make informed decisions, exercise caution, and acknowledge the risks involved in gambling.
+=======
+# PUTON
+>>>>>>> 35ecb0bea6c12bcb83ca8cbc728598d6c4a6a744
