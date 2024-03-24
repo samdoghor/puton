@@ -9,6 +9,8 @@ pycodestyle = "*"
 flake8 = "*"
 python-dotenv = "*"
 pandas = "*"
+google-generativeai = "*"
+sqlalchemy = "*"
 
 [dev-packages]
 
