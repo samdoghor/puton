@@ -1,0 +1,27 @@
+# ai
+
+ai_api_key = ''
+ai_model = ''
+
+# application
+
+application_host='0.0.0.0'
+application_port=3000
+apiApplication_root=''
+apiApplication_path=''
+
+# database
+
+database_host='localhost'
+database_port=5432
+database_username='postgres'
+database_password=''
+database_name=''
+
+# environment
+
+environment='dev'
+
+# security
+
+secret_key=''
