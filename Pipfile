@@ -11,6 +11,10 @@ python-dotenv = "*"
 pandas = "*"
 google-generativeai = "*"
 sqlalchemy = "*"
+flask = "*"
+flask-migrate = "*"
+flask-sqlalchemy = "*"
+psycopg = "*"
 
 [dev-packages]
 
