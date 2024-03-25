@@ -1,8 +1,9 @@
-"""src/models/country.py
+"""src/models/venue.py
 
 Keyword arguments:
 argument -- db.Model, BaseModel, metaclass=MetaBaseModel
-Return: Country's id, name, abbr, flag, teams, leauges, created_at, updated_at
+Return: Venue's id, name, address, city, capacity, team_id, created_at,
+updated_at
 """
 
 
@@ -15,22 +16,23 @@ from . import db
 from .abc import BaseModel, MetaBaseModel
 
 
-class CountryModel(db.Model, BaseModel, metaclass=MetaBaseModel):
-    """ Country model """
+class VenueModel(db.Model, BaseModel, metaclass=MetaBaseModel):
+    """ Venue model """
 
-    __tablename__ = 'countries'
+    __tablename__ = 'venues'
 
     id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid4)
     name = db.Column(db.String(50), nullable=False)
-    abbr = db.Column(db.String(10), nullable=False)
-    flag = db.Column(db.String(), nullable=True)
+    address = db.Column(db.String(10), nullable=False)
+    city = db.Column(db.String(), nullable=True)
+    capacity = db.Column(db.Integer, nullable=False)
 
     created_at = db.Column(
         db.DateTime(), default=datetime.utcnow, nullable=False)
     updated_at = db.Column(db.DateTime(), onupdate=datetime.utcnow,
                            default=datetime.utcnow, nullable=False)
 
-    # relationships
+    # foreign keys
 
-    teams = db.relationship('TeamModel', backref='countries', lazy=True)
-    leauges = db.relationship('LeagueModel', backref='countries', lazy=True)
+    team_id = db.Column(UUID(as_uuid=True), db.ForeignKey(
+        'teams.id'), nullable=False)
