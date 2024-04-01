@@ -41,5 +41,10 @@ class TeamModel(db.Model, BaseModel, metaclass=MetaBaseModel):
 
     # relationships
 
-    games = db.relationship('GameModel', backref='teams', lazy=True)
+    games = db.relationship(
+        'GameModel', foreign_keys='GameModel.home_team_id', backref='teams',
+        lazy=True)
+    games = db.relationship(
+        'GameModel', foreign_keys='GameModel.away_team_id', backref='teams',
+        lazy=True)
     venues = db.relationship('VenueModel', backref='teams', lazy=True)

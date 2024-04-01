@@ -15,6 +15,7 @@ flask = "*"
 flask-migrate = "*"
 flask-sqlalchemy = "*"
 psycopg = "*"
+flask-restful = "*"
 
 [dev-packages]
 

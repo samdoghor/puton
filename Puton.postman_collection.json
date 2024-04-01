@@ -1,0 +1,587 @@
+{
+	"info": {
+		"_postman_id": "ddffafe3-4421-4f55-86f1-e16b2df19b4e",
+		"name": "Puton",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "21686564"
+	},
+	"item": [
+		{
+			"name": "Country",
+			"item": [
+				{
+					"name": "create_country",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"England\",\r\n    \"abbr\": \"GB-ENG\",\r\n    \"flag\": \"https//cloudinary.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api_url}}countries",
+							"host": [
+								"{{api_url}}countries"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get_all_countries",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api_url}}countries",
+							"host": [
+								"{{api_url}}countries"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get_one_country",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api_url}}countries/4d7e81ca-45b6-4136-a002-895631d08b77",
+							"host": [
+								"{{api_url}}countries"
+							],
+							"path": [
+								"4d7e81ca-45b6-4136-a002-895631d08b77"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update_country",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Nigeria\",\r\n    \"abbr\": \"NGA\",\r\n    \"flag\": \"https//cloudinary.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api_url}}countries/4d7e81ca-45b6-4136-a002-895631d08b77",
+							"host": [
+								"{{api_url}}countries"
+							],
+							"path": [
+								"4d7e81ca-45b6-4136-a002-895631d08b77"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete_country",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api_url}}countries/4acd59c0-4a2b-409b-994f-ab28fc7f48d9",
+							"host": [
+								"{{api_url}}countries"
+							],
+							"path": [
+								"4acd59c0-4a2b-409b-994f-ab28fc7f48d9"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "League",
+			"item": [
+				{
+					"name": "create_league",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Carabao Cup\",\r\n    \"league_type\": \"Cup\",\r\n    \"abbr\": \"EFL Cup\",\r\n    \"logo\": \"https//cloudinary.com\",\r\n    \"country_id\": \"610781b5-1613-457b-8deb-a55af3d8a52e\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api_url}}leagues",
+							"host": [
+								"{{api_url}}leagues"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get_all_leagues",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api_url}}leagues",
+							"host": [
+								"{{api_url}}leagues"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get_one_league",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api_url}}leagues/7df22bfd-ae2d-438b-8e21-cdaabcf5bcff",
+							"host": [
+								"{{api_url}}leagues"
+							],
+							"path": [
+								"7df22bfd-ae2d-438b-8e21-cdaabcf5bcff"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update_league",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"abbr\": \"EPL\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api_url}}leagues/7df22bfd-ae2d-438b-8e21-cdaabcf5bcff",
+							"host": [
+								"{{api_url}}leagues"
+							],
+							"path": [
+								"7df22bfd-ae2d-438b-8e21-cdaabcf5bcff"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete_league",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api_url}}leagues/4acd59c0-4a2b-409b-994f-ab28fc7f48d9",
+							"host": [
+								"{{api_url}}leagues"
+							],
+							"path": [
+								"4acd59c0-4a2b-409b-994f-ab28fc7f48d9"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Season",
+			"item": [
+				{
+					"name": "create_season",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Parse the provided dates into JavaScript Date objects\r",
+									"const startDate = new Date(\"2014-08-16\");\r",
+									"const endDate = new Date(\"2015-05-24\");\r",
+									"\r",
+									"// Format the dates as YYYY-MM-DD\r",
+									"const startDateString = startDate.toISOString().split('T')[0];\r",
+									"const endDateString = endDate.toISOString().split('T')[0];\r",
+									"\r",
+									"// Set the date strings as environment variables in Postman\r",
+									"pm.environment.set('start_date', startDateString);\r",
+									"pm.environment.set('end_date', endDateString);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"start_date\": \"{{start_date}}\",\r\n    \"end_date\": \"{{end_date}}\",\r\n    \"current_season\": \"True\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api_url}}seasons",
+							"host": [
+								"{{api_url}}seasons"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get_all_seasons",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api_url}}seasons",
+							"host": [
+								"{{api_url}}seasons"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get_one_season",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api_url}}seasons/13c0e613-84f1-4941-98fb-d0312ef6cfc4",
+							"host": [
+								"{{api_url}}seasons"
+							],
+							"path": [
+								"13c0e613-84f1-4941-98fb-d0312ef6cfc4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update_season",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"current_season\": false\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api_url}}seasons/13c0e613-84f1-4941-98fb-d0312ef6cfc4",
+							"host": [
+								"{{api_url}}seasons"
+							],
+							"path": [
+								"13c0e613-84f1-4941-98fb-d0312ef6cfc4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete_league",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api_url}}leagues/4acd59c0-4a2b-409b-994f-ab28fc7f48d9",
+							"host": [
+								"{{api_url}}leagues"
+							],
+							"path": [
+								"4acd59c0-4a2b-409b-994f-ab28fc7f48d9"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "index",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{api_url}}",
+					"host": [
+						"{{api_url}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "api_url",
+			"value": "http://127.0.0.1:3000/puton-api/"
+		}
+	]
+}

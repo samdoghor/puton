@@ -22,11 +22,9 @@ class SeasonModel(db.Model, BaseModel, metaclass=MetaBaseModel):
     __tablename__ = "seasons"
 
     id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid4)
-    season = db.Column(db.String(50), nullable=False)
-    year = db.Column(db.Integer, nullable=False)
-    start_date = db.Column(db.DateTime(), nullable=False)
-    end_date = db.Column(db.DateTime(), nullable=False)
-    current = db.Column(db.Boolean, nullable=False, default=False)
+    start_date = db.Column(db.Date(), nullable=False)
+    end_date = db.Column(db.Date(), nullable=False)
+    current_season = db.Column(db.Boolean, nullable=False, default=False)
 
     created_at = db.Column(
         db.DateTime(), default=datetime.utcnow, nullable=False)

@@ -26,7 +26,6 @@ db.init_app(server)
 db.app = server
 migrate = Migrate(server, db)
 
-
 # blueprint config to register endpoints
 
 for blueprint in vars(routes).values():
