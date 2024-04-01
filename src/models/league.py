@@ -23,6 +23,7 @@ class LeagueModel(db.Model, BaseModel, metaclass=MetaBaseModel):
 
     id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid4)
     name = db.Column(db.String(50), nullable=False)
+    abbr = db.Column(db.String(50), nullable=False)
     league_type = db.Column(db.String(50), nullable=False)
     logo = db.Column(db.String(), nullable=True)
 

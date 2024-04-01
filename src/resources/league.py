@@ -1,68 +1,72 @@
-"""src/resources/season.py
+"""src/resources/league.py
 
 Keyword arguments:
 argument -- id, **args
-Return: Season's CRUD
+Return: League's CRUD
 """
-
-from datetime import datetime
 
 from flask.json import jsonify
 from flask_restful import Resource
 from flask_restful.reqparse import Argument
 from sqlalchemy.exc import DataError
 
-from models import SeasonModel
+from models import LeagueModel
 from utils import (Conflict, DataNotFound, Forbidden, InternalServerError,
                    parse_params)
 
 
-class SeasonResource(Resource):
-    """ This class performs CRUD Operation on Season """
+class LeagueResource(Resource):
+    """ This class performs CRUD Operation on League """
 
     @staticmethod
     @parse_params(
-        Argument("start_date", location="json", required=True,
-                 help="The date the league started"),
-        Argument("end_date", location="json", required=True,
-                 help="The date the league ended"),
-        Argument("current_season", location="json", required=True, type=bool,
-                 help="Is this the current season")
+        Argument("name", location="json", required=True,
+                 help="The name of the league"),
+        Argument("abbr", location="json", required=True,
+                 help="The abbreviation of the league"),
+        Argument("league_type", location="json", required=True,
+                 help="The type of league"),
+        Argument("logo", location="json", required=True,
+                 help="The logo of the league"),
+        Argument("country_id", location="json", required=True,
+                 help="The country which the league belong to")
     )
-    def create(start_date, end_date, current_season):
-        """ creates a new season """
+    def create(name, abbr, league_type, logo, country_id):
+        """ creates a new league """
 
         try:
-            season = SeasonModel.query.filter_by(
-                start_date=datetime.strptime(start_date, '%Y-%m-%d')).first()
+            league = LeagueModel.query.filter_by(name=name).first()
 
-            if season:
+            if league:
                 return jsonify(
                     {
                         'code': 409,
                         'code_message': "Data Conflict",
-                        'message': f"The season {start_date} already exist in the database"  # noqa
+                        'message': f"{name} already exist in the database"
                     }
                 ), 409
 
-            if not season:
-                new_season = SeasonModel(
-                    start_date=start_date,
-                    end_date=end_date,
-                    current_season=current_season,
+            if not league:
+                new_league = LeagueModel(
+                    name=name,
+                    abbr=abbr,
+                    league_type=league_type,
+                    logo=logo,
+                    country_id=country_id
                 )
 
-                new_season.save()
+                new_league.save()
 
                 return jsonify(
                     {
                         'code': 200,
                         'code_message': "Successful",
                         'data': {
-                            'start_date': start_date,
-                            'end_date': end_date,
-                            'current_season': current_season
-
+                            'name': name,
+                            'abbr': abbr,
+                            'league type': league_type,
+                            'flag': logo,
+                            'country id': country_id
                         }
                     }
                 ), 200
@@ -96,30 +100,32 @@ class SeasonResource(Resource):
             }
 
     def read_all():
-        """ retrieves all seasons """
+        """ retrieves all league """
 
         try:
-            seasons = SeasonModel.query.all()
+            leagues = LeagueModel.query.all()
 
-            if not seasons:
+            if not leagues:
                 return jsonify(
                     {
                         'code': 404,
                         'code_message': "Data Not Found",
-                        'message': "No season record was found in the database"  # noqa
+                        'message': "No league record was found in the database"  # noqa
                     }
                 ), 404
 
-            if seasons:
-                seasons_record = []
+            if leagues:
+                leagues_record = []
 
-                for season in seasons:
-                    seasons_record.append(
+                for league in leagues:
+                    leagues_record.append(
                         {
-                            'season_id': season.id,
-                            'start_date': season.start_date.year,
-                            'end_date': season.end_date.year,
-                            'current_season': season.current_season
+                            'league_id': league.id,
+                            'name': league.name,
+                            'abbr': league.abbr,
+                            'league type': league.league_type,
+                            'flag': league.logo,
+                            'country id': league.country_id
                         }
                     )
 
@@ -127,7 +133,7 @@ class SeasonResource(Resource):
                     {
                         'code': 200,
                         'code_mesaage': "Successful",
-                        'data': seasons_record
+                        'data': leagues_record
                     }
                 ), 200
 
@@ -136,7 +142,7 @@ class SeasonResource(Resource):
                 'code': e.code,
                 'type': e.type,
                 'code_mesaage': e.message,
-                'message': "No season record was found in the database"
+                'message': "No league record was found in the database"
             }
 
         except Forbidden as e:
@@ -161,33 +167,35 @@ class SeasonResource(Resource):
             }
 
     def read_one(id=None):
-        """ retrieves one season by id """
+        """ retrieves one league by id """
 
         try:
-            season = SeasonModel.query.filter_by(id=id).first()
+            league = LeagueModel.query.filter_by(id=id).first()
 
-            if not season:
+            if not league:
                 return jsonify(
                     {
                         'code': 404,
                         'code_message': "Data Not Found",
-                        'message': f"The season with id {id} was not found in the database"  # noqa
+                        'message': f"The league with id {id} was not found in the database"  # noqa
                     }
                 ), 404
 
-            if season:
-                season_record = {
-                    'season_id': season.id,
-                    'start_date': season.start_date.year,
-                    'end_date': season.end_date.year,
-                    'current_season': season.current_season
+            if league:
+                league_record = {
+                    'league_id': league.id,
+                    'name': league.name,
+                    'abbr': league.abbr,
+                    'league type': league.league_type,
+                    'flag': league.logo,
+                    'country id': league.country_id
                 }
 
                 return jsonify(
                     {
                         'code': 200,
                         'code_mesaage': "Successful",
-                        'data': season_record
+                        'data': league_record
                     }
                 ), 200
 
@@ -202,7 +210,7 @@ class SeasonResource(Resource):
                 'code': e.code,
                 'type': e.type,
                 'code_mesaage': e.message,
-                'message': f"The season with id {id} was not found in the database"  # noqa
+                'message': f"The league with id {id} was not found in the database"  # noqa
             }
 
         except Forbidden as e:
@@ -221,52 +229,61 @@ class SeasonResource(Resource):
 
     @staticmethod
     @parse_params(
-        Argument("start_date", location="json",
-                 help="The date the league started"),
-        Argument("end_date", location="json",
-                 help="The date the league ended"),
-        Argument("current_season", location="json", type=bool,
-                 help="Is this the current season")
+        Argument("name", location="json", help="The name of the league"),
+        Argument("abbr", location="json",
+                 help="The abbreviation of the league"),
+        Argument("league_type", location="json", help="The type of league"),
+        Argument("logo", location="json", help="The logo of the league"),
+        Argument("country_id", location="json",
+                 help="The country which the league belong to")
     )
     def update(id=None, **args):
-        """ retrieves a season by id and update the season """
+        """ retrieves a league by id and update the league """
 
         try:
-            season = SeasonModel.query.filter_by(id=id).first()
+            league = LeagueModel.query.filter_by(id=id).first()
 
-            if not season:
+            if not league:
                 return jsonify(
                     {
                         'code': 404,
                         'code_message': "Data Not Found",
-                        'message': f"The season with id {id} was not found in the database"  # noqa
+                        'message': f"The league with id {id} was not found in the database"  # noqa
                     }
                 ), 404
 
-            if season:
-                if 'start_date' in args and args['start_date'] is not None:
-                    season.start_date = args['start_date']
+            if league:
+                if 'name' in args and args['name'] is not None:
+                    league.name = args['name']
 
-                if 'end_date' in args and args['end_date'] is not None:
-                    season.end_date = args['end_date']
+                if 'abbr' in args and args['abbr'] is not None:
+                    league.abbr = args['abbr']
 
-                if 'current_season' in args and args['current_season'] is not None:  # noqa
-                    season.current_season = args['current_season']
+                if 'league_type' in args and args['league_type'] is not None:
+                    league.league_type = args['league_type']
 
-                season.save()
+                if 'logo' in args and args['logo'] is not None:
+                    league.logo = args['logo']
 
-                update_season = {
-                    'season_id': season.id,
-                    'start_date': season.start_date.year,
-                    'end_date': season.end_date.year,
-                    'current_season': season.current_season
+                if 'country_id' in args and args['country_id'] is not None:
+                    league.country_id = args['country_id']
+
+                league.save()
+
+                update_league = {
+                    'league_id': league.id,
+                    'name': league.name,
+                    'abbr': league.abbr,
+                    'league type': league.league_type,
+                    'flag': league.logo,
+                    'country id': league.country_id
                 }
 
                 return jsonify(
                     {
                         'code': 200,
                         'code_mesaage': "Successful",
-                        'data': update_season
+                        'data': update_league
                     }
                 ), 200
 
@@ -282,7 +299,7 @@ class SeasonResource(Resource):
                 'code': e.code,
                 'type': e.type,
                 'code_mesaage': e.message,
-                'message': f"The season with id {id} was not found in the database"  # noqa
+                'message': f"The league with id {id} was not found in the database"  # noqa
             }
 
         except Forbidden as e:
@@ -307,27 +324,27 @@ class SeasonResource(Resource):
             }
 
     def delete(id=None):
-        """ retrieves a season by id and delete the season """
+        """ retrieves a league by id and delete the league """
 
         try:
-            season = SeasonModel.query.filter_by(id=id).first()
+            league = LeagueModel.query.filter_by(id=id).first()
 
-            if not season:
+            if not league:
                 return jsonify(
                     {
                         'code': 404,
                         'code_message': "Data Not Found",
-                        'message': f"The season with id {id} was not found in the database"  # noqa
+                        'message': f"The league with id {id} was not found in the database"  # noqa
                     }
                 ), 404
 
-            season.delete()
+            league.delete()
 
             return jsonify(
                 {
                     'code': 200,
                     'code_mesaage': "Successful",
-                    'message': f"The season with id {id} was found in the database and was deleted"  # noqa
+                    'message': f"The league with id {id} was found in the database and was deleted"  # noqa
                 }
             ), 200
 
@@ -342,7 +359,7 @@ class SeasonResource(Resource):
                 'code': e.code,
                 'type': e.type,
                 'code_mesaage': e.message,
-                'message': f"The season with id {id} was not found in the database"  # noqa
+                'message': f"The league with id {id} was not found in the database"  # noqa
             }
 
         except Forbidden as e:
