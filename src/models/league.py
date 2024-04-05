@@ -6,7 +6,6 @@ Return: League's id, name, league_type, logo, country_id, teams, created_at,
 updated_at
 """
 
-
 from datetime import datetime
 from uuid import uuid4
 

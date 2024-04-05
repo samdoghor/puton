@@ -22,7 +22,6 @@ application_secret_key = env_var["secret_key"]
 ai_api_key = env_var["ai_api_key"]
 ai_model = env_var["ai_model"]
 
-
 # databases
 
 database_username = env_var["database_username"]

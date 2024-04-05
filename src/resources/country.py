@@ -68,7 +68,7 @@ class CountryResource(Resource):
                 'code': 500,
                 'code_message': "Wrong DataType",
                 'message': "A datatype error has occur, check the input and try again."  # noqa
-                }, 500
+            }, 500
 
         except Forbidden as e:
             return {
@@ -91,6 +91,7 @@ class CountryResource(Resource):
                 'code_message': e.message
             }
 
+    @staticmethod
     def read_all():
         """ retrieves all countries """
 
@@ -156,6 +157,7 @@ class CountryResource(Resource):
                 'code_mesaage': e.message
             }
 
+    @staticmethod
     def read_one(id=None):
         """ retrieves one country by id """
 
@@ -191,7 +193,7 @@ class CountryResource(Resource):
             return {
                 "error message": "Wrong ID format",
                 "message": "The Id you are trying to retrieve is invalid, check UUID correct format."  # noqa
-                }, 500
+            }, 500
 
         except DataNotFound as e:
             return {
@@ -269,7 +271,7 @@ class CountryResource(Resource):
                 'code': 500,
                 'code_message': "Wrong DataType",
                 'message': "A datatype error has occur, check the input and try again."  # noqa
-                }, 500
+            }, 500
 
         except DataNotFound as e:
             return {
@@ -300,6 +302,7 @@ class CountryResource(Resource):
                 'code_message': e.message
             }
 
+    @staticmethod
     def delete(id=None):
         """ retrieves a country by id and delete the country """
 
@@ -329,7 +332,7 @@ class CountryResource(Resource):
             return {
                 "error message": "Wrong ID format",
                 "message": "The Id you are trying to retrieve is invalid, check UUID correct format."  # noqa
-                }, 500
+            }, 500
 
         except DataNotFound as e:
             return {

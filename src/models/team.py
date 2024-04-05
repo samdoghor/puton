@@ -6,7 +6,6 @@ Return: Team's id, name, abbr, flag, founded, country_id, league_id, games,
 venues, created_at, updated_at
 """
 
-
 from datetime import datetime
 from uuid import uuid4
 
@@ -41,10 +40,4 @@ class TeamModel(db.Model, BaseModel, metaclass=MetaBaseModel):
 
     # relationships
 
-    games = db.relationship(
-        'GameModel', foreign_keys='GameModel.home_team_id', backref='teams',
-        lazy=True)
-    games = db.relationship(
-        'GameModel', foreign_keys='GameModel.away_team_id', backref='teams',
-        lazy=True)
     venues = db.relationship('VenueModel', backref='teams', lazy=True)

@@ -52,7 +52,10 @@ class TeamResource(Resource):
                 new_country = TeamModel(
                     name=name,
                     abbr=abbr,
-                    flag=flag
+                    flag=flag,
+                    founded=founded,
+                    country_id=country_id,
+                    league_id=league_id
                 )
 
                 new_country.save()
@@ -74,7 +77,7 @@ class TeamResource(Resource):
                 'code': 500,
                 'code_message': "Wrong DataType",
                 'message': "A datatype error has occur, check the input and try again."  # noqa
-                }, 500
+            }, 500
 
         except Forbidden as e:
             return {
@@ -197,7 +200,7 @@ class TeamResource(Resource):
             return {
                 "error message": "Wrong ID format",
                 "message": "The Id you are trying to retrieve is invalid, check UUID correct format."  # noqa
-                }, 500
+            }, 500
 
         except DataNotFound as e:
             return {
@@ -275,7 +278,7 @@ class TeamResource(Resource):
                 'code': 500,
                 'code_message': "Wrong DataType",
                 'message': "A datatype error has occur, check the input and try again."  # noqa
-                }, 500
+            }, 500
 
         except Forbidden as e:
             return {
@@ -327,7 +330,7 @@ class TeamResource(Resource):
             return {
                 "error message": "Wrong ID format",
                 "message": "The Id you are trying to retrieve is invalid, check UUID correct format."  # noqa
-                }, 500
+            }, 500
 
         except DataNotFound as e:
             return {

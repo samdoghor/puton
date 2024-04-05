@@ -5,7 +5,6 @@ argument -- db.Model, BaseModel, metaclass=MetaBaseModel
 Return: Country's id, name, abbr, flag, teams, leauges, created_at, updated_at
 """
 
-
 from datetime import datetime
 from uuid import uuid4
 
