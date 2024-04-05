@@ -130,6 +130,7 @@ dmypy.json
 
 mbs.db
 .vscode/
+.idea/
 
 
 # others

@@ -6,7 +6,6 @@ Return: Season's id, season, year, start_date, end_date, current, created_at,
 updated_at
 """
 
-
 from datetime import datetime
 from uuid import uuid4
 

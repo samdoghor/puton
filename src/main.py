@@ -15,7 +15,6 @@ from models import db
 
 server = Flask(__name__)
 
-
 # database configuration
 
 server.debug = config.application_debug

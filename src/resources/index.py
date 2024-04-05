@@ -12,6 +12,7 @@ from flask_restful import Resource
 class IndexResource(Resource):
     """ This class check if home endpoint is running """
 
+    @staticmethod
     def home():
         """ Test for 200 status code """
 

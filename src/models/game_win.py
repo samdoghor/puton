@@ -5,7 +5,6 @@ argument -- db.Model, BaseModel, metaclass=MetaBaseModel
 Return: Game Win's id, game_id, created_at, updated_at
 """
 
-
 from datetime import datetime
 from uuid import uuid4
 

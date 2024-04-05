@@ -6,7 +6,6 @@ Return: Venue's id, name, address, city, capacity, team_id, created_at,
 updated_at
 """
 
-
 from datetime import datetime
 from uuid import uuid4
 
