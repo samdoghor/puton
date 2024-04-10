@@ -31,5 +31,7 @@ class CountryModel(db.Model, BaseModel, metaclass=MetaBaseModel):
 
     # relationships
 
-    teams = db.relationship('TeamModel', backref='countries', lazy=True)
+    coaches = db.relationship('CoachModel', backref='countries', lazy=True)
     leauges = db.relationship('LeagueModel', backref='countries', lazy=True)
+    players = db.relationship('PlayerModel', backref='countries', lazy=True)
+    teams = db.relationship('TeamModel', backref='countries', lazy=True)

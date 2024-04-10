@@ -13,14 +13,13 @@ from resources import CountryResource
 CountryBlueprint = Blueprint("country", __name__)
 api = Api(CountryBlueprint)
 
-CountryBlueprint.route(
-    "/countries", methods=['POST'])(CountryResource.create)
-CountryBlueprint.route(
-    "/countries", methods=['GET'])(CountryResource.read_all)
-CountryBlueprint.route(
-    "/countries/<uuid:id>", methods=['GET'])(CountryResource.read_one)
-CountryBlueprint.route(
-    "/countries/<uuid:id>", methods=['PUT'])(CountryResource.update)
-CountryBlueprint.route(
-    "/countries/<uuid:id>",
-    methods=['DELETE'])(CountryResource.delete)
+CountryBlueprint.route("/countries", methods=["POST"])(CountryResource.create)
+CountryBlueprint.route("/countries", methods=["GET"])(CountryResource.read_all)
+CountryBlueprint.route("/countries/<uuid:id>", methods=["GET"])(
+    CountryResource.read_one
+)
+CountryBlueprint.route("/countries/<uuid:id>",
+                       methods=["PUT"])(CountryResource.update)
+CountryBlueprint.route("/countries/<uuid:id>", methods=["DELETE"])(
+    CountryResource.delete
+)

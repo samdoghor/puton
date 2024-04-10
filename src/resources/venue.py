@@ -1,73 +1,74 @@
-"""src/resources/season.py
+"""src/resources/venue.py
 
 Keyword arguments:
 argument -- id, **args
-Return: Season's CRUD
+Return: Venue's CRUD
 """
-
-from datetime import datetime
 
 from flask.json import jsonify
 from flask_restful import Resource
 from flask_restful.reqparse import Argument
 from sqlalchemy.exc import DataError
 
-from models import SeasonModel
+from models import VenueModel
 from utils import (Conflict, DataNotFound, Forbidden, InternalServerError,
                    parse_params)
 
 
-class SeasonResource(Resource):
-    """This class performs CRUD Operation on Season"""
+class VenueResource(Resource):
+    """This class performs CRUD Operation on Venue"""
 
     @staticmethod
     @parse_params(
+        Argument("name", location="json", required=True,
+                 help="The name of the club's venue"),
         Argument(
-            "start_date",
+            "address", location="json", required=True,
+            help="The address of the club's venue"
+        ),
+        Argument("city", location="json", required=True,
+                 help="The city of the club's venue"),
+        Argument(
+            "capacity",
             location="json",
             required=True,
-            help="The date the league started",
+            help="The capacity of the club's venue",
         ),
         Argument(
-            "end_date", location="json", required=True,
-            help="The date the league ended"
-        ),
-        Argument(
-            "current_season",
+            "team_id",
             location="json",
             required=True,
-            type=bool,
-            help="Is this the current season",
+            help="The team to which the club venue belong",
         ),
     )
-    def create(start_date, end_date, current_season):
-        """creates a new season"""
+    def create(name, address, city, capacity, team_id):
+        """creates a new club's venue"""
 
         try:
-            season = SeasonModel.query.filter_by(
-                start_date=datetime.strptime(start_date, "%Y-%m-%d")
-            ).first()
+            venue = VenueModel.query.filter_by(name=name).first()
 
-            if season:
+            if venue:
                 return (
                     jsonify(
                         {
                             "code": 409,
                             "code_message": "Data Conflict",
-                            "message": f"The season {start_date} already exist in the database",  # noqa
+                            "message": f"{name} already exist in the database",
                         }
                     ),
                     409,
                 )
 
-            if not season:
-                new_season = SeasonModel(
-                    start_date=start_date,
-                    end_date=end_date,
-                    current_season=current_season,
+            if not venue:
+                new_venue = VenueModel(
+                    name=name,
+                    address=address,
+                    city=city,
+                    capacity=capacity,
+                    team_id=team_id,
                 )
 
-                new_season.save()
+                new_venue.save()
 
                 return (
                     jsonify(
@@ -75,9 +76,11 @@ class SeasonResource(Resource):
                             "code": 200,
                             "code_message": "Successful",
                             "data": {
-                                "start_date": start_date,
-                                "end_date": end_date,
-                                "current_season": current_season,
+                                "name": name,
+                                "address": address,
+                                "city": city,
+                                "capacity": capacity,
+                                "team id": team_id,
                             },
                         }
                     ),
@@ -102,33 +105,35 @@ class SeasonResource(Resource):
 
     @staticmethod
     def read_all():
-        """retrieves all seasons"""
+        """retrieves all venues"""
 
         try:
-            seasons = SeasonModel.query.all()
+            venues = VenueModel.query.all()
 
-            if not seasons:
+            if not venues:
                 return (
                     jsonify(
                         {
                             "code": 404,
                             "code_message": "Data Not Found",
-                            "message": "No season record was found in the database",  # noqa
+                            "message": "No venue record was found in the database",  # noqa
                         }
                     ),
                     404,
                 )
 
-            if seasons:
-                seasons_record = []
+            if venues:
+                venues_record = []
 
-                for season in seasons:
-                    seasons_record.append(
+                for venue in venues:
+                    venues_record.append(
                         {
-                            "season_id": season.id,
-                            "start_date": season.start_date.year,
-                            "end_date": season.end_date.year,
-                            "current_season": season.current_season,
+                            "venue id": venue.id,
+                            "name": venue.name,
+                            "address": venue.address,
+                            "city": venue.city,
+                            "capacity": venue.capacity,
+                            "team id": venue.team_id,
                         }
                     )
 
@@ -137,7 +142,7 @@ class SeasonResource(Resource):
                         {
                             "code": 200,
                             "code_mesaage": "Successful",
-                            "data": seasons_record,
+                            "data": venues_record,
                         }
                     ),
                     200,
@@ -148,7 +153,7 @@ class SeasonResource(Resource):
                 "code": e.code,
                 "type": e.type,
                 "code_mesaage": e.message,
-                "message": "No season record was found in the database",
+                "message": "No venue record was found in the database",
             }
 
         except Forbidden as e:
@@ -162,29 +167,31 @@ class SeasonResource(Resource):
 
     @staticmethod
     def read_one(id=None):
-        """retrieves one season by id"""
+        """retrieves one venue by id"""
 
         try:
-            season = SeasonModel.query.filter_by(id=id).first()
+            venue = VenueModel.query.filter_by(id=id).first()
 
-            if not season:
+            if not venue:
                 return (
                     jsonify(
                         {
                             "code": 404,
                             "code_message": "Data Not Found",
-                            "message": f"The season with id {id} was not found in the database",  # noqa
+                            "message": f"The venue with id {id} was not found in the database",  # noqa
                         }
                     ),
                     404,
                 )
 
-            if season:
-                season_record = {
-                    "season_id": season.id,
-                    "start_date": season.start_date.year,
-                    "end_date": season.end_date.year,
-                    "current_season": season.current_season,
+            if venue:
+                venue_record = {
+                    "venue id": venue.id,
+                    "name": venue.name,
+                    "address": venue.abbr,
+                    "city": venue.city,
+                    "capacity": venue.capacity,
+                    "team id": venue.team_id,
                 }
 
                 return (
@@ -192,7 +199,7 @@ class SeasonResource(Resource):
                         {
                             "code": 200,
                             "code_mesaage": "Successful",
-                            "data": season_record,
+                            "data": venue_record,
                         }
                     ),
                     200,
@@ -209,7 +216,7 @@ class SeasonResource(Resource):
                 "code": e.code,
                 "type": e.type,
                 "code_mesaage": e.message,
-                "message": f"The season with id {id} was not found in the database",  # noqa
+                "message": f"The venue with id {id} was not found in the database",  # noqa
             }
 
         except Forbidden as e:
@@ -220,54 +227,68 @@ class SeasonResource(Resource):
 
     @staticmethod
     @parse_params(
-        Argument("start_date", location="json",
-                 help="The date the league started"),
-        Argument("end_date", location="json",
-                 help="The date the league ended"),
+        Argument("name", location="json",
+                 help="The name of the club's venue"),
         Argument(
-            "current_season",
+            "address", location="json",
+            help="The address of the club's venue"
+        ),
+        Argument("city", location="json",
+                 help="The city of the club's venue"),
+        Argument(
+            "capacity",
             location="json",
-            type=bool,
-            help="Is this the current season",
+            help="The capacity of the club's venue",
+        ),
+        Argument(
+            "team_id",
+            location="json",
+            help="The team to which the club venue belong",
         ),
     )
     def update(id=None, **args):
-        """retrieves a season by id and update the season"""
+        """retrieves a venue by id and update the venue"""
 
         try:
-            season = SeasonModel.query.filter_by(id=id).first()
+            venue = VenueModel.query.filter_by(id=id).first()
 
-            if not season:
+            if not venue:
                 return (
                     jsonify(
                         {
                             "code": 404,
                             "code_message": "Data Not Found",
-                            "message": f"The season with id {id} was not found in the database",  # noqa
+                            "message": f"The venue with id {id} was not found in the database",  # noqa
                         }
                     ),
                     404,
                 )
 
-            if season:
-                if "start_date" in args and args["start_date"] is not None:
-                    season.start_date = args["start_date"]
+            if venue:
+                if "name" in args and args["name"] is not None:
+                    venue.name = args["name"]
 
-                if "end_date" in args and args["end_date"] is not None:
-                    season.end_date = args["end_date"]
+                if "address" in args and args["address"] is not None:
+                    venue.address = args["address"]
 
-                if (
-                    "current_season" in args and args["current_season"] is not None  # noqa
-                ):
-                    season.current_season = args["current_season"]
+                if "city" in args and args["city"] is not None:
+                    venue.city = args["city"]
 
-                season.save()
+                if "capacity" in args and args["capacity"] is not None:
+                    venue.capacity = args["capacity"]
 
-                update_season = {
-                    "season_id": season.id,
-                    "start_date": season.start_date.year,
-                    "end_date": season.end_date.year,
-                    "current_season": season.current_season,
+                if "team_id" in args and args["team_id"] is not None:
+                    venue.team_id = args["team_id"]
+
+                venue.save()
+
+                update_venue = {
+                    "venue id": venue.id,
+                    "name": venue.name,
+                    "address": venue.address,
+                    "city": venue.city,
+                    "capacity": venue.capacity,
+                    "team id": venue.team_id,
                 }
 
                 return (
@@ -275,7 +296,7 @@ class SeasonResource(Resource):
                         {
                             "code": 200,
                             "code_mesaage": "Successful",
-                            "data": update_season,
+                            "data": update_venue,
                         }
                     ),
                     200,
@@ -288,14 +309,6 @@ class SeasonResource(Resource):
                 "message": "A datatype error has occur, check the input and try again.",  # noqa
             }, 500
 
-        except DataNotFound as e:
-            return {
-                "code": e.code,
-                "type": e.type,
-                "code_mesaage": e.message,
-                "message": f"The season with id {id} was not found in the database",  # noqa
-            }
-
         except Forbidden as e:
             return {"Code": e.code, "Type": e.type, "code_message": e.message}
 
@@ -307,31 +320,31 @@ class SeasonResource(Resource):
 
     @staticmethod
     def delete(id=None):
-        """retrieves a season by id and delete the season"""
+        """delete one venue by id"""
 
         try:
-            season = SeasonModel.query.filter_by(id=id).first()
+            venue = VenueModel.query.filter_by(id=id).first()
 
-            if not season:
+            if not venue:
                 return (
                     jsonify(
                         {
                             "code": 404,
                             "code_message": "Data Not Found",
-                            "message": f"The season with id {id} was not found in the database",  # noqa
+                            "message": f"The venue with id {id} was not found in the database",  # noqa
                         }
                     ),
                     404,
                 )
 
-            season.delete()
+            venue.delete()
 
             return (
                 jsonify(
                     {
                         "code": 200,
                         "code_mesaage": "Successful",
-                        "message": f"The season with id {id} was found in the database and was deleted",  # noqa
+                        "message": f"The venue with id {id} was found in the database and was deleted",  # noqa
                     }
                 ),
                 200,
@@ -348,7 +361,7 @@ class SeasonResource(Resource):
                 "code": e.code,
                 "type": e.type,
                 "code_mesaage": e.message,
-                "message": f"The season with id {id} was not found in the database",  # noqa
+                "message": f"The venue with id {id} was not found in the database",  # noqa
             }
 
         except Forbidden as e:
