@@ -31,7 +31,3 @@ class SeasonModel(db.Model, BaseModel, metaclass=MetaBaseModel):
         db.DateTime(), onupdate=datetime.utcnow, default=datetime.utcnow,
         nullable=False
     )
-
-    # relationships
-
-    games = db.relationship("GameModel", backref="seasons", lazy=True)

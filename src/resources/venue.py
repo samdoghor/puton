@@ -26,7 +26,7 @@ class VenueResource(Resource):
             "address", location="json", required=True,
             help="The address of the club's venue"
         ),
-        Argument("city", location="json", required=True,
+        Argument("city", location="json",
                  help="The city of the club's venue"),
         Argument(
             "capacity",
@@ -188,7 +188,7 @@ class VenueResource(Resource):
                 venue_record = {
                     "venue id": venue.id,
                     "name": venue.name,
-                    "address": venue.abbr,
+                    "address": venue.address,
                     "city": venue.city,
                     "capacity": venue.capacity,
                     "team id": venue.team_id,

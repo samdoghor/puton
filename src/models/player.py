@@ -28,9 +28,9 @@ class PlayerModel(db.Model, BaseModel, metaclass=MetaBaseModel):
     date_of_birth = db.Column(db.Date(), nullable=False)
     height = db.Column(db.Integer, nullable=False)
     weight = db.Column(db.Integer, nullable=False)
-    rating = db.Column(db.Float, nullable=False)
+    rating = db.Column(db.Integer, nullable=False)
     postion = db.Column(db.String(50), nullable=False)
-    injury = db.Column(db.Boolean, nullable=False, defualt=False)
+    injury = db.Column(db.Boolean, nullable=False, default=False)
 
     created_at = db.Column(
         db.DateTime(), default=datetime.utcnow, nullable=False)

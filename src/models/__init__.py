@@ -19,6 +19,7 @@ from .country import CountryModel
 from .game import GameModel
 from .league import LeagueModel
 from .player import PlayerModel
+from .referee import RefereeModel
 from .season import SeasonModel
 from .team import TeamModel
 from .venue import VenueModel

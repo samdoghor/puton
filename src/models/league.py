@@ -41,5 +41,4 @@ class LeagueModel(db.Model, BaseModel, metaclass=MetaBaseModel):
 
     # relationships
 
-    games = db.relationship("GameModel", backref="leagues", lazy=True)
     teams = db.relationship("TeamModel", backref="leagues", lazy=True)
