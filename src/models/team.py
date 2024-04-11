@@ -40,4 +40,6 @@ class TeamModel(db.Model, BaseModel, metaclass=MetaBaseModel):
 
     # relationships
 
+    coaches = db.relationship('CoachModel', backref='teams', lazy=True)
+    players = db.relationship('PlayerModel', backref='teams', lazy=True)
     venues = db.relationship('VenueModel', backref='teams', lazy=True)

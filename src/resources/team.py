@@ -16,340 +16,370 @@ from utils import (Conflict, DataNotFound, Forbidden, InternalServerError,
 
 
 class TeamResource(Resource):
-    """ This class performs CRUD Operation on Team """
+    """This class performs CRUD Operation on Team"""
 
     @staticmethod
     @parse_params(
         Argument("name", location="json", required=True,
                  help="The name of the club"),
-        Argument("abbr", location="json", required=True,
-                 help="The abbreviation of the club"),
+        Argument(
+            "abbr", location="json", required=True,
+            help="The abbreviation of the club"
+        ),
         Argument("flag", location="json", required=True,
                  help="The flag of the club"),
-        Argument("founded", location="json", required=True,
-                 help="The year the club was founded"),
-        Argument("country_id", location="json", required=True,
-                 help="The country to which the club belong"),
-        Argument("league_id", location="json", required=True,
-                 help="The league to which the club belong")
+        Argument(
+            "founded",
+            location="json",
+            required=True,
+            help="The year the club was founded",
+        ),
+        Argument(
+            "country_id",
+            location="json",
+            required=True,
+            help="The country to which the club belong",
+        ),
+        Argument(
+            "league_id",
+            location="json",
+            required=True,
+            help="The league to which the club belong",
+        ),
     )
     def create(name, abbr, flag, founded, country_id, league_id):
-        """ creates a new club """
+        """creates a new club"""
 
         try:
-            country = TeamModel.query.filter_by(name=name).first()
+            team = TeamModel.query.filter_by(name=name).first()
 
-            if country:
-                return jsonify(
-                    {
-                        'code': 409,
-                        'code_message': "Data Conflict",
-                        'message': f"{name} already exist in the database"
-                    }
-                ), 409
+            if team:
+                return (
+                    jsonify(
+                        {
+                            "code": 409,
+                            "code_message": "Data Conflict",
+                            "message": f"{name} already exist in the database",
+                        }
+                    ),
+                    409,
+                )
 
-            if not country:
-                new_country = TeamModel(
+            if not team:
+                new_team = TeamModel(
                     name=name,
                     abbr=abbr,
                     flag=flag,
                     founded=founded,
                     country_id=country_id,
-                    league_id=league_id
+                    league_id=league_id,
                 )
 
-                new_country.save()
+                new_team.save()
 
-                return jsonify(
-                    {
-                        'code': 200,
-                        'code_message': "Successful",
-                        'data': {
-                            'name': name,
-                            'abbreviation': abbr,
-                            'flag': flag
+                return (
+                    jsonify(
+                        {
+                            "code": 200,
+                            "code_message": "Successful",
+                            "data": {
+                                "name": name,
+                                "abbreviation": abbr,
+                                "flag": flag,
+                                "founded": founded,
+                                "country id": country_id,
+                                "league id": league_id,
+                            },
                         }
-                    }
-                ), 200
+                    ),
+                    200,
+                )
 
         except DataError:
             return {
-                'code': 500,
-                'code_message': "Wrong DataType",
-                'message': "A datatype error has occur, check the input and try again."  # noqa
+                "code": 500,
+                "code_message": "Wrong DataType",
+                "message": "A datatype error has occur, check the input and try again.",  # noqa
             }, 500
 
         except Forbidden as e:
-            return {
-                'Code': e.code,
-                'Type': e.type,
-                'code_message': e.message
-            }
+            return {"Code": e.code, "Type": e.type, "code_message": e.message}
 
         except Conflict as e:
-            return {
-                'code': e.code,
-                'type': e.type,
-                'code_message': e.message
-            }
+            return {"code": e.code, "type": e.type, "code_message": e.message}
 
         except InternalServerError as e:
-            return {
-                'code': e.code,
-                'type': e.type,
-                'code_message': e.message
-            }
+            return {"code": e.code, "type": e.type, "code_message": e.message}
 
+    @staticmethod
     def read_all():
-        """ retrieves all countries """
+        """retrieves all teams"""
 
         try:
-            countries = TeamModel.query.all()
+            teams = TeamModel.query.all()
 
-            if not countries:
-                return jsonify(
-                    {
-                        'code': 404,
-                        'code_message': "Data Not Found",
-                        'message': "No country record was found in the database"  # noqa
-                    }
-                ), 404
-
-            if countries:
-                countries_record = []
-
-                for country in countries:
-                    countries_record.append(
+            if not teams:
+                return (
+                    jsonify(
                         {
-                            'country_id': country.id,
-                            'name': country.name,
-                            'abbreviation': country.abbr,
-                            'flag': country.flag
+                            "code": 404,
+                            "code_message": "Data Not Found",
+                            "message": "No team record was found in the database",  # noqa
+                        }
+                    ),
+                    404,
+                )
+
+            if teams:
+                teams_record = []
+
+                for team in teams:
+                    teams_record.append(
+                        {
+                            "team id": team.id,
+                            "name": team.name,
+                            "abbreviation": team.abbr,
+                            "flag": team.flag,
+                            "founded": team.founded,
+                            "country id": team.country_id,
+                            "league id": team.league_id,
                         }
                     )
 
-                return jsonify(
-                    {
-                        'code': 200,
-                        'code_mesaage': "Successful",
-                        'data': countries_record
-                    }
-                ), 200
+                return (
+                    jsonify(
+                        {
+                            "code": 200,
+                            "code_mesaage": "Successful",
+                            "data": teams_record,
+                        }
+                    ),
+                    200,
+                )
 
         except DataNotFound as e:
             return {
-                'code': e.code,
-                'type': e.type,
-                'code_mesaage': e.message,
-                'message': "No country record was found in the database"
+                "code": e.code,
+                "type": e.type,
+                "code_mesaage": e.message,
+                "message": "No team record was found in the database",
             }
 
         except Forbidden as e:
-            return {
-                'code': e.code,
-                'type': e.type,
-                'code_mesaage': e.message
-            }
+            return {"code": e.code, "type": e.type, "code_mesaage": e.message}
 
         except Conflict as e:
-            return {
-                'code': e.code,
-                'type': e.type,
-                'code_mesaage': e.message
-            }
+            return {"code": e.code, "type": e.type, "code_mesaage": e.message}
 
         except InternalServerError as e:
-            return {
-                'code': e.code,
-                'type': e.type,
-                'code_mesaage': e.message
-            }
+            return {"code": e.code, "type": e.type, "code_mesaage": e.message}
 
+    @staticmethod
     def read_one(id=None):
-        """ retrieves one countries by id """
+        """retrieves one team by id"""
 
         try:
-            country = TeamModel.query.filter_by(id=id).first()
+            team = TeamModel.query.filter_by(id=id).first()
 
-            if not country:
-                return jsonify(
-                    {
-                        'code': 404,
-                        'code_message': "Data Not Found",
-                        'message': f"The country with id {id} was found in the database"  # noqa
-                    }
-                ), 404
+            if not team:
+                return (
+                    jsonify(
+                        {
+                            "code": 404,
+                            "code_message": "Data Not Found",
+                            "message": f"The team with id {id} was not found in the database",  # noqa
+                        }
+                    ),
+                    404,
+                )
 
-            if country:
-                country_record = {
-                    'id': country.id,
-                    'name': country.name,
-                    'abbreviation': country.abbr,
-                    'flag': country.flag
+            if team:
+                team_record = {
+                    "team id": team.id,
+                    "name": team.name,
+                    "abbreviation": team.abbr,
+                    "flag": team.flag,
+                    "founded": team.founded,
+                    "country id": team.country_id,
+                    "league id": team.league_id,
                 }
 
-                return jsonify(
-                    {
-                        'code': 200,
-                        'code_mesaage': "Successful",
-                        'data': country_record
-                    }
-                ), 200
+                return (
+                    jsonify(
+                        {
+                            "code": 200,
+                            "code_mesaage": "Successful",
+                            "data": team_record,
+                        }
+                    ),
+                    200,
+                )
 
         except DataError:
             return {
                 "error message": "Wrong ID format",
-                "message": "The Id you are trying to retrieve is invalid, check UUID correct format."  # noqa
+                "message": "The Id you are trying to retrieve is invalid, check UUID correct format.",  # noqa
             }, 500
 
         except DataNotFound as e:
             return {
-                'code': e.code,
-                'type': e.type,
-                'code_mesaage': e.message,
-                'message': f"The country with id {id} was found in the database"  # noqa
+                "code": e.code,
+                "type": e.type,
+                "code_mesaage": e.message,
+                "message": f"The team with id {id} was not found in the database",  # noqa
             }
 
         except Forbidden as e:
-            return {
-                'code': e.code,
-                'type': e.type,
-                'code_mesaage': e.message
-            }
+            return {"code": e.code, "type": e.type, "code_mesaage": e.message}
 
         except InternalServerError as e:
-            return {
-                'code': e.code,
-                'type': e.type,
-                'code_mesaage': e.message
-            }
+            return {"code": e.code, "type": e.type, "code_mesaage": e.message}
 
     @staticmethod
     @parse_params(
-        Argument("name", location="json", help="The name of the country"),
-        Argument("abbr", location="json",
-                 help="The abbreviation of the country"),
-        Argument("flag", location="json", help="The flag of the country")
+        Argument("name", location="json", help="The name of the club"),
+        Argument("abbr", location="json", help="The abbreviation of the club"),
+        Argument("flag", location="json", help="The flag of the club"),
+        Argument(
+            "founded",
+            location="json",
+            help="The year the club was founded",
+        ),
+        Argument(
+            "country_id",
+            location="json",
+            help="The country to which the club belong",
+        ),
+        Argument(
+            "league_id",
+            location="json",
+            help="The league to which the club belong",
+        ),
     )
     def update(id=None, **args):
-        """ retrieves a country by id and update the country """
+        """retrieves a team by id and update the team"""
 
         try:
-            country = TeamModel.query.filter_by(id=id).first()
+            team = TeamModel.query.filter_by(id=id).first()
 
-            if not country:
-                return jsonify(
-                    {
-                        'code': 404,
-                        'code_message': "Data Not Found",
-                        'message': f"The country with id {id} was found in the database"  # noqa
-                    }
-                ), 404
+            if not team:
+                return (
+                    jsonify(
+                        {
+                            "code": 404,
+                            "code_message": "Data Not Found",
+                            "message": f"The team with id {id} was not found in the database",  # noqa
+                        }
+                    ),
+                    404,
+                )
 
-            if country:
-                if 'name' in args and args['name'] is not None:
-                    country.name = args['name']
+            if team:
+                if "name" in args and args["name"] is not None:
+                    team.name = args["name"]
 
-                if 'abbr' in args and args['abbr'] is not None:
-                    country.abbr = args['abbr']
+                if "abbr" in args and args["abbr"] is not None:
+                    team.abbr = args["abbr"]
 
-                if 'flag' in args and args['flag'] is not None:
-                    country.flag = args['flag']
+                if "flag" in args and args["flag"] is not None:
+                    team.flag = args["flag"]
 
-                country.save()
+                if "founded" in args and args["founded"] is not None:
+                    team.founded = args["founded"]
 
-                update_country = {
-                    'id': country.id,
-                    'name': country.name,
-                    'abbreviation': country.abbr,
-                    'flag': country.flag
+                if "country_id" in args and args["country_id"] is not None:
+                    team.country_id = args["country_id"]
+
+                if "league_id" in args and args["league_id"] is not None:
+                    team.league_id = args["league_id"]
+
+                team.save()
+
+                update_team = {
+                    "team id": team.id,
+                    "name": team.name,
+                    "abbreviation": team.abbr,
+                    "flag": team.flag,
+                    "founded": team.founded,
+                    "country id": team.country_id,
+                    "league id": team.league_id,
                 }
 
-                return jsonify(
-                    {
-                        'code': 200,
-                        'code_mesaage': "Successful",
-                        'data': update_country
-                    }
-                ), 200
+                return (
+                    jsonify(
+                        {
+                            "code": 200,
+                            "code_mesaage": "Successful",
+                            "data": update_team,
+                        }
+                    ),
+                    200,
+                )
 
         except DataError:
             return {
-                'code': 500,
-                'code_message': "Wrong DataType",
-                'message': "A datatype error has occur, check the input and try again."  # noqa
+                "code": 500,
+                "code_message": "Wrong DataType",
+                "message": "A datatype error has occur, check the input and try again.",  # noqa
             }, 500
 
         except Forbidden as e:
-            return {
-                'Code': e.code,
-                'Type': e.type,
-                'code_message': e.message
-            }
+            return {"Code": e.code, "Type": e.type, "code_message": e.message}
 
         except Conflict as e:
-            return {
-                'code': e.code,
-                'type': e.type,
-                'code_message': e.message
-            }
+            return {"code": e.code, "type": e.type, "code_message": e.message}
 
         except InternalServerError as e:
-            return {
-                'code': e.code,
-                'type': e.type,
-                'code_message': e.message
-            }
+            return {"code": e.code, "type": e.type, "code_message": e.message}
 
+    @staticmethod
     def delete(id=None):
-        """ delete one countries by id """
+        """delete one team by id"""
 
         try:
-            country = TeamModel.query.filter_by(id=id).first()
+            team = TeamModel.query.filter_by(id=id).first()
 
-            if not country:
-                return jsonify(
+            if not team:
+                return (
+                    jsonify(
+                        {
+                            "code": 404,
+                            "code_message": "Data Not Found",
+                            "message": f"The team with id {id} was not found in the database",  # noqa
+                        }
+                    ),
+                    404,
+                )
+
+            team.delete()
+
+            return (
+                jsonify(
                     {
-                        'code': 404,
-                        'code_message': "Data Not Found",
-                        'message': f"The country with id {id} was found in the database"  # noqa
+                        "code": 200,
+                        "code_mesaage": "Successful",
+                        "message": f"The team with id {id} was found in the database and was deleted",  # noqa
                     }
-                ), 404
-
-            country.delete()
-
-            return jsonify(
-                {
-                    'code': 200,
-                    'code_mesaage': "Successful",
-                    'message': "The country with id {id} was found in the database and was deleted"  # noqa
-                }
-            ), 200
+                ),
+                200,
+            )
 
         except DataError:
             return {
                 "error message": "Wrong ID format",
-                "message": "The Id you are trying to retrieve is invalid, check UUID correct format."  # noqa
+                "message": "The Id you are trying to retrieve is invalid, check UUID correct format.",  # noqa
             }, 500
 
         except DataNotFound as e:
             return {
-                'code': e.code,
-                'type': e.type,
-                'code_mesaage': e.message,
-                'message': f"The country with id {id} was found in the database"  # noqa
+                "code": e.code,
+                "type": e.type,
+                "code_mesaage": e.message,
+                "message": f"The team with id {id} was not found in the database",  # noqa
             }
 
         except Forbidden as e:
-            return {
-                'code': e.code,
-                'type': e.type,
-                'code_mesaage': e.message
-            }
+            return {"code": e.code, "type": e.type, "code_mesaage": e.message}
 
         except InternalServerError as e:
-            return {
-                'code': e.code,
-                'type': e.type,
-                'code_mesaage': e.message
-            }
+            return {"code": e.code, "type": e.type, "code_mesaage": e.message}

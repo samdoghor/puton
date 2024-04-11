@@ -16,22 +16,24 @@ from .abc import BaseModel, MetaBaseModel
 
 
 class VenueModel(db.Model, BaseModel, metaclass=MetaBaseModel):
-    """ Venue model """
+    """Venue model"""
 
-    __tablename__ = 'venues'
+    __tablename__ = "venues"
 
     id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid4)
     name = db.Column(db.String(50), nullable=False)
-    address = db.Column(db.String(10), nullable=False)
-    city = db.Column(db.String(), nullable=True)
+    address = db.Column(db.Text(), nullable=False)
+    city = db.Column(db.String(50), nullable=False)
     capacity = db.Column(db.Integer, nullable=False)
 
     created_at = db.Column(
         db.DateTime(), default=datetime.utcnow, nullable=False)
-    updated_at = db.Column(db.DateTime(), onupdate=datetime.utcnow,
-                           default=datetime.utcnow, nullable=False)
+    updated_at = db.Column(
+        db.DateTime(), onupdate=datetime.utcnow, default=datetime.utcnow,
+        nullable=False
+    )
 
     # foreign keys
 
     team_id = db.Column(UUID(as_uuid=True), db.ForeignKey(
-        'teams.id'), nullable=False)
+        "teams.id"), nullable=False)

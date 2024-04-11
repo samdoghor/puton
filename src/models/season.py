@@ -16,7 +16,7 @@ from .abc import BaseModel, MetaBaseModel
 
 
 class SeasonModel(db.Model, BaseModel, metaclass=MetaBaseModel):
-    """ Season model """
+    """Season model"""
 
     __tablename__ = "seasons"
 
@@ -27,9 +27,7 @@ class SeasonModel(db.Model, BaseModel, metaclass=MetaBaseModel):
 
     created_at = db.Column(
         db.DateTime(), default=datetime.utcnow, nullable=False)
-    updated_at = db.Column(db.DateTime(), onupdate=datetime.utcnow,
-                           default=datetime.utcnow, nullable=False)
-
-    # relationships
-
-    games = db.relationship('GameModel', backref='seasons', lazy=True)
+    updated_at = db.Column(
+        db.DateTime(), onupdate=datetime.utcnow, default=datetime.utcnow,
+        nullable=False
+    )

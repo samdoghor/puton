@@ -1,94 +1,80 @@
-"""src/resources/season.py
+"""src/resources/coach.py
 
 Keyword arguments:
 argument -- id, **args
-Return: Season's CRUD
+Return: Coach's CRUD
 """
-
-from datetime import datetime
 
 from flask.json import jsonify
 from flask_restful import Resource
 from flask_restful.reqparse import Argument
-from sqlalchemy.exc import DataError
+from sqlalchemy.exc import DataError, IntegrityError
 
-from models import SeasonModel
+from models import CoachModel
 from utils import (Conflict, DataNotFound, Forbidden, InternalServerError,
                    parse_params)
 
 
-class SeasonResource(Resource):
-    """This class performs CRUD Operation on Season"""
+class CoachResource(Resource):
+    """This class performs CRUD Operation on Coach"""
 
     @staticmethod
     @parse_params(
-        Argument(
-            "start_date",
-            location="json",
-            required=True,
-            help="The date the league started",
-        ),
-        Argument(
-            "end_date", location="json", required=True,
-            help="The date the league ended"
-        ),
-        Argument(
-            "current_season",
-            location="json",
-            required=True,
-            type=bool,
-            help="Is this the current season",
-        ),
+        Argument("first_name", location="json", required=True,
+                 help="The first name of the coach"),
+        Argument("last_name", location="json", required=True,
+                 help="The last name of the coach"),
+        Argument("middle_name", location="json", required=True,
+                 help="The middle name of the coach"),
+        Argument("country_id", location="json", required=True,
+                 help="The country of the coach"),
+        Argument("team_id", location="json", required=True,
+                 help="The team of the coach"),
+
     )
-    def create(start_date, end_date, current_season):
-        """creates a new season"""
+    def create(first_name, last_name, middle_name, country_id, team_id):
+        """creates a new coach"""
 
         try:
-            season = SeasonModel.query.filter_by(
-                start_date=datetime.strptime(start_date, "%Y-%m-%d")
-            ).first()
+            new_coach = CoachModel(
+                first_name=first_name,
+                last_name=last_name,
+                middle_name=middle_name,
+                country_id=country_id,
+                team_id=team_id
+            )
 
-            if season:
-                return (
-                    jsonify(
-                        {
-                            "code": 409,
-                            "code_message": "Data Conflict",
-                            "message": f"The season {start_date} already exist in the database",  # noqa
-                        }
-                    ),
-                    409,
-                )
+            new_coach.save()
 
-            if not season:
-                new_season = SeasonModel(
-                    start_date=start_date,
-                    end_date=end_date,
-                    current_season=current_season,
-                )
-
-                new_season.save()
-
-                return (
-                    jsonify(
-                        {
-                            "code": 200,
-                            "code_message": "Successful",
-                            "data": {
-                                "start_date": start_date,
-                                "end_date": end_date,
-                                "current_season": current_season,
-                            },
-                        }
-                    ),
-                    200,
-                )
+            return (
+                jsonify(
+                    {
+                        "code": 200,
+                        "code_message": "Successful",
+                        "data": {
+                            "first name": first_name,
+                            "last name": last_name,
+                            "middle name": middle_name,
+                            "country id": country_id,
+                            "team id": team_id
+                        },
+                    }
+                ),
+                200,
+            )
 
         except DataError:
             return {
                 "code": 500,
                 "code_message": "Wrong DataType",
                 "message": "A datatype error has occur, check the input and try again.",  # noqa
+            }, 500
+
+        except IntegrityError:
+            return {
+                "code": 500,
+                "code_message": "Wrong DataType",
+                "message": "The country id or team id is incorrect",  # noqa
             }, 500
 
         except Forbidden as e:
@@ -102,33 +88,35 @@ class SeasonResource(Resource):
 
     @staticmethod
     def read_all():
-        """retrieves all seasons"""
+        """retrieves all coaches"""
 
         try:
-            seasons = SeasonModel.query.all()
+            coaches = CoachModel.query.all()
 
-            if not seasons:
+            if not coaches:
                 return (
                     jsonify(
                         {
                             "code": 404,
                             "code_message": "Data Not Found",
-                            "message": "No season record was found in the database",  # noqa
+                            "message": "No coach record was found in the database",  # noqa
                         }
                     ),
                     404,
                 )
 
-            if seasons:
-                seasons_record = []
+            if coaches:
+                coaches_record = []
 
-                for season in seasons:
-                    seasons_record.append(
+                for coach in coaches:
+                    coaches_record.append(
                         {
-                            "season_id": season.id,
-                            "start_date": season.start_date.year,
-                            "end_date": season.end_date.year,
-                            "current_season": season.current_season,
+                            "coach id": coach.id,
+                            "first name": coach.first_name,
+                            "last name": coach.last_name,
+                            "middle name": coach.middle_name,
+                            "country id": coach.country_id,
+                            "team id": coach.team_id
                         }
                     )
 
@@ -137,7 +125,7 @@ class SeasonResource(Resource):
                         {
                             "code": 200,
                             "code_mesaage": "Successful",
-                            "data": seasons_record,
+                            "data": coaches_record,
                         }
                     ),
                     200,
@@ -148,7 +136,7 @@ class SeasonResource(Resource):
                 "code": e.code,
                 "type": e.type,
                 "code_mesaage": e.message,
-                "message": "No season record was found in the database",
+                "message": "No coach record was found in the database",
             }
 
         except Forbidden as e:
@@ -162,29 +150,31 @@ class SeasonResource(Resource):
 
     @staticmethod
     def read_one(id=None):
-        """retrieves one season by id"""
+        """retrieves one coach by id"""
 
         try:
-            season = SeasonModel.query.filter_by(id=id).first()
+            coach = CoachModel.query.filter_by(id=id).first()
 
-            if not season:
+            if not coach:
                 return (
                     jsonify(
                         {
                             "code": 404,
                             "code_message": "Data Not Found",
-                            "message": f"The season with id {id} was not found in the database",  # noqa
+                            "message": f"The coach with id {id} was not found in the database",  # noqa
                         }
                     ),
                     404,
                 )
 
-            if season:
-                season_record = {
-                    "season_id": season.id,
-                    "start_date": season.start_date.year,
-                    "end_date": season.end_date.year,
-                    "current_season": season.current_season,
+            if coach:
+                coach_record = {
+                    "coach id": coach.id,
+                    "first name": coach.first_name,
+                    "last name": coach.last_name,
+                    "middle name": coach.middle_name,
+                    "country id": coach.country_id,
+                    "team id": coach.team_id
                 }
 
                 return (
@@ -192,7 +182,7 @@ class SeasonResource(Resource):
                         {
                             "code": 200,
                             "code_mesaage": "Successful",
-                            "data": season_record,
+                            "data": coach_record,
                         }
                     ),
                     200,
@@ -209,7 +199,7 @@ class SeasonResource(Resource):
                 "code": e.code,
                 "type": e.type,
                 "code_mesaage": e.message,
-                "message": f"The season with id {id} was not found in the database",  # noqa
+                "message": f"The coach with id {id} was not found in the database",  # noqa
             }
 
         except Forbidden as e:
@@ -220,54 +210,60 @@ class SeasonResource(Resource):
 
     @staticmethod
     @parse_params(
-        Argument("start_date", location="json",
-                 help="The date the league started"),
-        Argument("end_date", location="json",
-                 help="The date the league ended"),
-        Argument(
-            "current_season",
-            location="json",
-            type=bool,
-            help="Is this the current season",
-        ),
+        Argument("first_name", location="json",
+                 help="The first name of the coach"),
+        Argument("last_name", location="json",
+                 help="The last name of the coach"),
+        Argument("middle_name", location="json",
+                 help="The middle name of the coach"),
+        Argument("country_id", location="json",
+                 help="The country of the coach"),
+        Argument("team_id", location="json",
+                 help="The team of the coach"),
     )
     def update(id=None, **args):
-        """retrieves a season by id and update the season"""
+        """retrieves a coach by id and update the coach"""
 
         try:
-            season = SeasonModel.query.filter_by(id=id).first()
+            coach = CoachModel.query.filter_by(id=id).first()
 
-            if not season:
+            if not coach:
                 return (
                     jsonify(
                         {
                             "code": 404,
                             "code_message": "Data Not Found",
-                            "message": f"The season with id {id} was not found in the database",  # noqa
+                            "message": f"The coach with id {id} was not found in the database",  # noqa
                         }
                     ),
                     404,
                 )
 
-            if season:
-                if "start_date" in args and args["start_date"] is not None:
-                    season.start_date = args["start_date"]
+            if coach:
+                if "first_name" in args and args["first_name"] is not None:
+                    coach.first_name = args["first_name"]
 
-                if "end_date" in args and args["end_date"] is not None:
-                    season.end_date = args["end_date"]
+                if "last_name" in args and args["last_name"] is not None:
+                    coach.last_name = args["last_name"]
 
-                if (
-                    "current_season" in args and args["current_season"] is not None  # noqa
-                ):
-                    season.current_season = args["current_season"]
+                if "middle_name" in args and args["middle_name"] is not None:
+                    coach.middle_name = args["middle_name"]
 
-                season.save()
+                if "country_id" in args and args["country_id"] is not None:
+                    coach.country_id = args["country_id"]
 
-                update_season = {
-                    "season_id": season.id,
-                    "start_date": season.start_date.year,
-                    "end_date": season.end_date.year,
-                    "current_season": season.current_season,
+                if "team_id" in args and args["team_id"] is not None:
+                    coach.team_id = args["team_id"]
+
+                coach.save()
+
+                update_coach = {
+                    "coach id": coach.id,
+                    "first name": coach.first_name,
+                    "last name": coach.last_name,
+                    "middle name": coach.middle_name,
+                    "country id": coach.country_id,
+                    "team id": coach.team_id
                 }
 
                 return (
@@ -275,7 +271,7 @@ class SeasonResource(Resource):
                         {
                             "code": 200,
                             "code_mesaage": "Successful",
-                            "data": update_season,
+                            "data": update_coach,
                         }
                     ),
                     200,
@@ -288,14 +284,6 @@ class SeasonResource(Resource):
                 "message": "A datatype error has occur, check the input and try again.",  # noqa
             }, 500
 
-        except DataNotFound as e:
-            return {
-                "code": e.code,
-                "type": e.type,
-                "code_mesaage": e.message,
-                "message": f"The season with id {id} was not found in the database",  # noqa
-            }
-
         except Forbidden as e:
             return {"Code": e.code, "Type": e.type, "code_message": e.message}
 
@@ -307,31 +295,31 @@ class SeasonResource(Resource):
 
     @staticmethod
     def delete(id=None):
-        """retrieves a season by id and delete the season"""
+        """delete one coach by id"""
 
         try:
-            season = SeasonModel.query.filter_by(id=id).first()
+            coach = CoachModel.query.filter_by(id=id).first()
 
-            if not season:
+            if not coach:
                 return (
                     jsonify(
                         {
                             "code": 404,
                             "code_message": "Data Not Found",
-                            "message": f"The season with id {id} was not found in the database",  # noqa
+                            "message": f"The coach with id {id} was not found in the database",  # noqa
                         }
                     ),
                     404,
                 )
 
-            season.delete()
+            coach.delete()
 
             return (
                 jsonify(
                     {
                         "code": 200,
                         "code_mesaage": "Successful",
-                        "message": f"The season with id {id} was found in the database and was deleted",  # noqa
+                        "message": f"The coach with id {id} was found in the database and was deleted",  # noqa
                     }
                 ),
                 200,
@@ -348,7 +336,7 @@ class SeasonResource(Resource):
                 "code": e.code,
                 "type": e.type,
                 "code_mesaage": e.message,
-                "message": f"The season with id {id} was not found in the database",  # noqa
+                "message": f"The coach with id {id} was not found in the database",  # noqa
             }
 
         except Forbidden as e:
