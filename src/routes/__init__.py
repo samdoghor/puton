@@ -3,6 +3,7 @@ from .country import CountryBlueprint
 from .index import IndexBlueprint
 from .league import LeagueBlueprint
 from .player import PlayerBlueprint
+from .referee import RefereeBlueprint
 from .season import SeasonBlueprint
 from .team import TeamBlueprint
 from .venue import VenueBlueprint
