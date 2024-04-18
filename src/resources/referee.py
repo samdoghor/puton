@@ -8,9 +8,11 @@ Return: Referee's CRUD
 from flask.json import jsonify
 from flask_restful import Resource
 from flask_restful.reqparse import Argument
-from models import RefereeModel
 from sqlalchemy.exc import DataError, IntegrityError
-from utils import Conflict, DataNotFound, Forbidden, InternalServerError, parse_params
+
+from models import RefereeModel
+from utils import (Conflict, DataNotFound, Forbidden,
+                   InternalServerError, parse_params)
 
 
 class RefereeResource(Resource):
@@ -217,10 +219,14 @@ class RefereeResource(Resource):
 
     @staticmethod
     @parse_params(
-        Argument("first_name", location="json", help="The first name of the referee"),
-        Argument("last_name", location="json", help="The last name of the referee"),
-        Argument("middle_name", location="json", help="The middle name of the referee"),
-        Argument("country_id", location="json", help="The country of the referee"),
+        Argument("first_name", location="json",
+                 help="The first name of the referee"),
+        Argument("last_name", location="json",
+                 help="The last name of the referee"),
+        Argument("middle_name", location="json",
+                 help="The middle name of the referee"),
+        Argument("country_id", location="json",
+                 help="The country of the referee"),
     )
     def update(id=None, **args):
         """retrieves a referee by id and update the referee"""

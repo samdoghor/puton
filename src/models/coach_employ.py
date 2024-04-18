@@ -23,10 +23,10 @@ class CoachEmployModel(db.Model, BaseModel, metaclass=MetaBaseModel):
     id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid4)
     employment_type = db.Column(db.String(), nullable=False)
 
-    created_at = db.Column(db.DateTime(), default=datetime.utcnow, nullable=False)
-    updated_at = db.Column(
-        db.DateTime(), onupdate=datetime.utcnow, default=datetime.utcnow, nullable=False
-    )
+    created_at = db.Column(
+        db.DateTime(), default=datetime.utcnow, nullable=False)
+    updated_at = db.Column(db.DateTime(), onupdate=datetime.utcnow,
+                           default=datetime.utcnow, nullable=False)
 
     # foreign keys
 
@@ -36,4 +36,5 @@ class CoachEmployModel(db.Model, BaseModel, metaclass=MetaBaseModel):
     season_id = db.Column(
         UUID(as_uuid=True), db.ForeignKey("seasons.id"), nullable=False
     )
-    team_id = db.Column(UUID(as_uuid=True), db.ForeignKey("teams.id"), nullable=False)
+    team_id = db.Column(UUID(as_uuid=True), db.ForeignKey(
+        "teams.id"), nullable=False)

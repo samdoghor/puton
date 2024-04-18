@@ -25,17 +25,16 @@ class PlayerTransferModel(db.Model, BaseModel, metaclass=MetaBaseModel):
     transfer_window = db.Column(db.String(), nullable=False)
     transfer_type = db.Column(db.String(), nullable=False)
 
-    created_at = db.Column(db.DateTime(), default=datetime.utcnow, nullable=False)
-    updated_at = db.Column(
-        db.DateTime(), onupdate=datetime.utcnow, default=datetime.utcnow, nullable=False
-    )
+    created_at = db.Column(
+        db.DateTime(), default=datetime.utcnow, nullable=False)
+    updated_at = db.Column(db.DateTime(), onupdate=datetime.utcnow,
+                           default=datetime.utcnow, nullable=False)
 
     # foreign keys
 
-    player_id = db.Column(
-        UUID(as_uuid=True), db.ForeignKey("players.id"), nullable=False
-    )
-    season_id = db.Column(
-        UUID(as_uuid=True), db.ForeignKey("seasons.id"), nullable=False
-    )
-    team_id = db.Column(UUID(as_uuid=True), db.ForeignKey("teams.id"), nullable=False)
+    player_id = db.Column(UUID(as_uuid=True), db.ForeignKey(
+        "players.id"), nullable=False)
+    season_id = db.Column(UUID(as_uuid=True), db.ForeignKey(
+        "seasons.id"), nullable=False)
+    team_id = db.Column(UUID(as_uuid=True), db.ForeignKey(
+        "teams.id"), nullable=False)

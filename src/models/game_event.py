@@ -27,16 +27,16 @@ class GameEventModel(db.Model, BaseModel, metaclass=MetaBaseModel):
 
     created_at = db.Column(
         db.DateTime(), default=datetime.utcnow, nullable=False)
-    updated_at = db.Column(
-        db.DateTime(), onupdate=datetime.utcnow, default=datetime.utcnow,
-        nullable=False
-    )
+    updated_at = db.Column(db.DateTime(), onupdate=datetime.utcnow,
+                           default=datetime.utcnow, nullable=False)
 
     # foreign keys
 
     game_id = db.Column(UUID(as_uuid=True), db.ForeignKey(
         "games.id"), nullable=False)
-    game_player_id = db.Column(UUID(as_uuid=True), db.ForeignKey(
-        "game_players.id"), nullable=False)
-    game_team_id = db.Column(UUID(as_uuid=True), db.ForeignKey(
-        "game_teams.id"), nullable=False)
+    game_player_id = db.Column(
+        UUID(as_uuid=True), db.ForeignKey("game_players.id"), nullable=False
+    )
+    game_team_id = db.Column(
+        UUID(as_uuid=True), db.ForeignKey("game_teams.id"), nullable=False
+    )

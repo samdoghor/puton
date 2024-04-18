@@ -11,8 +11,8 @@ from flask_restful.reqparse import Argument
 from sqlalchemy.exc import DataError
 
 from models import LeagueModel
-from utils import (Conflict, DataNotFound, Forbidden, InternalServerError,
-                   parse_params)
+from utils import (Conflict, DataNotFound, Forbidden,
+                   InternalServerError, parse_params)
 
 
 class LeagueResource(Resource):
@@ -29,11 +29,16 @@ class LeagueResource(Resource):
             help="The abbreviation of the league",
         ),
         Argument(
-            "league_type", location="json", required=True,
+            "league_type",
+            location="json",
+            required=True,
             help="The type of league"
         ),
-        Argument("logo", location="json", required=True,
-                 help="The logo of the league"),
+        Argument(
+            "logo",
+            location="json",
+            required=True,
+            help="The logo of the league"),
         Argument(
             "country_id",
             location="json",
@@ -233,7 +238,8 @@ class LeagueResource(Resource):
         Argument("league_type", location="json", help="The type of league"),
         Argument("logo", location="json", help="The logo of the league"),
         Argument(
-            "country_id", location="json",
+            "country_id",
+            location="json",
             help="The country which the league belong to"
         ),
     )

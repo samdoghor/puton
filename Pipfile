@@ -8,15 +8,12 @@ autopep8 = "*"
 pycodestyle = "*"
 flake8 = "*"
 python-dotenv = "*"
-pandas = "*"
 google-generativeai = "*"
-sqlalchemy = "*"
 flask = "*"
 flask-migrate = "*"
 flask-sqlalchemy = "*"
 psycopg = "*"
 flask-restful = "*"
-idna = "==3.7"
 
 [dev-packages]
 

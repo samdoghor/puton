@@ -25,10 +25,10 @@ class CoachModel(db.Model, BaseModel, metaclass=MetaBaseModel):
     last_name = db.Column(db.String(50), nullable=False)
     middle_name = db.Column(db.String(50), nullable=True)
 
-    created_at = db.Column(db.DateTime(), default=datetime.utcnow, nullable=False)
-    updated_at = db.Column(
-        db.DateTime(), onupdate=datetime.utcnow, default=datetime.utcnow, nullable=False
-    )
+    created_at = db.Column(
+        db.DateTime(), default=datetime.utcnow, nullable=False)
+    updated_at = db.Column(db.DateTime(), onupdate=datetime.utcnow,
+                           default=datetime.utcnow, nullable=False)
 
     # foreign keys
 

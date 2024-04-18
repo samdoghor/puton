@@ -11,8 +11,8 @@ from flask_restful.reqparse import Argument
 from sqlalchemy.exc import DataError
 
 from models import TeamModel
-from utils import (Conflict, DataNotFound, Forbidden, InternalServerError,
-                   parse_params)
+from utils import (Conflict, DataNotFound, Forbidden,
+                   InternalServerError, parse_params)
 
 
 class TeamResource(Resource):
@@ -20,14 +20,22 @@ class TeamResource(Resource):
 
     @staticmethod
     @parse_params(
-        Argument("name", location="json", required=True,
-                 help="The name of the club"),
         Argument(
-            "abbr", location="json", required=True,
+            "name",
+            location="json",
+            required=True,
+            help="The name of the club"),
+        Argument(
+            "abbr",
+            location="json",
+            required=True,
             help="The abbreviation of the club"
         ),
-        Argument("flag", location="json", required=True,
-                 help="The flag of the club"),
+        Argument(
+            "flag",
+            location="json",
+            required=True,
+            help="The flag of the club"),
         Argument(
             "founded",
             location="json",

@@ -10,7 +10,7 @@ from flask_restful import Api
 
 from resources import IndexResource
 
-IndexBlueprint = Blueprint('index', __name__)
+IndexBlueprint = Blueprint("index", __name__)
 api = Api(IndexBlueprint)
 
 IndexBlueprint.route("/", methods=["GET"])(IndexResource.home)

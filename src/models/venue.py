@@ -26,14 +26,15 @@ class VenueModel(db.Model, BaseModel, metaclass=MetaBaseModel):
     city = db.Column(db.String(50), nullable=False)
     capacity = db.Column(db.Integer, nullable=False)
 
-    created_at = db.Column(db.DateTime(), default=datetime.utcnow, nullable=False)
-    updated_at = db.Column(
-        db.DateTime(), onupdate=datetime.utcnow, default=datetime.utcnow, nullable=False
-    )
+    created_at = db.Column(
+        db.DateTime(), default=datetime.utcnow, nullable=False)
+    updated_at = db.Column(db.DateTime(), onupdate=datetime.utcnow,
+                           default=datetime.utcnow, nullable=False)
 
     # foreign keys
 
-    team_id = db.Column(UUID(as_uuid=True), db.ForeignKey("teams.id"), nullable=False)
+    team_id = db.Column(UUID(as_uuid=True), db.ForeignKey(
+        "teams.id"), nullable=False)
 
     # relationships
 

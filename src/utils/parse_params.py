@@ -2,6 +2,7 @@
 Wrap parameters parsing
 As it's quite ugly and messy
 """
+
 from functools import wraps
 
 from flask_restful import reqparse
@@ -14,11 +15,11 @@ def parse_params(*arguments):
     """
 
     def parse(func):
-        """ Wrapper """
+        """Wrapper"""
 
         @wraps(func)
         def resource_verb(*args, **kwargs):
-            """ Decorated function """
+            """Decorated function"""
             parser = reqparse.RequestParser()
             for argument in arguments:
                 parser.add_argument(argument)
