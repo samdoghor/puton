@@ -13,8 +13,8 @@ from flask_restful.reqparse import Argument
 from sqlalchemy.exc import DataError
 
 from models import SeasonModel
-from utils import (Conflict, DataNotFound, Forbidden, InternalServerError,
-                   parse_params)
+from utils import (Conflict, DataNotFound, Forbidden,
+                   InternalServerError, parse_params)
 
 
 class SeasonResource(Resource):
@@ -29,7 +29,9 @@ class SeasonResource(Resource):
             help="The date the league started",
         ),
         Argument(
-            "end_date", location="json", required=True,
+            "end_date",
+            location="json",
+            required=True,
             help="The date the league ended"
         ),
         Argument(
@@ -257,7 +259,8 @@ class SeasonResource(Resource):
                     season.end_date = args["end_date"]
 
                 if (
-                    "current_season" in args and args["current_season"] is not None  # noqa
+                    "current_season" in args
+                    and args["current_season"] is not None  # noqa
                 ):
                     season.current_season = args["current_season"]
 

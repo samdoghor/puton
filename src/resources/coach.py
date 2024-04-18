@@ -5,14 +5,16 @@ argument -- id, **args
 Return: Coach's CRUD
 """
 
+import uuid
+
 from flask.json import jsonify
 from flask_restful import Resource
 from flask_restful.reqparse import Argument
 from sqlalchemy.exc import DataError, IntegrityError
 
 from models import CoachModel
-from utils import (Conflict, DataNotFound, Forbidden, InternalServerError,
-                   parse_params)
+from utils import (Conflict, DataNotFound, Forbidden,
+                   InternalServerError, parse_params)
 
 
 class CoachResource(Resource):
@@ -20,19 +22,44 @@ class CoachResource(Resource):
 
     @staticmethod
     @parse_params(
-        Argument("first_name", location="json", required=True,
-                 help="The first name of the coach"),
-        Argument("last_name", location="json", required=True,
-                 help="The last name of the coach"),
-        Argument("middle_name", location="json", required=True,
-                 help="The middle name of the coach"),
-        Argument("country_id", location="json", required=True,
-                 help="The country of the coach"),
-        Argument("team_id", location="json", required=True,
-                 help="The team of the coach"),
-
+        Argument(
+            "first_name",
+            location="json",
+            required=True,
+            help="The first name of the coach",
+        ),
+        Argument(
+            "last_name",
+            location="json",
+            required=True,
+            help="The last name of the coach",
+        ),
+        Argument(
+            "middle_name",
+            location="json",
+            required=True,
+            help="The middle name of the coach",
+        ),
+        Argument(
+            "country_id",
+            location="json",
+            required=True,
+            help="The country of the coach",
+        ),
+        Argument(
+            "team_id",
+            location="json",
+            required=True,
+            help="The team of the coach"
+        ),
     )
-    def create(first_name, last_name, middle_name, country_id, team_id):
+    def create(
+        first_name: str,
+        last_name: str,
+        middle_name: str,
+        country_id: uuid,
+        team_id: uuid,
+    ):
         """creates a new coach"""
 
         try:
@@ -41,7 +68,7 @@ class CoachResource(Resource):
                 last_name=last_name,
                 middle_name=middle_name,
                 country_id=country_id,
-                team_id=team_id
+                team_id=team_id,
             )
 
             new_coach.save()
@@ -56,7 +83,7 @@ class CoachResource(Resource):
                             "last name": last_name,
                             "middle name": middle_name,
                             "country id": country_id,
-                            "team id": team_id
+                            "team id": team_id,
                         },
                     }
                 ),
@@ -116,7 +143,7 @@ class CoachResource(Resource):
                             "last name": coach.last_name,
                             "middle name": coach.middle_name,
                             "country id": coach.country_id,
-                            "team id": coach.team_id
+                            "team id": coach.team_id,
                         }
                     )
 
@@ -174,7 +201,7 @@ class CoachResource(Resource):
                     "last name": coach.last_name,
                     "middle name": coach.middle_name,
                     "country id": coach.country_id,
-                    "team id": coach.team_id
+                    "team id": coach.team_id,
                 }
 
                 return (
@@ -218,8 +245,7 @@ class CoachResource(Resource):
                  help="The middle name of the coach"),
         Argument("country_id", location="json",
                  help="The country of the coach"),
-        Argument("team_id", location="json",
-                 help="The team of the coach"),
+        Argument("team_id", location="json", help="The team of the coach"),
     )
     def update(id=None, **args):
         """retrieves a coach by id and update the coach"""
@@ -263,7 +289,7 @@ class CoachResource(Resource):
                     "last name": coach.last_name,
                     "middle name": coach.middle_name,
                     "country id": coach.country_id,
-                    "team id": coach.team_id
+                    "team id": coach.team_id,
                 }
 
                 return (

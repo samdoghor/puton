@@ -11,8 +11,8 @@ from flask_restful.reqparse import Argument
 from sqlalchemy.exc import DataError
 
 from models import VenueModel
-from utils import (Conflict, DataNotFound, Forbidden, InternalServerError,
-                   parse_params)
+from utils import (Conflict, DataNotFound, Forbidden,
+                   InternalServerError, parse_params)
 
 
 class VenueResource(Resource):
@@ -20,14 +20,21 @@ class VenueResource(Resource):
 
     @staticmethod
     @parse_params(
-        Argument("name", location="json", required=True,
-                 help="The name of the club's venue"),
         Argument(
-            "address", location="json", required=True,
-            help="The address of the club's venue"
+            "name",
+            location="json",
+            required=True, help="The name of the club's venue"
         ),
-        Argument("city", location="json",
-                 help="The city of the club's venue"),
+        Argument(
+            "address",
+            location="json",
+            required=True,
+            help="The address of the club's venue",
+        ),
+        Argument(
+            "city",
+            location="json",
+            help="The city of the club's venue"),
         Argument(
             "capacity",
             location="json",
@@ -227,14 +234,10 @@ class VenueResource(Resource):
 
     @staticmethod
     @parse_params(
-        Argument("name", location="json",
-                 help="The name of the club's venue"),
-        Argument(
-            "address", location="json",
-            help="The address of the club's venue"
-        ),
-        Argument("city", location="json",
-                 help="The city of the club's venue"),
+        Argument("name", location="json", help="The name of the club's venue"),
+        Argument("address", location="json",
+                 help="The address of the club's venue"),
+        Argument("city", location="json", help="The city of the club's venue"),
         Argument(
             "capacity",
             location="json",

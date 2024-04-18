@@ -27,7 +27,12 @@ class SeasonModel(db.Model, BaseModel, metaclass=MetaBaseModel):
 
     created_at = db.Column(
         db.DateTime(), default=datetime.utcnow, nullable=False)
-    updated_at = db.Column(
-        db.DateTime(), onupdate=datetime.utcnow, default=datetime.utcnow,
-        nullable=False
-    )
+    updated_at = db.Column(db.DateTime(), onupdate=datetime.utcnow,
+                           default=datetime.utcnow, nullable=False)
+
+    # relationships
+
+    coaches_employment = db.relationship(
+        "CoachEmployModel", backref="seasons", lazy=True)
+    games = db.relationship("GameModel", backref="seasons", lazy=True)
+    transfer = db.relationship("TransferModel", backref="seaons", lazy=True)

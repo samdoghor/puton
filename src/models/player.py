@@ -34,10 +34,8 @@ class PlayerModel(db.Model, BaseModel, metaclass=MetaBaseModel):
 
     created_at = db.Column(
         db.DateTime(), default=datetime.utcnow, nullable=False)
-    updated_at = db.Column(
-        db.DateTime(), onupdate=datetime.utcnow, default=datetime.utcnow,
-        nullable=False
-    )
+    updated_at = db.Column(db.DateTime(), onupdate=datetime.utcnow,
+                           default=datetime.utcnow, nullable=False)
 
     # foreign keys
 
@@ -45,3 +43,9 @@ class PlayerModel(db.Model, BaseModel, metaclass=MetaBaseModel):
         "countries.id"), nullable=False)
     team_id = db.Column(UUID(as_uuid=True), db.ForeignKey(
         "teams.id"), nullable=False)
+
+    # relationships
+
+    game_players = db.relationship(
+        "GamePlayerModel", backref="players", lazy=True)
+    transfer = db.relationship("TransferModel", backref="players", lazy=True)

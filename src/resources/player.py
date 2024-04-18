@@ -11,8 +11,8 @@ from flask_restful.reqparse import Argument
 from sqlalchemy.exc import DataError, IntegrityError
 
 from models import PlayerModel
-from utils import (Conflict, DataNotFound, Forbidden, InternalServerError,
-                   parse_params)
+from utils import (Conflict, DataNotFound, Forbidden,
+                   InternalServerError, parse_params)
 
 
 class PlayerResource(Resource):
@@ -20,34 +20,87 @@ class PlayerResource(Resource):
 
     @staticmethod
     @parse_params(
-        Argument("first_name", location="json", required=True,
-                 help="The first name of the player"),
-        Argument("last_name", location="json", required=True,
-                 help="The last name of the player"),
-        Argument("middle_name", location="json", required=True,
-                 help="The middle name of the player"),
         Argument(
-            "date_of_birth", location="json", required=True,
-            help="The date of birth of the player"
+            "first_name",
+            location="json",
+            required=True,
+            help="The first name of the player",
         ),
-        Argument("height", location="json", required=True,
-                 help="The height of the player"),
-        Argument("weight", location="json", required=True,
-                 help="The weight of the player"),
-        Argument("rating", location="json", required=True,
-                 help="The rating of the player"),
-        Argument("postion", location="json", required=True,
-                 help="The postion of the player"),
-        Argument("injury", location="json", required=True, type=bool,
-                 help="The injury status of the player"),
-        Argument("country_id", location="json", required=True,
-                 help="The country of the player"),
-        Argument("team_id", location="json", required=True,
-                 help="The team of the player"),
-
+        Argument(
+            "last_name",
+            location="json",
+            required=True,
+            help="The last name of the player",
+        ),
+        Argument(
+            "middle_name",
+            location="json",
+            required=True,
+            help="The middle name of the player",
+        ),
+        Argument(
+            "date_of_birth",
+            location="json",
+            required=True,
+            help="The date of birth of the player",
+        ),
+        Argument(
+            "height",
+            location="json",
+            required=True,
+            help="The height of the player"
+        ),
+        Argument(
+            "weight",
+            location="json",
+            required=True,
+            help="The weight of the player"
+        ),
+        Argument(
+            "rating",
+            location="json",
+            required=True,
+            help="The rating of the player"
+        ),
+        Argument(
+            "postion",
+            location="json",
+            required=True,
+            help="The postion of the player"
+        ),
+        Argument(
+            "injury",
+            location="json",
+            required=True,
+            type=bool,
+            help="The injury status of the player",
+        ),
+        Argument(
+            "country_id",
+            location="json",
+            required=True,
+            help="The country of the player",
+        ),
+        Argument(
+            "team_id",
+            location="json",
+            required=True,
+            help="The team of the player"
+        ),
     )
-    def create(first_name, last_name, middle_name, date_of_birth, height,
-               weight, rating, postion, injury, country_id, team_id):
+    def create(
+        first_name,
+        last_name,
+        middle_name,
+        date_of_birth,
+        height,
+        weight,
+        rating,
+        postion,
+        injury,
+        country_id,
+        team_id,
+    ):
         """creates a new player"""
 
         try:
@@ -62,7 +115,7 @@ class PlayerResource(Resource):
                 postion=postion,
                 injury=injury,
                 country_id=country_id,
-                team_id=team_id
+                team_id=team_id,
             )
 
             new_player.save()
@@ -83,7 +136,7 @@ class PlayerResource(Resource):
                             "postion": postion,
                             "injury": injury,
                             "country id": country_id,
-                            "team id": team_id
+                            "team id": team_id,
                         },
                     }
                 ),
@@ -142,14 +195,16 @@ class PlayerResource(Resource):
                             "first name": player.first_name,
                             "last name": player.last_name,
                             "middle name": player.middle_name,
-                            "date of birth": player.date_of_birth.strftime("%Y-%m-%d"),  # noqa
+                            "date of birth": player.date_of_birth.strftime(
+                                "%Y-%m-%d"
+                            ),  # noqa
                             "height": player.height,
                             "weight": player.weight,
                             "rating": player.rating,
                             "postion": player.postion,
                             "injury": player.injury,
                             "country id": player.country_id,
-                            "team id": player.team_id
+                            "team id": player.team_id,
                         }
                     )
 
@@ -213,7 +268,7 @@ class PlayerResource(Resource):
                     "postion": player.postion,
                     "injury": player.injury,
                     "country id": player.country_id,
-                    "team id": player.team_id
+                    "team id": player.team_id,
                 }
 
                 return (
@@ -249,30 +304,54 @@ class PlayerResource(Resource):
 
     @staticmethod
     @parse_params(
-        Argument("first_name", location="json",
-                 help="The first name of the player"),
-        Argument("last_name", location="json",
-                 help="The last name of the player"),
-        Argument("middle_name", location="json",
-                 help="The middle name of the player"),
         Argument(
-            "date_of_birth", location="json",
+            "first_name",
+            location="json",
+            help="The first name of the player"),
+        Argument(
+            "last_name",
+            location="json",
+            help="The last name of the player"),
+        Argument(
+            "middle_name",
+            location="json",
+            help="The middle name of the player"),
+        Argument(
+
+            "date_of_birth",
+            location="json",
             help="The date of birth of the player"
         ),
-        Argument("height", location="json",
-                 help="The height of the player"),
-        Argument("weight", location="json",
-                 help="The weight of the player"),
-        Argument("rating", location="json",
-                 help="The rating of the player"),
-        Argument("postion", location="json",
-                 help="The postion of the player"),
-        Argument("injury", location="json", type=bool,
-                 help="The injury status of the player"),
-        Argument("country_id", location="json",
-                 help="The country of the player"),
-        Argument("team_id", location="json",
-                 help="The team of the player"),
+        Argument(
+            "height",
+            location="json",
+            help="The height of the player"),
+        Argument(
+            "weight",
+            location="json",
+            help="The weight of the player"),
+        Argument(
+            "rating",
+            location="json",
+            help="The rating of the player"),
+        Argument(
+            "postion",
+            location="json",
+            help="The postion of the player"),
+        Argument(
+
+            "injury",
+            location="json", type=bool,
+            help="The injury status of the player"
+        ),
+        Argument(
+            "country_id",
+            location="json",
+            help="The country of the player"),
+        Argument(
+            "team_id",
+            location="json",
+            help="The team of the player"),
     )
     def update(id=None, **args):
         """retrieves a player by id and update the player"""
@@ -302,7 +381,7 @@ class PlayerResource(Resource):
                 if "middle_name" in args and args["middle_name"] is not None:
                     player.middle_name = args["middle_name"]
 
-                if "date_of_birth" in args and args["date_of_birth"] is not None:  # noqa
+                if ("date_of_birth" in args and args["date_of_birth"] is not None):  # noqa
                     player.date_of_birth = args["date_of_birth"]
 
                 if "height" in args and args["height"] is not None:
@@ -340,7 +419,7 @@ class PlayerResource(Resource):
                     "postion": player.postion,
                     "injury": player.injury,
                     "country id": player.country_id,
-                    "team id": player.team_id
+                    "team id": player.team_id,
                 }
 
                 return (

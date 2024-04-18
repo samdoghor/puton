@@ -16,9 +16,9 @@ from .abc import BaseModel, MetaBaseModel
 
 
 class TeamModel(db.Model, BaseModel, metaclass=MetaBaseModel):
-    """ Team model """
+    """Team model"""
 
-    __tablename__ = 'teams'
+    __tablename__ = "teams"
 
     id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid4)
     name = db.Column(db.String(50), nullable=False)
@@ -34,12 +34,14 @@ class TeamModel(db.Model, BaseModel, metaclass=MetaBaseModel):
     # foreign keys
 
     country_id = db.Column(UUID(as_uuid=True), db.ForeignKey(
-        'countries.id'), nullable=False)
-    league_id = db.Column(UUID(as_uuid=True), db.ForeignKey(
-        'leagues.id'), nullable=False)
+        "countries.id"), nullable=False)
 
     # relationships
 
-    coaches = db.relationship('CoachModel', backref='teams', lazy=True)
-    players = db.relationship('PlayerModel', backref='teams', lazy=True)
-    venues = db.relationship('VenueModel', backref='teams', lazy=True)
+    coaches_employment = db.relationship(
+        "CoachEmployModel", backref="teams", lazy=True)
+    game_teams = db.relationship("GameTeamModel", backref="teams", lazy=True)
+    players = db.relationship("PlayerModel", backref="teams", lazy=True)
+    players_tranfers = db.relationship(
+        "PlayerTransferModel", backref="teams", lazy=True)
+    venues = db.relationship("VenueModel", backref="teams", lazy=True)

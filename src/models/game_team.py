@@ -1,9 +1,9 @@
-"""src/models/venue.py
+"""src/models/game_team.py
 
 Keyword arguments:
 argument -- db.Model, BaseModel, metaclass=MetaBaseModel
-Return: Venue's id, name, address, city, capacity, team_id, created_at,
-updated_at
+Return: Game's id, first_name, last_name, middle_name, country_id, team_id,
+created_at, updated_at
 """
 
 from datetime import datetime
@@ -15,16 +15,13 @@ from . import db
 from .abc import BaseModel, MetaBaseModel
 
 
-class VenueModel(db.Model, BaseModel, metaclass=MetaBaseModel):
-    """Venue model"""
+class GameTeamModel(db.Model, BaseModel, metaclass=MetaBaseModel):
+    """Game Team model"""
 
-    __tablename__ = "venues"
+    __tablename__ = "game_teams"
 
     id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid4)
-    name = db.Column(db.String(50), nullable=False)
-    address = db.Column(db.Text(), nullable=False)
-    city = db.Column(db.String(50), nullable=False)
-    capacity = db.Column(db.Integer, nullable=False)
+    is_home = db.Column(db.Boolean, nullable=False, default=False)
 
     created_at = db.Column(
         db.DateTime(), default=datetime.utcnow, nullable=False)
@@ -33,9 +30,14 @@ class VenueModel(db.Model, BaseModel, metaclass=MetaBaseModel):
 
     # foreign keys
 
+    game_id = db.Column(UUID(as_uuid=True), db.ForeignKey(
+        "games.id"), nullable=False)
     team_id = db.Column(UUID(as_uuid=True), db.ForeignKey(
         "teams.id"), nullable=False)
 
     # relationships
 
-    games = db.relationship("GameModel", backref="venues", lazy=True)
+    game_events = db.relationship(
+        "GameEventModel", backref="game_teams", lazy=True)
+    game_players = db.relationship(
+        "GamePlayerModel", backref="game_teams", lazy=True)
