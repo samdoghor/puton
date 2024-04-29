@@ -1,3 +1,4 @@
+from .coach_employ import CoachEmployResource
 from .coach import CoachResource
 from .country import CountryResource
 from .index import IndexResource

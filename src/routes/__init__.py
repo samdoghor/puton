@@ -1,3 +1,4 @@
+from .coach_employ import CoachEmployBlueprint
 from .coach import CoachBlueprint
 from .country import CountryBlueprint
 from .index import IndexBlueprint
