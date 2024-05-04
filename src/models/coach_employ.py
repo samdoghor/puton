@@ -21,7 +21,7 @@ class CoachEmployModel(db.Model, BaseModel, metaclass=MetaBaseModel):
     __tablename__ = "coaches_employment"
 
     id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid4)
-    employment_type = db.Column(db.String(), nullable=False)
+    employment_type = db.Column(db.String(), nullable=False)  # noqa full-time, interim
 
     created_at = db.Column(
         db.DateTime(), default=datetime.utcnow, nullable=False)

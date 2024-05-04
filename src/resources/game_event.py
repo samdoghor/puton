@@ -1,69 +1,76 @@
-"""src/resources/coach_employ.py
+"""src/resources/game_event.py
 
 Keyword arguments:
 argument -- id, **args
-Return: Coach Employ's CRUD
+Return: Game Events's CRUD
 """
-
-import uuid
 
 from flask.json import jsonify
 from flask_restful import Resource
 from flask_restful.reqparse import Argument
-from sqlalchemy.exc import DataError, IntegrityError
+from sqlalchemy.exc import DataError
 
-from models import CoachEmployModel
+from models import GameEventModel
 from utils import (Conflict, DataNotFound, Forbidden,
                    InternalServerError, parse_params)
 
 
-class CoachEmployResource(Resource):
-    """This class performs CRUD Operation on Coach"""
+class GameEventResource(Resource):
+    """This class performs CRUD Operation on Game Events"""
 
     @staticmethod
     @parse_params(
         Argument(
-            "employment_type",
+            "event_type",
             location="json",
             required=True,
-            help="The employment type of the coach",
+            help="The event type"
         ),
         Argument(
-            "coach_id",
+            "event_time",
             location="json",
             required=True,
-            help="The coach id of the coach",
+            help="The event time",
         ),
         Argument(
-            "season_id",
+            "game_half",
             location="json",
             required=True,
-            help="The season id of the coach",
+            help="which half is the game"
         ),
         Argument(
-            "team_id",
+            "game_id",
             location="json",
             required=True,
-            help="The team id of the coach",
-        )
+            help="The game to which the event belong to"),
+        Argument(
+            "game_player_id",
+            location="json",
+            required=True,
+            help="The player to whom the event occured to",
+        ),
+        Argument(
+            "game_team_id",
+            location="json",
+            required=True,
+            help="The team to whom the event occured to",
+        ),
     )
-    def create(
-        employment_type: str,
-        coach_id: uuid,
-        season_id: uuid,
-        team_id: uuid,
-    ):
-        """creates a new coach employment"""
+    def create(event_type, event_time, game_half, game_id, game_player_id,
+               game_team_id):
+        """creates a new league"""
 
         try:
-            new_coach_employment = CoachEmployModel(
-                employment_type=employment_type,
-                coach_id=coach_id,
-                season_id=season_id,
-                team_id=team_id,
+            new_game_event = GameEventModel(
+                event_type=event_type,
+                event_time=event_time,
+                game_half=game_half,
+                game_id=game_id,
+                game_player_id=game_player_id,
+                game_team_id=game_team_id
             )
 
-            new_coach_employment.save()
+            new_game_event.save()
 
             return (
                 jsonify(
@@ -71,10 +78,13 @@ class CoachEmployResource(Resource):
                         "code": 200,
                         "code_message": "Successful",
                         "data": {
-                            "employment type": employment_type,
-                            "coach id": coach_id,
-                            "season id": season_id,
-                            "team id": team_id,
+                            "event type id": new_game_event.id,
+                            "event type": event_type,
+                            "event time": event_time,
+                            "game half": game_half,
+                            "game id": game_id,
+                            "game player id": game_player_id,
+                            "game team id": game_team_id,
                         },
                     }
                 ),
@@ -88,13 +98,6 @@ class CoachEmployResource(Resource):
                 "message": "A datatype error has occur, check the input and try again.",  # noqa
             }, 500
 
-        except IntegrityError:
-            return {
-                "code": 500,
-                "code_message": "Wrong DataType",
-                "message": "The coach id or season id or team id is incorrect",  # noqa
-            }, 500
-
         except Forbidden as e:
             return {"Code": e.code, "Type": e.type, "code_message": e.message}
 
@@ -106,34 +109,36 @@ class CoachEmployResource(Resource):
 
     @staticmethod
     def read_all():
-        """retrieves all coaches employment"""
+        """retrieves all game events"""
 
         try:
-            coaches_employment = CoachEmployModel.query.all()
+            game_events = GameEventModel.query.all()
 
-            if not coaches_employment:
+            if not game_events:
                 return (
                     jsonify(
                         {
                             "code": 404,
                             "code_message": "Data Not Found",
-                            "message": "No coach employment record was found in the database",  # noqa
+                            "message": "No game event record was found in the database",  # noqa
                         }
                     ),
                     404,
                 )
 
-            if coaches_employment:
-                coaches_employment_record = []
+            if game_events:
+                game_events_record = []
 
-                for coach in coaches_employment:
-                    coaches_employment_record.append(
+                for game_event in game_events:
+                    game_events_record.append(
                         {
-                            "coach employment id": coach.id,
-                            "employment type": coach.employment_type,
-                            "coach id": coach.coach_id,
-                            "season id": coach.season_id,
-                            "team id": coach.team_id,
+                            "game event id": game_event.id,
+                            "event type": game_event.event_type,
+                            "event time": game_event.event_time,
+                            "game half": game_event.game_half,
+                            "game id": game_event.game_id,
+                            "game player id": game_event.game_player_id,
+                            "game team id": game_event.game_team_id,
                         }
                     )
 
@@ -142,7 +147,7 @@ class CoachEmployResource(Resource):
                         {
                             "code": 200,
                             "code_mesaage": "Successful",
-                            "data": coaches_employment_record,
+                            "data": game_events_record,
                         }
                     ),
                     200,
@@ -153,7 +158,7 @@ class CoachEmployResource(Resource):
                 "code": e.code,
                 "type": e.type,
                 "code_mesaage": e.message,
-                "message": "No coach employment record was found in the database",  # noqa
+                "message": "No game event record was found in the database",
             }
 
         except Forbidden as e:
@@ -167,30 +172,32 @@ class CoachEmployResource(Resource):
 
     @staticmethod
     def read_one(id=None):
-        """retrieves one coach employment by id"""
+        """retrieves one game event by id"""
 
         try:
-            coach_employment = CoachEmployModel.query.filter_by(id=id).first()
+            game_event = GameEventModel.query.filter_by(id=id).first()
 
-            if not coach_employment:
+            if not game_event:
                 return (
                     jsonify(
                         {
                             "code": 404,
                             "code_message": "Data Not Found",
-                            "message": f"The coach employment with id {id} was not found in the database",  # noqa
+                            "message": f"The game event with id {id} was not found in the database",  # noqa
                         }
                     ),
                     404,
                 )
 
-            if coach_employment:
-                coach_employment_record = {
-                    "coach employment id": coach_employment.id,
-                    "employment type": coach_employment.employment_type,
-                    "coach id": coach_employment.coach_id,
-                    "season id": coach_employment.season_id,
-                    "team id": coach_employment.team_id,
+            if game_event:
+                game_event_record = {
+                    "game event id": game_event.id,
+                    "event type": game_event.event_type,
+                    "event time": game_event.event_time,
+                    "game half": game_event.game_half,
+                    "game id": game_event.game_id,
+                    "game player id": game_event.game_player_id,
+                    "game team id": game_event.game_team_id,
                 }
 
                 return (
@@ -198,7 +205,7 @@ class CoachEmployResource(Resource):
                         {
                             "code": 200,
                             "code_mesaage": "Successful",
-                            "data": coach_employment_record,
+                            "data": game_event_record,
                         }
                     ),
                     200,
@@ -215,7 +222,7 @@ class CoachEmployResource(Resource):
                 "code": e.code,
                 "type": e.type,
                 "code_mesaage": e.message,
-                "message": f"The coach employment with id {id} was not found in the database",  # noqa
+                "message": f"The game event with id {id} was not found in the database",  # noqa
             }
 
         except Forbidden as e:
@@ -227,65 +234,82 @@ class CoachEmployResource(Resource):
     @staticmethod
     @parse_params(
         Argument(
-            "employment_type",
+            "event_type",
             location="json",
-            help="The employment type of the coach",
+            help="The event type"
         ),
         Argument(
-            "coach_id",
+            "event_time",
             location="json",
-            help="The coach id of the coach",
+            help="The event time",
         ),
         Argument(
-            "season_id",
+            "game_half",
             location="json",
-            help="The season id of the coach",
+            help="which half is the game"
         ),
         Argument(
-            "team_id",
+            "game_id",
             location="json",
-            help="The team id of the coach",
-        )
+            help="The game to which the event belong to"),
+        Argument(
+            "game_player_id",
+            location="json",
+            help="The player to whom the event occured to",
+        ),
+        Argument(
+            "game_team_id",
+            location="json",
+            help="The team to whom the event occured to",
+        ),
     )
     def update(id=None, **args):
-        """retrieves a coach employment by id and update the coach employment"""  # noqa
+        """retrieves a game event by id and update the game event"""
 
         try:
-            coach_employment = CoachEmployModel.query.filter_by(id=id).first()
+            game_event = GameEventModel.query.filter_by(id=id).first()
 
-            if not coach_employment:
+            if not game_event:
                 return (
                     jsonify(
                         {
                             "code": 404,
                             "code_message": "Data Not Found",
-                            "message": f"The coach employment with id {id} was not found in the database",  # noqa
+                            "message": f"The game event with id {id} was not found in the database",  # noqa
                         }
                     ),
                     404,
                 )
 
-            if coach_employment:
-                if "employment_type" in args and args["employment_type"] is not None:  # noqa
-                    coach_employment.employment_type = args["employment_type"]
+            if game_event:
+                if "event_type" in args and args["event_type"] is not None:
+                    game_event.event_type = args["event_type"]
 
-                if "coach_id" in args and args["coach_id"] is not None:
-                    coach_employment.coach_id = args["coach_id"]
+                if "event_time" in args and args["event_time"] is not None:
+                    game_event.event_time = args["event_time"]
 
-                if "season_id" in args and args["season_id"] is not None:
-                    coach_employment.season_id = args["season_id"]
+                if "game_half" in args and args["game_half"] is not None:
+                    game_event.game_half = args["game_half"]
 
-                if "team_id" in args and args["team_id"] is not None:
-                    coach_employment.team_id = args["team_id"]
+                if "game_id" in args and args["game_id"] is not None:
+                    game_event.game_id = args["game_id"]
 
-                coach_employment.save()
+                if "game_player_id" in args and args["game_player_id"] is not None:  # noqa
+                    game_event.game_player_id = args["game_player_id"]
 
-                update_coach_employment = {
-                    "coach employment id": coach_employment.id,
-                    "employment type": coach_employment.employment_type,
-                    "coach id": coach_employment.coach_id,
-                    "season id": coach_employment.season_id,
-                    "team id": coach_employment.team_id,
+                if "game_team_id" in args and args["game_team_id"] is not None:
+                    game_event.game_team_id = args["game_team_id"]
+
+                game_event.save()
+
+                update_game_event = {
+                    "game event id": game_event.id,
+                    "event type": game_event.event_type,
+                    "event time": game_event.event_time,
+                    "game half": game_event.game_half,
+                    "game id": game_event.game_id,
+                    "game player id": game_event.game_player_id,
+                    "game team id": game_event.game_team_id,
                 }
 
                 return (
@@ -293,7 +317,7 @@ class CoachEmployResource(Resource):
                         {
                             "code": 200,
                             "code_mesaage": "Successful",
-                            "data": update_coach_employment,
+                            "data": update_game_event,
                         }
                     ),
                     200,
@@ -306,6 +330,14 @@ class CoachEmployResource(Resource):
                 "message": "A datatype error has occur, check the input and try again.",  # noqa
             }, 500
 
+        except DataNotFound as e:
+            return {
+                "code": e.code,
+                "type": e.type,
+                "code_mesaage": e.message,
+                "message": f"The game event with id {id} was not found in the database",  # noqa
+            }
+
         except Forbidden as e:
             return {"Code": e.code, "Type": e.type, "code_message": e.message}
 
@@ -317,31 +349,31 @@ class CoachEmployResource(Resource):
 
     @staticmethod
     def delete(id=None):
-        """delete one coach employment by id"""
+        """retrieves a game event by id and delete the game event"""
 
         try:
-            coach_employment = CoachEmployModel.query.filter_by(id=id).first()
+            game_event = GameEventModel.query.filter_by(id=id).first()
 
-            if not coach_employment:
+            if not game_event:
                 return (
                     jsonify(
                         {
                             "code": 404,
                             "code_message": "Data Not Found",
-                            "message": f"The coach employment with id {id} was not found in the database",  # noqa
+                            "message": f"The game event with id {id} was not found in the database",  # noqa
                         }
                     ),
                     404,
                 )
 
-            coach_employment.delete()
+            game_event.delete()
 
             return (
                 jsonify(
                     {
                         "code": 200,
                         "code_mesaage": "Successful",
-                        "message": f"The coach employment with id {id} was found in the database and was deleted",  # noqa
+                        "message": f"The game event with id {id} was found in the database and was deleted",  # noqa
                     }
                 ),
                 200,
@@ -358,7 +390,7 @@ class CoachEmployResource(Resource):
                 "code": e.code,
                 "type": e.type,
                 "code_mesaage": e.message,
-                "message": f"The coach employment with id {id} was not found in the database",  # noqa
+                "message": f"The game event with id {id} was not found in the database",  # noqa
             }
 
         except Forbidden as e:

@@ -143,7 +143,6 @@ class CoachResource(Resource):
                             "last name": coach.last_name,
                             "middle name": coach.middle_name,
                             "country id": coach.country_id,
-                            "team id": coach.team_id,
                         }
                     )
 
@@ -201,7 +200,6 @@ class CoachResource(Resource):
                     "last name": coach.last_name,
                     "middle name": coach.middle_name,
                     "country id": coach.country_id,
-                    "team id": coach.team_id,
                 }
 
                 return (
@@ -278,9 +276,6 @@ class CoachResource(Resource):
                 if "country_id" in args and args["country_id"] is not None:
                     coach.country_id = args["country_id"]
 
-                if "team_id" in args and args["team_id"] is not None:
-                    coach.team_id = args["team_id"]
-
                 coach.save()
 
                 update_coach = {
@@ -289,7 +284,6 @@ class CoachResource(Resource):
                     "last name": coach.last_name,
                     "middle name": coach.middle_name,
                     "country id": coach.country_id,
-                    "team id": coach.team_id,
                 }
 
                 return (

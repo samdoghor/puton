@@ -21,7 +21,7 @@ class GameEventModel(db.Model, BaseModel, metaclass=MetaBaseModel):
     __tablename__ = "game_events"
 
     id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid4)
-    event_type = db.Column(db.Boolean, nullable=False, default=False)
+    event_type = db.Column(db.Boolean, nullable=False, default=False)  # noqa | goals, yellow card etc
     event_time = db.Column(db.Integer, nullable=False)
     game_half = db.Column(db.Integer, nullable=False)
 
