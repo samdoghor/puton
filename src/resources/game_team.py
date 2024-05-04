@@ -1,8 +1,8 @@
-"""src/resources/team.py
+"""src/resources/game_player.py
 
 Keyword arguments:
 argument -- id, **args
-Return: Team's CRUD
+Return: Game Player's CRUD
 """
 
 from flask.json import jsonify
@@ -10,97 +10,62 @@ from flask_restful import Resource
 from flask_restful.reqparse import Argument
 from sqlalchemy.exc import DataError
 
-from models import TeamModel
+from models import GameTeamModel
 from utils import (Conflict, DataNotFound, Forbidden,
                    InternalServerError, parse_params)
 
 
-class TeamResource(Resource):
-    """This class performs CRUD Operation on Team"""
+class GameTeamResource(Resource):
+    """This class performs CRUD Operation on Game Teams"""
 
     @staticmethod
     @parse_params(
         Argument(
-            "name",
+            "is_home",
             location="json",
             required=True,
-            help="The name of the club"),
-        Argument(
-            "abbr",
-            location="json",
-            required=True,
-            help="The abbreviation of the club"
+            type=bool,
+            help="Is the team home or away for the gmae"
         ),
         Argument(
-            "flag",
+            "game_id",
             location="json",
             required=True,
-            help="The flag of the club"),
+            help="The game to which the event belong to"),
         Argument(
-            "founded",
+            "team_id",
             location="json",
             required=True,
-            help="The year the club was founded",
-        ),
-        Argument(
-            "country_id",
-            location="json",
-            required=True,
-            help="The country to which the club belong",
-        ),
-        Argument(
-            "league_id",
-            location="json",
-            required=True,
-            help="The league to which the club belong",
+            help="The team to whom the event occured to",
         ),
     )
-    def create(name, abbr, flag, founded, country_id, league_id):
-        """creates a new club"""
+    def create(is_home, game_id, team_id):
+        """creates a new game team"""
 
         try:
-            team = TeamModel.query.filter_by(name=name).first()
+            new_game_player = GameTeamModel(
+                is_home=is_home,
+                game_id=game_id,
+                team_id=team_id,
+            )
 
-            if team:
-                return (
-                    jsonify(
-                        {
-                            "code": 409,
-                            "code_message": "Data Conflict",
-                            "message": f"{name} already exist in the database",
-                        }
-                    ),
-                    409,
-                )
+            new_game_player.save()
 
-            if not team:
-                new_team = TeamModel(
-                    name=name,
-                    abbr=abbr,
-                    flag=flag,
-                    founded=founded,
-                    country_id=country_id,
-                    league_id=league_id,
-                )
-
-                new_team.save()
-
-                return (
-                    jsonify(
-                        {
-                            "code": 200,
-                            "code_message": "Successful",
-                            "data": {
-                                "name": name,
-                                "abbreviation": abbr,
-                                "flag": flag,
-                                "founded": founded,
-                                "country id": country_id,
-                            },
-                        }
-                    ),
-                    200,
-                )
+            return (
+                jsonify(
+                    {
+                        "code": 200,
+                        "code_message": "Successful",
+                        "data": {
+                            "game team id": new_game_player.id,
+                            "home team": is_home,
+                            "game id": game_id,
+                            "team id": team_id,
+                        },
+                    }
+                ),
+                200,
+            )
 
         except DataError:
             return {
@@ -120,35 +85,33 @@ class TeamResource(Resource):
 
     @staticmethod
     def read_all():
-        """retrieves all teams"""
+        """retrieves all game teams"""
 
         try:
-            teams = TeamModel.query.all()
+            game_teams = GameTeamModel.query.all()
 
-            if not teams:
+            if not game_teams:
                 return (
                     jsonify(
                         {
                             "code": 404,
                             "code_message": "Data Not Found",
-                            "message": "No team record was found in the database",  # noqa
+                            "message": "No game team record was found in the database",  # noqa
                         }
                     ),
                     404,
                 )
 
-            if teams:
-                teams_record = []
+            if game_teams:
+                game_teams_record = []
 
-                for team in teams:
-                    teams_record.append(
+                for game_team in game_teams:
+                    game_teams_record.append(
                         {
-                            "team id": team.id,
-                            "name": team.name,
-                            "abbreviation": team.abbr,
-                            "flag": team.flag,
-                            "founded": team.founded,
-                            "country id": team.country_id,
+                            "game team id": game_team.id,
+                            "home team": game_team.is_home,
+                            "game id": game_team.game_id,
+                            "team id": game_team.team_id,
                         }
                     )
 
@@ -157,7 +120,7 @@ class TeamResource(Resource):
                         {
                             "code": 200,
                             "code_mesaage": "Successful",
-                            "data": teams_record,
+                            "data": game_teams_record,
                         }
                     ),
                     200,
@@ -168,7 +131,7 @@ class TeamResource(Resource):
                 "code": e.code,
                 "type": e.type,
                 "code_mesaage": e.message,
-                "message": "No team record was found in the database",
+                "message": "No game team record was found in the database",
             }
 
         except Forbidden as e:
@@ -182,31 +145,29 @@ class TeamResource(Resource):
 
     @staticmethod
     def read_one(id=None):
-        """retrieves one team by id"""
+        """retrieves one game team by id"""
 
         try:
-            team = TeamModel.query.filter_by(id=id).first()
+            game_team = GameTeamModel.query.filter_by(id=id).first()
 
-            if not team:
+            if not game_team:
                 return (
                     jsonify(
                         {
                             "code": 404,
                             "code_message": "Data Not Found",
-                            "message": f"The team with id {id} was not found in the database",  # noqa
+                            "message": f"The game team with id {id} was not found in the database",  # noqa
                         }
                     ),
                     404,
                 )
 
-            if team:
-                team_record = {
-                    "team id": team.id,
-                    "name": team.name,
-                    "abbreviation": team.abbr,
-                    "flag": team.flag,
-                    "founded": team.founded,
-                    "country id": team.country_id,
+            if game_team:
+                game_team_record = {
+                    "game team id": game_team.id,
+                    "home team": game_team.is_home,
+                    "game id": game_team.game_id,
+                    "team id": game_team.team_id,
                 }
 
                 return (
@@ -214,7 +175,7 @@ class TeamResource(Resource):
                         {
                             "code": 200,
                             "code_mesaage": "Successful",
-                            "data": team_record,
+                            "data": game_team_record,
                         }
                     ),
                     200,
@@ -231,7 +192,7 @@ class TeamResource(Resource):
                 "code": e.code,
                 "type": e.type,
                 "code_mesaage": e.message,
-                "message": f"The team with id {id} was not found in the database",  # noqa
+                "message": f"The game team with id {id} was not found in the database",  # noqa
             }
 
         except Forbidden as e:
@@ -242,63 +203,57 @@ class TeamResource(Resource):
 
     @staticmethod
     @parse_params(
-        Argument("name", location="json", help="The name of the club"),
-        Argument("abbr", location="json", help="The abbreviation of the club"),
-        Argument("flag", location="json", help="The flag of the club"),
         Argument(
-            "founded",
+            "is_home",
             location="json",
-            help="The year the club was founded",
+            type=bool,
+            help="Is the team home or away for the gmae"
         ),
         Argument(
-            "country_id",
+            "game_id",
             location="json",
-            help="The country to which the club belong",
+            help="The game to which the event belong to"),
+        Argument(
+            "team_id",
+            location="json",
+            help="The team to whom the event occured to",
         ),
     )
     def update(id=None, **args):
-        """retrieves a team by id and update the team"""
+        """retrieves a game team by id and update the game team"""
 
         try:
-            team = TeamModel.query.filter_by(id=id).first()
+            game_team = GameTeamModel.query.filter_by(id=id).first()
 
-            if not team:
+            if not game_team:
                 return (
                     jsonify(
                         {
                             "code": 404,
                             "code_message": "Data Not Found",
-                            "message": f"The team with id {id} was not found in the database",  # noqa
+                            "message": f"The game team with id {id} was not found in the database",  # noqa
                         }
                     ),
                     404,
                 )
 
-            if team:
-                if "name" in args and args["name"] is not None:
-                    team.name = args["name"]
+            if game_team:
+                if "is_home" in args and args["is_home"] is not None:  # noqa
+                    game_team.is_home = args["is_home"]
 
-                if "abbr" in args and args["abbr"] is not None:
-                    team.abbr = args["abbr"]
+                if "game_id" in args and args["game_id"] is not None:
+                    game_team.game_id = args["game_id"]
 
-                if "flag" in args and args["flag"] is not None:
-                    team.flag = args["flag"]
+                if "team_id" in args and args["team_id"] is not None:  # noqa
+                    game_team.team_id = args["team_id"]
 
-                if "founded" in args and args["founded"] is not None:
-                    team.founded = args["founded"]
+                game_team.save()
 
-                if "country_id" in args and args["country_id"] is not None:
-                    team.country_id = args["country_id"]
-
-                team.save()
-
-                update_team = {
-                    "team id": team.id,
-                    "name": team.name,
-                    "abbreviation": team.abbr,
-                    "flag": team.flag,
-                    "founded": team.founded,
-                    "country id": team.country_id,
+                update_game_team = {
+                    "game team id": game_team.id,
+                    "home team": game_team.is_home,
+                    "game id": game_team.game_id,
+                    "team id": game_team.team_id,
                 }
 
                 return (
@@ -306,7 +261,7 @@ class TeamResource(Resource):
                         {
                             "code": 200,
                             "code_mesaage": "Successful",
-                            "data": update_team,
+                            "data": update_game_team,
                         }
                     ),
                     200,
@@ -319,6 +274,14 @@ class TeamResource(Resource):
                 "message": "A datatype error has occur, check the input and try again.",  # noqa
             }, 500
 
+        except DataNotFound as e:
+            return {
+                "code": e.code,
+                "type": e.type,
+                "code_mesaage": e.message,
+                "message": f"The game team with id {id} was not found in the database",  # noqa
+            }
+
         except Forbidden as e:
             return {"Code": e.code, "Type": e.type, "code_message": e.message}
 
@@ -330,31 +293,31 @@ class TeamResource(Resource):
 
     @staticmethod
     def delete(id=None):
-        """delete one team by id"""
+        """retrieves a game team by id and delete the game team"""
 
         try:
-            team = TeamModel.query.filter_by(id=id).first()
+            game_team = GameTeamModel.query.filter_by(id=id).first()
 
-            if not team:
+            if not game_team:
                 return (
                     jsonify(
                         {
                             "code": 404,
                             "code_message": "Data Not Found",
-                            "message": f"The team with id {id} was not found in the database",  # noqa
+                            "message": f"The game team with id {id} was not found in the database",  # noqa
                         }
                     ),
                     404,
                 )
 
-            team.delete()
+            game_team.delete()
 
             return (
                 jsonify(
                     {
                         "code": 200,
                         "code_mesaage": "Successful",
-                        "message": f"The team with id {id} was found in the database and was deleted",  # noqa
+                        "message": f"The game team with id {id} was found in the database and was deleted",  # noqa
                     }
                 ),
                 200,
@@ -371,7 +334,7 @@ class TeamResource(Resource):
                 "code": e.code,
                 "type": e.type,
                 "code_mesaage": e.message,
-                "message": f"The team with id {id} was not found in the database",  # noqa
+                "message": f"The game team with id {id} was not found in the database",  # noqa
             }
 
         except Forbidden as e:

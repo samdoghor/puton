@@ -2,6 +2,7 @@ from .coach_employ import CoachEmployResource
 from .coach import CoachResource
 from .country import CountryResource
 from .game_event import GameEventResource
+from .game_player import GamePlayerResource
 from .game import GameResource
 from .index import IndexResource
 from .league import LeagueResource

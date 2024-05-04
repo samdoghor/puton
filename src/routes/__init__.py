@@ -2,6 +2,7 @@ from .coach_employ import CoachEmployBlueprint
 from .coach import CoachBlueprint
 from .country import CountryBlueprint
 from .game import GameBlueprint
+from .game_player import GamePlayerBlueprint
 from .index import IndexBlueprint
 from .league import LeagueBlueprint
 from .player import PlayerBlueprint
