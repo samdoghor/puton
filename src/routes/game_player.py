@@ -1,4 +1,4 @@
-"""src/routes/game_Palyer.py
+"""src/routes/game_player.py
 
 Keyword arguments:
 argument -- create, reall_all, read_one, update, delete

@@ -134,7 +134,7 @@ class GamePlayerResource(Resource):
                 for game_player in game_players:
                     game_players_record.append(
                         {
-                            "game player type id": game_player.id,
+                            "game player id": game_player.id,
                             "starting lineup": game_player.starting_lineup,
                             "substitute": game_player.substitute,
                             "minutes played": game_player.minutes_played,
@@ -193,7 +193,7 @@ class GamePlayerResource(Resource):
 
             if game_player:
                 game_player_record = {
-                    "game player type id": game_player.id,
+                    "game player id": game_player.id,
                     "starting lineup": game_player.starting_lineup,
                     "substitute": game_player.substitute,
                     "minutes played": game_player.minutes_played,
@@ -307,7 +307,7 @@ class GamePlayerResource(Resource):
                 game_player.save()
 
                 update_game_player = {
-                    "game player type id": game_player.id,
+                    "game player id": game_player.id,
                     "starting lineup": game_player.starting_lineup,
                     "substitute": game_player.substitute,
                     "minutes played": game_player.minutes_played,

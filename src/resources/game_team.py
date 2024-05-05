@@ -1,8 +1,8 @@
-"""src/resources/game_player.py
+"""src/resources/game_team.py
 
 Keyword arguments:
 argument -- id, **args
-Return: Game Player's CRUD
+Return: Game Team's CRUD
 """
 
 from flask.json import jsonify
