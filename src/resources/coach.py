@@ -79,6 +79,7 @@ class CoachResource(Resource):
                         "code": 200,
                         "code_message": "Successful",
                         "data": {
+                            "coach id": new_coach.id,
                             "first name": first_name,
                             "last name": last_name,
                             "middle name": middle_name,
@@ -143,6 +144,8 @@ class CoachResource(Resource):
                             "last name": coach.last_name,
                             "middle name": coach.middle_name,
                             "country id": coach.country_id,
+                            "created at": coach.created_at,
+                            "updated at": coach.updated_at
                         }
                     )
 
@@ -200,6 +203,8 @@ class CoachResource(Resource):
                     "last name": coach.last_name,
                     "middle name": coach.middle_name,
                     "country id": coach.country_id,
+                    "created at": coach.created_at,
+                    "updated at": coach.updated_at,
                 }
 
                 return (
@@ -284,6 +289,8 @@ class CoachResource(Resource):
                     "last name": coach.last_name,
                     "middle name": coach.middle_name,
                     "country id": coach.country_id,
+                    "created at": coach.created_at,
+                    "updated at": coach.updated_at,
                 }
 
                 return (

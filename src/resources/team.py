@@ -91,11 +91,14 @@ class TeamResource(Resource):
                             "code": 200,
                             "code_message": "Successful",
                             "data": {
+                                "team id": new_team.id,
                                 "name": name,
                                 "abbreviation": abbr,
                                 "flag": flag,
                                 "founded": founded,
                                 "country id": country_id,
+                                "created at": new_team.created_at,
+                                "updated at": new_team.updated_at,
                             },
                         }
                     ),
@@ -149,6 +152,8 @@ class TeamResource(Resource):
                             "flag": team.flag,
                             "founded": team.founded,
                             "country id": team.country_id,
+                            "created at": team.created_at,
+                            "updated at": team.updated_at,
                         }
                     )
 
@@ -207,6 +212,8 @@ class TeamResource(Resource):
                     "flag": team.flag,
                     "founded": team.founded,
                     "country id": team.country_id,
+                    "created at": team.created_at,
+                    "updated at": team.updated_at,
                 }
 
                 return (
@@ -299,6 +306,8 @@ class TeamResource(Resource):
                     "flag": team.flag,
                     "founded": team.founded,
                     "country id": team.country_id,
+                    "created at": team.created_at,
+                    "updated at": team.updated_at,
                 }
 
                 return (

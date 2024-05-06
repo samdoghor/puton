@@ -87,6 +87,8 @@ class GamePlayerResource(Resource):
                             "game id": game_id,
                             "player id": player_id,
                             "game team id": game_team_id,
+                            "created at": new_game_player.created_at,
+                            "updated at": new_game_player.updated_at,
                         },
                     }
                 ),
@@ -141,6 +143,8 @@ class GamePlayerResource(Resource):
                             "game id": game_player.game_id,
                             "player id": game_player.player_id,
                             "game team id": game_player.game_team_id,
+                            "created at": game_player.created_at,
+                            "updated at": game_player.updated_at,
                         }
                     )
 
@@ -200,6 +204,8 @@ class GamePlayerResource(Resource):
                     "game id": game_player.game_id,
                     "player id": game_player.player_id,
                     "game team id": game_player.game_team_id,
+                    "created at": game_player.created_at,
+                    "updated at": game_player.updated_at,
                 }
 
                 return (
@@ -314,6 +320,8 @@ class GamePlayerResource(Resource):
                     "game id": game_player.game_id,
                     "player id": game_player.player_id,
                     "game team id": game_player.game_team_id,
+                    "created at": game_player.created_at,
+                    "updated at": game_player.updated_at,
                 }
 
                 return (

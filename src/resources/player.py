@@ -126,6 +126,7 @@ class PlayerResource(Resource):
                         "code": 200,
                         "code_message": "Successful",
                         "data": {
+                            "player id": new_player.id,
                             "first name": first_name,
                             "last name": last_name,
                             "middle name": middle_name,
@@ -137,6 +138,8 @@ class PlayerResource(Resource):
                             "injury": injury,
                             "country id": country_id,
                             "team id": team_id,
+                            "created at": new_player.created_at,
+                            "updated at": new_player.updated_at,
                         },
                     }
                 ),
@@ -205,6 +208,8 @@ class PlayerResource(Resource):
                             "injury": player.injury,
                             "country id": player.country_id,
                             "team id": player.team_id,
+                            "created at": player.created_at,
+                            "updated at": player.updated_at,
                         }
                     )
 
@@ -269,6 +274,8 @@ class PlayerResource(Resource):
                     "injury": player.injury,
                     "country id": player.country_id,
                     "team id": player.team_id,
+                    "created at": player.created_at,
+                    "updated at": player.updated_at,
                 }
 
                 return (
@@ -420,6 +427,8 @@ class PlayerResource(Resource):
                     "injury": player.injury,
                     "country id": player.country_id,
                     "team id": player.team_id,
+                    "created at": player.created_at,
+                    "updated at": player.updated_at,
                 }
 
                 return (

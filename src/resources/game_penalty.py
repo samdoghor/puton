@@ -45,13 +45,13 @@ class GamePenaltyResource(Resource):
         """creates a new game penalty event"""
 
         try:
-            new_game_penaltty = GamePenaltyModel(
+            new_game_penalty = GamePenaltyModel(
                 is_penalty_shootout=is_penalty_shootout,
                 is_goal=is_goal,
                 game_event_id=game_event_id,
             )
 
-            new_game_penaltty.save()
+            new_game_penalty.save()
 
             return (
                 jsonify(
@@ -59,10 +59,12 @@ class GamePenaltyResource(Resource):
                         "code": 200,
                         "code_message": "Successful",
                         "data": {
-                            "game penalty id": new_game_penaltty.id,
+                            "game penalty id": new_game_penalty.id,
                             "is penalty shootout": is_penalty_shootout,
                             "is goal": is_goal,
                             "game event id": game_event_id,
+                            "created at": new_game_penalty.created_at,
+                            "updated at": new_game_penalty.updated_at
                         },
                     }
                 ),
@@ -114,6 +116,8 @@ class GamePenaltyResource(Resource):
                             "is penalty shootout": game_penalty.is_penalty_shootout,  # noqa
                             "is goal": game_penalty.is_goal,
                             "game event id": game_penalty.game_event_id,
+                            "created at": game_penalty.created_at,
+                            "updated at": game_penalty.updated_at,
                         }
                     )
 
@@ -170,6 +174,8 @@ class GamePenaltyResource(Resource):
                     "is penalty shootout": game_penalty.is_penalty_shootout,  # noqa
                     "is goal": game_penalty.is_goal,
                     "game event id": game_penalty.game_event_id,
+                    "created at": game_penalty.created_at,
+                    "updated at": game_penalty.updated_at,
                 }
 
                 return (
@@ -258,6 +264,8 @@ class GamePenaltyResource(Resource):
                     "is penalty shootout": game_penalty.is_penalty_shootout,  # noqa
                     "is goal": game_penalty.is_goal,
                     "game event id": game_penalty.game_event_id,
+                    "created at": game_penalty.created_at,
+                    "updated at": game_penalty.updated_at,
                 }
 
                 return (

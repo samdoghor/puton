@@ -61,6 +61,8 @@ class GameTeamResource(Resource):
                             "home team": is_home,
                             "game id": game_id,
                             "team id": team_id,
+                            "created at": new_game_player.created_at,
+                            "updated at": new_game_player.updated_at,
                         },
                     }
                 ),
@@ -112,6 +114,8 @@ class GameTeamResource(Resource):
                             "home team": game_team.is_home,
                             "game id": game_team.game_id,
                             "team id": game_team.team_id,
+                            "created at": game_team.created_at,
+                            "updated at": game_team.updated_at,
                         }
                     )
 
@@ -168,6 +172,8 @@ class GameTeamResource(Resource):
                     "home team": game_team.is_home,
                     "game id": game_team.game_id,
                     "team id": game_team.team_id,
+                    "created at": game_team.created_at,
+                    "updated at": game_team.updated_at,
                 }
 
                 return (
@@ -254,6 +260,8 @@ class GameTeamResource(Resource):
                     "home team": game_team.is_home,
                     "game id": game_team.game_id,
                     "team id": game_team.team_id,
+                    "created at": game_team.created_at,
+                    "updated at": game_team.updated_at,
                 }
 
                 return (

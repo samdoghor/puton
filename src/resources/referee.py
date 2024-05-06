@@ -64,10 +64,13 @@ class RefereeResource(Resource):
                         "code": 200,
                         "code_message": "Successful",
                         "data": {
+                            "referee id": new_referee.id,
                             "first name": first_name,
                             "last name": last_name,
                             "middle name": middle_name,
                             "country id": country_id,
+                            "created at": new_referee.created_at,
+                            "updated at": new_referee.updated_at,
                         },
                     }
                 ),
@@ -127,6 +130,8 @@ class RefereeResource(Resource):
                             "last name": referee.last_name,
                             "middle name": referee.middle_name,
                             "country id": referee.country_id,
+                            "created at": referee.created_at,
+                            "updated at": referee.updated_at,
                         }
                     )
 
@@ -184,6 +189,8 @@ class RefereeResource(Resource):
                     "last name": referee.last_name,
                     "middle name": referee.middle_name,
                     "country id": referee.country_id,
+                    "created at": referee.created_at,
+                    "updated at": referee.updated_at
                 }
 
                 return (
@@ -267,6 +274,8 @@ class RefereeResource(Resource):
                     "last name": referee.last_name,
                     "middle name": referee.middle_name,
                     "country id": referee.country_id,
+                    "created at": referee.created_at,
+                    "updated at": referee.updated_at,
                 }
 
                 return (

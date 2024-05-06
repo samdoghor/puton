@@ -81,11 +81,14 @@ class LeagueResource(Resource):
                             "code": 200,
                             "code_message": "Successful",
                             "data": {
+                                "league id": new_league.id,
                                 "name": name,
                                 "abbr": abbr,
                                 "league type": league_type,
                                 "flag": logo,
                                 "country id": country_id,
+                                "created at": new_league.created_at,
+                                "updated at": new_league.updated_at,
                             },
                         }
                     ),
@@ -133,12 +136,14 @@ class LeagueResource(Resource):
                 for league in leagues:
                     leagues_record.append(
                         {
-                            "league_id": league.id,
+                            "league id": league.id,
                             "name": league.name,
                             "abbr": league.abbr,
                             "league type": league.league_type,
                             "flag": league.logo,
                             "country id": league.country_id,
+                            "created at": league.created_at,
+                            "updated at": league.updated_at,
                         }
                     )
 
@@ -191,12 +196,14 @@ class LeagueResource(Resource):
 
             if league:
                 league_record = {
-                    "league_id": league.id,
+                    "league id": league.id,
                     "name": league.name,
                     "abbr": league.abbr,
                     "league type": league.league_type,
                     "flag": league.logo,
                     "country id": league.country_id,
+                    "created at": league.created_at,
+                    "updated at": league.updated_at,
                 }
 
                 return (
@@ -280,12 +287,14 @@ class LeagueResource(Resource):
                 league.save()
 
                 update_league = {
-                    "league_id": league.id,
+                    "league id": league.id,
                     "name": league.name,
                     "abbr": league.abbr,
                     "league type": league.league_type,
                     "flag": league.logo,
                     "country id": league.country_id,
+                    "created at": league.created_at,
+                    "updated at": league.updated_at,
                 }
 
                 return (

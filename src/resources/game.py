@@ -95,6 +95,8 @@ class GameResource(Resource):
                             "referee id": referee_id,
                             "season id": season_id,
                             "venue id": venue_id,
+                            "created at": new_game.created_at,
+                            "updated at": new_game.updated_at,
                         },
                     }
                 ),
@@ -150,6 +152,8 @@ class GameResource(Resource):
                             "referee id": game.referee_id,
                             "season id": game.season_id,
                             "venue id": game.venue_id,
+                            "created at": game.created_at,
+                            "updated at": game.updated_at,
                         }
                     )
 
@@ -210,6 +214,8 @@ class GameResource(Resource):
                     "referee id": game.referee_id,
                     "season id": game.season_id,
                     "venue id": game.venue_id,
+                    "created at": game.created_at,
+                    "updated at": game.updated_at,
                 }
 
                 return (
@@ -332,6 +338,8 @@ class GameResource(Resource):
                     "referee id": game.referee_id,
                     "season id": game.season_id,
                     "venue id": game.venue_id,
+                    "created at": game.created_at,
+                    "updated at": game.updated_at,
                 }
 
                 return (
