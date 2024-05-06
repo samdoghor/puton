@@ -40,3 +40,8 @@ class GameEventModel(db.Model, BaseModel, metaclass=MetaBaseModel):
     game_team_id = db.Column(
         UUID(as_uuid=True), db.ForeignKey("game_teams.id"), nullable=False
     )
+
+    # relationships
+
+    game_penalties = db.relationship(
+        'GamePenaltyModel', backref='game_events', lazy=True)
