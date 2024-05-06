@@ -22,8 +22,8 @@ class PlayerTransferModel(db.Model, BaseModel, metaclass=MetaBaseModel):
 
     id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid4)
     amount = db.Column(db.Integer, nullable=False)
-    transfer_window = db.Column(db.String(), nullable=False)
-    transfer_type = db.Column(db.String(), nullable=False)
+    transfer_window = db.Column(db.String(), nullable=False)  # noqa | jan or aug
+    transfer_type = db.Column(db.String(), nullable=False)  # noqa | buy or sell
 
     created_at = db.Column(
         db.DateTime(), default=datetime.utcnow, nullable=False)

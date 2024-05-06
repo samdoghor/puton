@@ -1,77 +1,83 @@
-"""src/resources/coach.py
+"""src/resources/player_transfer.py
 
 Keyword arguments:
 argument -- id, **args
-Return: Coach's CRUD
+Return:  Player Transfer's CRUD
 """
-
-import uuid
 
 from flask.json import jsonify
 from flask_restful import Resource
 from flask_restful.reqparse import Argument
 from sqlalchemy.exc import DataError, IntegrityError
 
-from models import CoachModel
+from models import PlayerTransferModel
 from utils import (Conflict, DataNotFound, Forbidden,
                    InternalServerError, parse_params)
 
 
-class CoachResource(Resource):
-    """This class performs CRUD Operation on Coach"""
+class PlayerTransferResource(Resource):
+    """This class performs CRUD Operation on Players Transfer"""
 
     @staticmethod
     @parse_params(
         Argument(
-            "first_name",
+            "amount",
             location="json",
             required=True,
-            help="The first name of the coach",
+            help="The fee for the transfer",
         ),
         Argument(
-            "last_name",
+            "transfer_window",
             location="json",
             required=True,
-            help="The last name of the coach",
+            help="The transfer window",
         ),
         Argument(
-            "middle_name",
+            "transfer_type",
             location="json",
             required=True,
-            help="The middle name of the coach",
+            help="The transfer type",
         ),
         Argument(
-            "country_id",
+            "player_id",
             location="json",
             required=True,
-            help="The country of the coach",
+            help="The id of the player to whom was transfered ",
+        ),
+        Argument(
+            "season_id",
+            location="json",
+            required=True,
+            help="The season id in which the player was transfer",
         ),
         Argument(
             "team_id",
             location="json",
             required=True,
-            help="The team of the coach"
-        ),
+            help="The team id the player was transfer to",
+        )
     )
     def create(
-        first_name: str,
-        last_name: str,
-        middle_name: str,
-        country_id: uuid,
-        team_id: uuid,
+        amount,
+        transfer_window,
+        transfer_type,
+        player_id,
+        season_id,
+        team_id,
     ):
-        """creates a new coach"""
+        """creates a new player transfer"""
 
         try:
-            new_coach = CoachModel(
-                first_name=first_name,
-                last_name=last_name,
-                middle_name=middle_name,
-                country_id=country_id,
+            new_player_transfer = PlayerTransferModel(
+                amount=amount,
+                transfer_window=transfer_window,
+                transfer_type=transfer_type,
+                player_id=player_id,
+                season_id=season_id,
                 team_id=team_id,
             )
 
-            new_coach.save()
+            new_player_transfer.save()
 
             return (
                 jsonify(
@@ -79,10 +85,12 @@ class CoachResource(Resource):
                         "code": 200,
                         "code_message": "Successful",
                         "data": {
-                            "first name": first_name,
-                            "last name": last_name,
-                            "middle name": middle_name,
-                            "country id": country_id,
+                            "player transfer id": new_player_transfer.id,
+                            "amount": amount,
+                            "transfer window": transfer_window,
+                            "transfer type": transfer_type,
+                            "player id": player_id,
+                            "season id": season_id,
                             "team id": team_id,
                         },
                     }
@@ -101,7 +109,7 @@ class CoachResource(Resource):
             return {
                 "code": 500,
                 "code_message": "Wrong DataType",
-                "message": "The country id or team id is incorrect",  # noqa
+                "message": "The player id or season id or team id is incorrect",  # noqa
             }, 500
 
         except Forbidden as e:
@@ -115,34 +123,36 @@ class CoachResource(Resource):
 
     @staticmethod
     def read_all():
-        """retrieves all coaches"""
+        """retrieves all player transfer"""
 
         try:
-            coaches = CoachModel.query.all()
+            players_transfer = PlayerTransferModel.query.all()
 
-            if not coaches:
+            if not players_transfer:
                 return (
                     jsonify(
                         {
                             "code": 404,
                             "code_message": "Data Not Found",
-                            "message": "No coach record was found in the database",  # noqa
+                            "message": "No player transfer record was found in the database",  # noqa
                         }
                     ),
                     404,
                 )
 
-            if coaches:
-                coaches_record = []
+            if players_transfer:
+                players_transfer_record = []
 
-                for coach in coaches:
-                    coaches_record.append(
+                for player_transfer in players_transfer:
+                    players_transfer_record.append(
                         {
-                            "coach id": coach.id,
-                            "first name": coach.first_name,
-                            "last name": coach.last_name,
-                            "middle name": coach.middle_name,
-                            "country id": coach.country_id,
+                            "player transfer id": player_transfer.id,
+                            "amount": player_transfer.amount,
+                            "transfer window": player_transfer.transfer_window,
+                            "transfer type": player_transfer.transfer_type,
+                            "player id": player_transfer.player_id,
+                            "season id": player_transfer.season_id,
+                            "team id": player_transfer.team_id,
                         }
                     )
 
@@ -151,7 +161,7 @@ class CoachResource(Resource):
                         {
                             "code": 200,
                             "code_mesaage": "Successful",
-                            "data": coaches_record,
+                            "data": players_transfer_record,
                         }
                     ),
                     200,
@@ -162,7 +172,7 @@ class CoachResource(Resource):
                 "code": e.code,
                 "type": e.type,
                 "code_mesaage": e.message,
-                "message": "No coach record was found in the database",
+                "message": "No player transfer record was found in the database",  # noqa
             }
 
         except Forbidden as e:
@@ -176,30 +186,33 @@ class CoachResource(Resource):
 
     @staticmethod
     def read_one(id=None):
-        """retrieves one coach by id"""
+        """retrieves one player transfer by id"""
 
         try:
-            coach = CoachModel.query.filter_by(id=id).first()
+            player_transfer = PlayerTransferModel.query.filter_by(
+                id=id).first()
 
-            if not coach:
+            if not player_transfer:
                 return (
                     jsonify(
                         {
                             "code": 404,
                             "code_message": "Data Not Found",
-                            "message": f"The coach with id {id} was not found in the database",  # noqa
+                            "message": f"The player transfer with id {id} was not found in the database",  # noqa
                         }
                     ),
                     404,
                 )
 
-            if coach:
-                coach_record = {
-                    "coach id": coach.id,
-                    "first name": coach.first_name,
-                    "last name": coach.last_name,
-                    "middle name": coach.middle_name,
-                    "country id": coach.country_id,
+            if player_transfer:
+                player_transfer_record = {
+                    "player transfer id": player_transfer.id,
+                    "amount": player_transfer.amount,
+                    "transfer window": player_transfer.transfer_window,
+                    "transfer type": player_transfer.transfer_type,
+                    "player id": player_transfer.player_id,
+                    "season id": player_transfer.season_id,
+                    "team id": player_transfer.team_id,
                 }
 
                 return (
@@ -207,7 +220,7 @@ class CoachResource(Resource):
                         {
                             "code": 200,
                             "code_mesaage": "Successful",
-                            "data": coach_record,
+                            "data": player_transfer_record,
                         }
                     ),
                     200,
@@ -224,7 +237,7 @@ class CoachResource(Resource):
                 "code": e.code,
                 "type": e.type,
                 "code_mesaage": e.message,
-                "message": f"The coach with id {id} was not found in the database",  # noqa
+                "message": f"The player transfer with id {id} was not found in the database",  # noqa
             }
 
         except Forbidden as e:
@@ -235,55 +248,85 @@ class CoachResource(Resource):
 
     @staticmethod
     @parse_params(
-        Argument("first_name", location="json",
-                 help="The first name of the coach"),
-        Argument("last_name", location="json",
-                 help="The last name of the coach"),
-        Argument("middle_name", location="json",
-                 help="The middle name of the coach"),
-        Argument("country_id", location="json",
-                 help="The country of the coach"),
-        Argument("team_id", location="json", help="The team of the coach"),
+        Argument(
+            "amount",
+            location="json",
+            help="The fee for the transfer",
+        ),
+        Argument(
+            "transfer_window",
+            location="json",
+            help="The transfer window",
+        ),
+        Argument(
+            "transfer_type",
+            location="json",
+            help="The transfer type",
+        ),
+        Argument(
+            "player_id",
+            location="json",
+            help="The id of the player to whom was transfered ",
+        ),
+        Argument(
+            "season_id",
+            location="json",
+            help="The season id in which the player was transfer",
+        ),
+        Argument(
+            "team_id",
+            location="json",
+            help="The team id the player was transfer to",
+        )
     )
     def update(id=None, **args):
-        """retrieves a coach by id and update the coach"""
+        """retrieves a player transfer by id and update the player transfer"""  # noqa
 
         try:
-            coach = CoachModel.query.filter_by(id=id).first()
+            player_transfer = PlayerTransferModel.query.filter_by(
+                id=id).first()
 
-            if not coach:
+            if not player_transfer:
                 return (
                     jsonify(
                         {
                             "code": 404,
                             "code_message": "Data Not Found",
-                            "message": f"The coach with id {id} was not found in the database",  # noqa
+                            "message": f"The player transfer with id {id} was not found in the database",  # noqa
                         }
                     ),
                     404,
                 )
 
-            if coach:
-                if "first_name" in args and args["first_name"] is not None:
-                    coach.first_name = args["first_name"]
+            if player_transfer:
+                if "amount" in args and args["amount"] is not None:  # noqa
+                    player_transfer.amount = args["amount"]
 
-                if "last_name" in args and args["last_name"] is not None:
-                    coach.last_name = args["last_name"]
+                if "transfer_window" in args and args["transfer_window"] is not None:  # noqa
+                    player_transfer.transfer_window = args["transfer_window"]
 
-                if "middle_name" in args and args["middle_name"] is not None:
-                    coach.middle_name = args["middle_name"]
+                if "transfer_type" in args and args["transfer_type"] is not None:  # noqa
+                    player_transfer.transfer_type = args["transfer_type"]
 
-                if "country_id" in args and args["country_id"] is not None:
-                    coach.country_id = args["country_id"]
+                if "player_id" in args and args["player_id"] is not None:
+                    player_transfer.player_id = args["player_id"]
 
-                coach.save()
+                if "season_id" in args and args["season_id"] is not None:
+                    player_transfer.season_id = args["season_id"]
 
-                update_coach = {
-                    "coach id": coach.id,
-                    "first name": coach.first_name,
-                    "last name": coach.last_name,
-                    "middle name": coach.middle_name,
-                    "country id": coach.country_id,
+                if "team_id" in args and args["team_id"] is not None:
+                    player_transfer.team_id = args["team_id"]
+
+                player_transfer.save()
+
+                update_player_transfer = {
+                    "player transfer id": player_transfer.id,
+                    "amount": player_transfer.amount,
+                    "transfer window": player_transfer.transfer_window,
+                    "transfer type": player_transfer.transfer_type,
+                    "player id": player_transfer.player_id,
+                    "season id": player_transfer.season_id,
+                    "team id": player_transfer.team_id,
                 }
 
                 return (
@@ -291,7 +334,7 @@ class CoachResource(Resource):
                         {
                             "code": 200,
                             "code_mesaage": "Successful",
-                            "data": update_coach,
+                            "data": update_player_transfer,
                         }
                     ),
                     200,
@@ -315,31 +358,32 @@ class CoachResource(Resource):
 
     @staticmethod
     def delete(id=None):
-        """delete one coach by id"""
+        """delete one player transfer by id"""
 
         try:
-            coach = CoachModel.query.filter_by(id=id).first()
+            player_transfer = PlayerTransferModel.query.filter_by(
+                id=id).first()
 
-            if not coach:
+            if not player_transfer:
                 return (
                     jsonify(
                         {
                             "code": 404,
                             "code_message": "Data Not Found",
-                            "message": f"The coach with id {id} was not found in the database",  # noqa
+                            "message": f"The player transfer with id {id} was not found in the database",  # noqa
                         }
                     ),
                     404,
                 )
 
-            coach.delete()
+            player_transfer.delete()
 
             return (
                 jsonify(
                     {
                         "code": 200,
                         "code_mesaage": "Successful",
-                        "message": f"The coach with id {id} was found in the database and was deleted",  # noqa
+                        "message": f"The player transfer with id {id} was found in the database and was deleted",  # noqa
                     }
                 ),
                 200,
@@ -356,7 +400,7 @@ class CoachResource(Resource):
                 "code": e.code,
                 "type": e.type,
                 "code_mesaage": e.message,
-                "message": f"The coach with id {id} was not found in the database",  # noqa
+                "message": f"The player transfer with id {id} was not found in the database",  # noqa
             }
 
         except Forbidden as e:

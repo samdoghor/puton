@@ -18,6 +18,7 @@ from .coach_employ import CoachEmployModel
 from .coach import CoachModel
 from .country import CountryModel
 from .game_event import GameEventModel
+from .game_penalty import GamePenaltyModel
 from .game_player import GamePlayerModel
 from .game_team import GameTeamModel
 from .game import GameModel

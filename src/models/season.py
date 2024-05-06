@@ -35,4 +35,5 @@ class SeasonModel(db.Model, BaseModel, metaclass=MetaBaseModel):
     coaches_employment = db.relationship(
         "CoachEmployModel", backref="seasons", lazy=True)
     games = db.relationship("GameModel", backref="seasons", lazy=True)
-    transfer = db.relationship("TransferModel", backref="seaons", lazy=True)
+    player_transfer = db.relationship(
+        "PlayerTransferModel", backref="seaons", lazy=True)

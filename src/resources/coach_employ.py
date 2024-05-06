@@ -1,112 +1,98 @@
-"""src/resources/team.py
+"""src/resources/coach_employ.py
 
 Keyword arguments:
 argument -- id, **args
-Return: Team's CRUD
+Return: Coach Employ's CRUD
 """
+
+import uuid
 
 from flask.json import jsonify
 from flask_restful import Resource
 from flask_restful.reqparse import Argument
-from sqlalchemy.exc import DataError
+from sqlalchemy.exc import DataError, IntegrityError
 
-from models import TeamModel
+from models import CoachEmployModel
 from utils import (Conflict, DataNotFound, Forbidden,
                    InternalServerError, parse_params)
 
 
-class TeamResource(Resource):
-    """This class performs CRUD Operation on Team"""
+class CoachEmployResource(Resource):
+    """This class performs CRUD Operation on Coach"""
 
     @staticmethod
     @parse_params(
         Argument(
-            "name",
+            "employment_type",
             location="json",
             required=True,
-            help="The name of the club"),
-        Argument(
-            "abbr",
-            location="json",
-            required=True,
-            help="The abbreviation of the club"
+            help="The employment type of the coach",
         ),
         Argument(
-            "flag",
+            "coach_id",
             location="json",
             required=True,
-            help="The flag of the club"),
-        Argument(
-            "founded",
-            location="json",
-            required=True,
-            help="The year the club was founded",
+            help="The coach id of the coach",
         ),
         Argument(
-            "country_id",
+            "season_id",
             location="json",
             required=True,
-            help="The country to which the club belong",
+            help="The season id of the coach",
         ),
         Argument(
-            "league_id",
+            "team_id",
             location="json",
             required=True,
-            help="The league to which the club belong",
-        ),
+            help="The team id of the coach",
+        )
     )
-    def create(name, abbr, flag, founded, country_id, league_id):
-        """creates a new club"""
+    def create(
+        employment_type: str,
+        coach_id: uuid,
+        season_id: uuid,
+        team_id: uuid,
+    ):
+        """creates a new coach employment"""
 
         try:
-            team = TeamModel.query.filter_by(name=name).first()
+            new_coach_employment = CoachEmployModel(
+                employment_type=employment_type,
+                coach_id=coach_id,
+                season_id=season_id,
+                team_id=team_id,
+            )
 
-            if team:
-                return (
-                    jsonify(
-                        {
-                            "code": 409,
-                            "code_message": "Data Conflict",
-                            "message": f"{name} already exist in the database",
-                        }
-                    ),
-                    409,
-                )
+            new_coach_employment.save()
 
-            if not team:
-                new_team = TeamModel(
-                    name=name,
-                    abbr=abbr,
-                    flag=flag,
-                    founded=founded,
-                    country_id=country_id,
-                    league_id=league_id,
-                )
-
-                new_team.save()
-
-                return (
-                    jsonify(
-                        {
-                            "code": 200,
-                            "code_message": "Successful",
-                            "data": {
-                                "name": name,
-                                "abbreviation": abbr,
-                                "flag": flag,
-                                "founded": founded,
-                                "country id": country_id,
-                            },
-                        }
-                    ),
-                    200,
-                )
+            return (
+                jsonify(
+                    {
+                        "code": 200,
+                        "code_message": "Successful",
+                        "data": {
+                            "employment type": employment_type,
+                            "coach id": coach_id,
+                            "season id": season_id,
+                            "team id": team_id,
+                        },
+                    }
+                ),
+                200,
+            )
 
         except DataError:
             return {
                 "code": 500,
                 "code_message": "Wrong DataType",
                 "message": "A datatype error has occur, check the input and try again.",  # noqa
+            }, 500
+
+        except IntegrityError:
+            return {
+                "code": 500,
+                "code_message": "Wrong DataType",
+                "message": "The coach id or season id or team id is incorrect",  # noqa
             }, 500
 
         except Forbidden as e:
@@ -120,35 +106,34 @@ class TeamResource(Resource):
 
     @staticmethod
     def read_all():
-        """retrieves all teams"""
+        """retrieves all coaches employment"""
 
         try:
-            teams = TeamModel.query.all()
+            coaches_employment = CoachEmployModel.query.all()
 
-            if not teams:
+            if not coaches_employment:
                 return (
                     jsonify(
                         {
                             "code": 404,
                             "code_message": "Data Not Found",
-                            "message": "No team record was found in the database",  # noqa
+                            "message": "No coach employment record was found in the database",  # noqa
                         }
                     ),
                     404,
                 )
 
-            if teams:
-                teams_record = []
+            if coaches_employment:
+                coaches_employment_record = []
 
-                for team in teams:
-                    teams_record.append(
+                for coach in coaches_employment:
+                    coaches_employment_record.append(
                         {
-                            "team id": team.id,
-                            "name": team.name,
-                            "abbreviation": team.abbr,
-                            "flag": team.flag,
-                            "founded": team.founded,
-                            "country id": team.country_id,
+                            "coach employment id": coach.id,
+                            "employment type": coach.employment_type,
+                            "coach id": coach.coach_id,
+                            "season id": coach.season_id,
+                            "team id": coach.team_id,
                         }
                     )
 
@@ -157,7 +142,7 @@ class TeamResource(Resource):
                         {
                             "code": 200,
                             "code_mesaage": "Successful",
-                            "data": teams_record,
+                            "data": coaches_employment_record,
                         }
                     ),
                     200,
@@ -168,7 +153,7 @@ class TeamResource(Resource):
                 "code": e.code,
                 "type": e.type,
                 "code_mesaage": e.message,
-                "message": "No team record was found in the database",
+                "message": "No coach employment record was found in the database",  # noqa
             }
 
         except Forbidden as e:
@@ -182,31 +167,30 @@ class TeamResource(Resource):
 
     @staticmethod
     def read_one(id=None):
-        """retrieves one team by id"""
+        """retrieves one coach employment by id"""
 
         try:
-            team = TeamModel.query.filter_by(id=id).first()
+            coach_employment = CoachEmployModel.query.filter_by(id=id).first()
 
-            if not team:
+            if not coach_employment:
                 return (
                     jsonify(
                         {
                             "code": 404,
                             "code_message": "Data Not Found",
-                            "message": f"The team with id {id} was not found in the database",  # noqa
+                            "message": f"The coach employment with id {id} was not found in the database",  # noqa
                         }
                     ),
                     404,
                 )
 
-            if team:
-                team_record = {
-                    "team id": team.id,
-                    "name": team.name,
-                    "abbreviation": team.abbr,
-                    "flag": team.flag,
-                    "founded": team.founded,
-                    "country id": team.country_id,
+            if coach_employment:
+                coach_employment_record = {
+                    "coach employment id": coach_employment.id,
+                    "employment type": coach_employment.employment_type,
+                    "coach id": coach_employment.coach_id,
+                    "season id": coach_employment.season_id,
+                    "team id": coach_employment.team_id,
                 }
 
                 return (
@@ -214,7 +198,7 @@ class TeamResource(Resource):
                         {
                             "code": 200,
                             "code_mesaage": "Successful",
-                            "data": team_record,
+                            "data": coach_employment_record,
                         }
                     ),
                     200,
@@ -231,7 +215,7 @@ class TeamResource(Resource):
                 "code": e.code,
                 "type": e.type,
                 "code_mesaage": e.message,
-                "message": f"The team with id {id} was not found in the database",  # noqa
+                "message": f"The coach employment with id {id} was not found in the database",  # noqa
             }
 
         except Forbidden as e:
@@ -242,63 +226,66 @@ class TeamResource(Resource):
 
     @staticmethod
     @parse_params(
-        Argument("name", location="json", help="The name of the club"),
-        Argument("abbr", location="json", help="The abbreviation of the club"),
-        Argument("flag", location="json", help="The flag of the club"),
         Argument(
-            "founded",
+            "employment_type",
             location="json",
-            help="The year the club was founded",
+            help="The employment type of the coach",
         ),
         Argument(
-            "country_id",
+            "coach_id",
             location="json",
-            help="The country to which the club belong",
+            help="The coach id of the coach",
         ),
+        Argument(
+            "season_id",
+            location="json",
+            help="The season id of the coach",
+        ),
+        Argument(
+            "team_id",
+            location="json",
+            help="The team id of the coach",
+        )
     )
     def update(id=None, **args):
-        """retrieves a team by id and update the team"""
+        """retrieves a coach employment by id and update the coach employment"""  # noqa
 
         try:
-            team = TeamModel.query.filter_by(id=id).first()
+            coach_employment = CoachEmployModel.query.filter_by(id=id).first()
 
-            if not team:
+            if not coach_employment:
                 return (
                     jsonify(
                         {
                             "code": 404,
                             "code_message": "Data Not Found",
-                            "message": f"The team with id {id} was not found in the database",  # noqa
+                            "message": f"The coach employment with id {id} was not found in the database",  # noqa
                         }
                     ),
                     404,
                 )
 
-            if team:
-                if "name" in args and args["name"] is not None:
-                    team.name = args["name"]
+            if coach_employment:
+                if "employment_type" in args and args["employment_type"] is not None:  # noqa
+                    coach_employment.employment_type = args["employment_type"]
 
-                if "abbr" in args and args["abbr"] is not None:
-                    team.abbr = args["abbr"]
+                if "coach_id" in args and args["coach_id"] is not None:
+                    coach_employment.coach_id = args["coach_id"]
 
-                if "flag" in args and args["flag"] is not None:
-                    team.flag = args["flag"]
+                if "season_id" in args and args["season_id"] is not None:
+                    coach_employment.season_id = args["season_id"]
 
-                if "founded" in args and args["founded"] is not None:
-                    team.founded = args["founded"]
+                if "team_id" in args and args["team_id"] is not None:
+                    coach_employment.team_id = args["team_id"]
 
-                if "country_id" in args and args["country_id"] is not None:
-                    team.country_id = args["country_id"]
+                coach_employment.save()
 
-                team.save()
-
-                update_team = {
-                    "team id": team.id,
-                    "name": team.name,
-                    "abbreviation": team.abbr,
-                    "flag": team.flag,
-                    "founded": team.founded,
-                    "country id": team.country_id,
+                update_coach_employment = {
+                    "coach employment id": coach_employment.id,
+                    "employment type": coach_employment.employment_type,
+                    "coach id": coach_employment.coach_id,
+                    "season id": coach_employment.season_id,
+                    "team id": coach_employment.team_id,
                 }
 
                 return (
@@ -306,7 +293,7 @@ class TeamResource(Resource):
                         {
                             "code": 200,
                             "code_mesaage": "Successful",
-                            "data": update_team,
+                            "data": update_coach_employment,
                         }
                     ),
                     200,
@@ -330,31 +317,31 @@ class TeamResource(Resource):
 
     @staticmethod
     def delete(id=None):
-        """delete one team by id"""
+        """delete one coach employment by id"""
 
         try:
-            team = TeamModel.query.filter_by(id=id).first()
+            coach_employment = CoachEmployModel.query.filter_by(id=id).first()
 
-            if not team:
+            if not coach_employment:
                 return (
                     jsonify(
                         {
                             "code": 404,
                             "code_message": "Data Not Found",
-                            "message": f"The team with id {id} was not found in the database",  # noqa
+                            "message": f"The coach employment with id {id} was not found in the database",  # noqa
                         }
                     ),
                     404,
                 )
 
-            team.delete()
+            coach_employment.delete()
 
             return (
                 jsonify(
                     {
                         "code": 200,
                         "code_mesaage": "Successful",
-                        "message": f"The team with id {id} was found in the database and was deleted",  # noqa
+                        "message": f"The coach employment with id {id} was found in the database and was deleted",  # noqa
                     }
                 ),
                 200,
@@ -371,7 +358,7 @@ class TeamResource(Resource):
                 "code": e.code,
                 "type": e.type,
                 "code_mesaage": e.message,
-                "message": f"The team with id {id} was not found in the database",  # noqa
+                "message": f"The coach employment with id {id} was not found in the database",  # noqa
             }
 
         except Forbidden as e:

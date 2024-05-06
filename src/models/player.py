@@ -48,4 +48,5 @@ class PlayerModel(db.Model, BaseModel, metaclass=MetaBaseModel):
 
     game_players = db.relationship(
         "GamePlayerModel", backref="players", lazy=True)
-    transfer = db.relationship("TransferModel", backref="players", lazy=True)
+    transfer = db.relationship(
+        "PlayerTransferModel", backref="players", lazy=True)

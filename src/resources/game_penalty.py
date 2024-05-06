@@ -1,8 +1,8 @@
-"""src/resources/team.py
+"""src/resources/game_penalty.py
 
 Keyword arguments:
 argument -- id, **args
-Return: Team's CRUD
+Return: Game Penalty's CRUD
 """
 
 from flask.json import jsonify
@@ -10,97 +10,64 @@ from flask_restful import Resource
 from flask_restful.reqparse import Argument
 from sqlalchemy.exc import DataError
 
-from models import TeamModel
+from models import GamePenaltyModel
 from utils import (Conflict, DataNotFound, Forbidden,
                    InternalServerError, parse_params)
 
 
-class TeamResource(Resource):
-    """This class performs CRUD Operation on Team"""
+class GamePenaltyResource(Resource):
+    """This class performs CRUD Operation on Game Penalty"""
 
     @staticmethod
     @parse_params(
         Argument(
-            "name",
+            "is_penalty_shootout",
             location="json",
+            type=bool,
             required=True,
-            help="The name of the club"),
-        Argument(
-            "abbr",
-            location="json",
-            required=True,
-            help="The abbreviation of the club"
+            help="Is the penalty event a penalty shootout?"
         ),
         Argument(
-            "flag",
+            "is_goal",
             location="json",
+            type=bool,
             required=True,
-            help="The flag of the club"),
-        Argument(
-            "founded",
-            location="json",
-            required=True,
-            help="The year the club was founded",
+            help="Was the penalty a goal",
         ),
         Argument(
-            "country_id",
+            "game_event_id",
             location="json",
             required=True,
-            help="The country to which the club belong",
-        ),
-        Argument(
-            "league_id",
-            location="json",
-            required=True,
-            help="The league to which the club belong",
+            help="Which event id is this penalty"
         ),
     )
-    def create(name, abbr, flag, founded, country_id, league_id):
-        """creates a new club"""
+    def create(is_penalty_shootout, is_goal, game_event_id):
+        """creates a new game penalty event"""
 
         try:
-            team = TeamModel.query.filter_by(name=name).first()
+            new_game_penaltty = GamePenaltyModel(
+                is_penalty_shootout=is_penalty_shootout,
+                is_goal=is_goal,
+                game_event_id=game_event_id,
+            )
 
-            if team:
-                return (
-                    jsonify(
-                        {
-                            "code": 409,
-                            "code_message": "Data Conflict",
-                            "message": f"{name} already exist in the database",
-                        }
-                    ),
-                    409,
-                )
+            new_game_penaltty.save()
 
-            if not team:
-                new_team = TeamModel(
-                    name=name,
-                    abbr=abbr,
-                    flag=flag,
-                    founded=founded,
-                    country_id=country_id,
-                    league_id=league_id,
-                )
-
-                new_team.save()
-
-                return (
-                    jsonify(
-                        {
-                            "code": 200,
-                            "code_message": "Successful",
-                            "data": {
-                                "name": name,
-                                "abbreviation": abbr,
-                                "flag": flag,
-                                "founded": founded,
-                                "country id": country_id,
-                            },
-                        }
-                    ),
-                    200,
-                )
+            return (
+                jsonify(
+                    {
+                        "code": 200,
+                        "code_message": "Successful",
+                        "data": {
+                            "game penalty id": new_game_penaltty.id,
+                            "is penalty shootout": is_penalty_shootout,
+                            "is goal": is_goal,
+                            "game event id": game_event_id,
+                        },
+                    }
+                ),
+                200,
+            )
 
         except DataError:
             return {
@@ -120,35 +87,33 @@ class TeamResource(Resource):
 
     @staticmethod
     def read_all():
-        """retrieves all teams"""
+        """retrieves all game penalties"""
 
         try:
-            teams = TeamModel.query.all()
+            game_penalties = GamePenaltyModel.query.all()
 
-            if not teams:
+            if not game_penalties:
                 return (
                     jsonify(
                         {
                             "code": 404,
                             "code_message": "Data Not Found",
-                            "message": "No team record was found in the database",  # noqa
+                            "message": "No game penalty record was found in the database",  # noqa
                         }
                     ),
                     404,
                 )
 
-            if teams:
-                teams_record = []
+            if game_penalties:
+                game_penalties_record = []
 
-                for team in teams:
-                    teams_record.append(
+                for game_penalty in game_penalties:
+                    game_penalties_record.append(
                         {
-                            "team id": team.id,
-                            "name": team.name,
-                            "abbreviation": team.abbr,
-                            "flag": team.flag,
-                            "founded": team.founded,
-                            "country id": team.country_id,
+                            "game penalty id": game_penalty.id,
+                            "is penalty shootout": game_penalty.is_penalty_shootout,  # noqa
+                            "is goal": game_penalty.is_goal,
+                            "game event id": game_penalty.game_event_id,
                         }
                     )
 
@@ -157,7 +122,7 @@ class TeamResource(Resource):
                         {
                             "code": 200,
                             "code_mesaage": "Successful",
-                            "data": teams_record,
+                            "data": game_penalties_record,
                         }
                     ),
                     200,
@@ -168,7 +133,7 @@ class TeamResource(Resource):
                 "code": e.code,
                 "type": e.type,
                 "code_mesaage": e.message,
-                "message": "No team record was found in the database",
+                "message": "No game penalty record was found in the database",
             }
 
         except Forbidden as e:
@@ -182,31 +147,29 @@ class TeamResource(Resource):
 
     @staticmethod
     def read_one(id=None):
-        """retrieves one team by id"""
+        """retrieves one game penalty by id"""
 
         try:
-            team = TeamModel.query.filter_by(id=id).first()
+            game_penalty = GamePenaltyModel.query.filter_by(id=id).first()
 
-            if not team:
+            if not game_penalty:
                 return (
                     jsonify(
                         {
                             "code": 404,
                             "code_message": "Data Not Found",
-                            "message": f"The team with id {id} was not found in the database",  # noqa
+                            "message": f"The game penalty with id {id} was not found in the database",  # noqa
                         }
                     ),
                     404,
                 )
 
-            if team:
-                team_record = {
-                    "team id": team.id,
-                    "name": team.name,
-                    "abbreviation": team.abbr,
-                    "flag": team.flag,
-                    "founded": team.founded,
-                    "country id": team.country_id,
+            if game_penalty:
+                game_penalty_record = {
+                    "game penalty id": game_penalty.id,
+                    "is penalty shootout": game_penalty.is_penalty_shootout,  # noqa
+                    "is goal": game_penalty.is_goal,
+                    "game event id": game_penalty.game_event_id,
                 }
 
                 return (
@@ -214,7 +177,7 @@ class TeamResource(Resource):
                         {
                             "code": 200,
                             "code_mesaage": "Successful",
-                            "data": team_record,
+                            "data": game_penalty_record,
                         }
                     ),
                     200,
@@ -231,7 +194,7 @@ class TeamResource(Resource):
                 "code": e.code,
                 "type": e.type,
                 "code_mesaage": e.message,
-                "message": f"The team with id {id} was not found in the database",  # noqa
+                "message": f"The game peanlty with id {id} was not found in the database",  # noqa
             }
 
         except Forbidden as e:
@@ -242,63 +205,59 @@ class TeamResource(Resource):
 
     @staticmethod
     @parse_params(
-        Argument("name", location="json", help="The name of the club"),
-        Argument("abbr", location="json", help="The abbreviation of the club"),
-        Argument("flag", location="json", help="The flag of the club"),
         Argument(
-            "founded",
+            "is_penalty_shootout",
             location="json",
-            help="The year the club was founded",
+            type=bool,
+            help="Is the penalty event a penalty shootout?"
         ),
         Argument(
-            "country_id",
+            "is_goal",
             location="json",
-            help="The country to which the club belong",
+            type=bool,
+            help="Was the penalty a goal",
+        ),
+        Argument(
+            "game_event_id",
+            location="json",
+            help="Which event id is this penalty"
         ),
     )
     def update(id=None, **args):
-        """retrieves a team by id and update the team"""
+        """retrieves a game penalty by id and update the game penalty"""
 
         try:
-            team = TeamModel.query.filter_by(id=id).first()
+            game_penalty = GamePenaltyModel.query.filter_by(id=id).first()
 
-            if not team:
+            if not game_penalty:
                 return (
                     jsonify(
                         {
                             "code": 404,
                             "code_message": "Data Not Found",
-                            "message": f"The team with id {id} was not found in the database",  # noqa
+                            "message": f"The game penalty with id {id} was not found in the database",  # noqa
                         }
                     ),
                     404,
                 )
 
-            if team:
-                if "name" in args and args["name"] is not None:
-                    team.name = args["name"]
+            if game_penalty:
+                if "is_penalty_shootout" in args and args["is_penalty_shootout"] is not None:  # noqa
+                    game_penalty.is_penalty_shootout = args["is_penalty_shootout"]  # noqa
 
-                if "abbr" in args and args["abbr"] is not None:
-                    team.abbr = args["abbr"]
+                if "is_goal" in args and args["is_goal"] is not None:
+                    game_penalty.is_goal = args["is_goal"]
 
-                if "flag" in args and args["flag"] is not None:
-                    team.flag = args["flag"]
+                if "game_event_id" in args and args["game_event_id"] is not None:  # noqa
+                    game_penalty.game_event_id = args["game_event_id"]
 
-                if "founded" in args and args["founded"] is not None:
-                    team.founded = args["founded"]
+                game_penalty.save()
 
-                if "country_id" in args and args["country_id"] is not None:
-                    team.country_id = args["country_id"]
-
-                team.save()
-
-                update_team = {
-                    "team id": team.id,
-                    "name": team.name,
-                    "abbreviation": team.abbr,
-                    "flag": team.flag,
-                    "founded": team.founded,
-                    "country id": team.country_id,
+                update_game_penalty = {
+                    "game penalty id": game_penalty.id,
+                    "is penalty shootout": game_penalty.is_penalty_shootout,  # noqa
+                    "is goal": game_penalty.is_goal,
+                    "game event id": game_penalty.game_event_id,
                 }
 
                 return (
@@ -306,7 +265,7 @@ class TeamResource(Resource):
                         {
                             "code": 200,
                             "code_mesaage": "Successful",
-                            "data": update_team,
+                            "data": update_game_penalty,
                         }
                     ),
                     200,
@@ -319,6 +278,14 @@ class TeamResource(Resource):
                 "message": "A datatype error has occur, check the input and try again.",  # noqa
             }, 500
 
+        except DataNotFound as e:
+            return {
+                "code": e.code,
+                "type": e.type,
+                "code_mesaage": e.message,
+                "message": f"The game penalty with id {id} was not found in the database",  # noqa
+            }
+
         except Forbidden as e:
             return {"Code": e.code, "Type": e.type, "code_message": e.message}
 
@@ -330,31 +297,31 @@ class TeamResource(Resource):
 
     @staticmethod
     def delete(id=None):
-        """delete one team by id"""
+        """retrieves a game penalty by id and delete the game penalty"""
 
         try:
-            team = TeamModel.query.filter_by(id=id).first()
+            game_penalty = GamePenaltyModel.query.filter_by(id=id).first()
 
-            if not team:
+            if not game_penalty:
                 return (
                     jsonify(
                         {
                             "code": 404,
                             "code_message": "Data Not Found",
-                            "message": f"The team with id {id} was not found in the database",  # noqa
+                            "message": f"The game penalty with id {id} was not found in the database",  # noqa
                         }
                     ),
                     404,
                 )
 
-            team.delete()
+            game_penalty.delete()
 
             return (
                 jsonify(
                     {
                         "code": 200,
                         "code_mesaage": "Successful",
-                        "message": f"The team with id {id} was found in the database and was deleted",  # noqa
+                        "message": f"The game penalty with id {id} was found in the database and was deleted",  # noqa
                     }
                 ),
                 200,
@@ -371,7 +338,7 @@ class TeamResource(Resource):
                 "code": e.code,
                 "type": e.type,
                 "code_mesaage": e.message,
-                "message": f"The team with id {id} was not found in the database",  # noqa
+                "message": f"The game penalty with id {id} was not found in the database",  # noqa
             }
 
         except Forbidden as e:
