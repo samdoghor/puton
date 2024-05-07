@@ -76,6 +76,12 @@ class PlayerResource(Resource):
             help="The injury status of the player",
         ),
         Argument(
+            "footed",
+            location="json",
+            required=True,
+            help="The stronger foot of the player",
+        ),
+        Argument(
             "country_id",
             location="json",
             required=True,
@@ -98,6 +104,7 @@ class PlayerResource(Resource):
         rating,
         postion,
         injury,
+        footed,
         country_id,
         team_id,
     ):
@@ -114,6 +121,7 @@ class PlayerResource(Resource):
                 rating=rating,
                 postion=postion,
                 injury=injury,
+                footed=footed,
                 country_id=country_id,
                 team_id=team_id,
             )
@@ -136,6 +144,7 @@ class PlayerResource(Resource):
                             "rating": rating,
                             "postion": postion,
                             "injury": injury,
+                            "footed": footed,
                             "country id": country_id,
                             "team id": team_id,
                             "created at": new_player.created_at,
@@ -206,6 +215,7 @@ class PlayerResource(Resource):
                             "rating": player.rating,
                             "postion": player.postion,
                             "injury": player.injury,
+                            "footed": player.footed,
                             "country id": player.country_id,
                             "team id": player.team_id,
                             "created at": player.created_at,
@@ -272,6 +282,7 @@ class PlayerResource(Resource):
                     "rating": player.rating,
                     "postion": player.postion,
                     "injury": player.injury,
+                    "footed": player.footed,
                     "country id": player.country_id,
                     "team id": player.team_id,
                     "created at": player.created_at,
@@ -352,6 +363,11 @@ class PlayerResource(Resource):
             help="The injury status of the player"
         ),
         Argument(
+            "footed",
+            location="json",
+            help="The stronger foot of the player",
+        ),
+        Argument(
             "country_id",
             location="json",
             help="The country of the player"),
@@ -406,6 +422,9 @@ class PlayerResource(Resource):
                 if "injury" in args and args["injury"] is not None:
                     player.injury = args["injury"]
 
+                if "footed" in args and args["footed"] is not None:
+                    player.footed = args["footed"]
+
                 if "country_id" in args and args["country_id"] is not None:
                     player.country_id = args["country_id"]
 
@@ -425,6 +444,7 @@ class PlayerResource(Resource):
                     "rating": player.rating,
                     "postion": player.postion,
                     "injury": player.injury,
+                    "footed": player.footed,
                     "country id": player.country_id,
                     "team id": player.team_id,
                     "created at": player.created_at,

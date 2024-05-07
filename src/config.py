@@ -26,19 +26,19 @@ ai_model = env_var["ai_model"]
 
 # local database
 
-database_username = env_var["database_username"]
-database_password = env_var["database_password"]
-database_host = env_var["database_host"]
-database_port = int(env_var["database_port"])
-database_name = env_var["database_name"]
+# database_username = env_var["database_username"]
+# database_password = env_var["database_password"]
+# database_host = env_var["database_host"]
+# database_port = int(env_var["database_port"])
+# database_name = env_var["database_name"]
 
 # production database
 
-# database_username = env_var["production_database_user"]
-# database_password = env_var["production_database_password"]
-# database_host = env_var["production_database_host"]
-# database_port = int(env_var["production_database_port"])
-# database_name = env_var["production_database_name"]
+database_username = env_var["production_database_user"]
+database_password = env_var["production_database_password"]
+database_host = env_var["production_database_host"]
+database_port = int(env_var["production_database_port"])
+database_name = env_var["production_database_name"]
 
 database_uri = f"postgresql+psycopg://{database_username}:{database_password}@{database_host}:{database_port}/{database_name}"  # noqa
 

@@ -48,14 +48,8 @@ class TeamResource(Resource):
             required=True,
             help="The country to which the club belong",
         ),
-        Argument(
-            "league_id",
-            location="json",
-            required=True,
-            help="The league to which the club belong",
-        ),
     )
-    def create(name, abbr, flag, founded, country_id, league_id):
+    def create(name, abbr, flag, founded, country_id):
         """creates a new club"""
 
         try:
@@ -80,7 +74,6 @@ class TeamResource(Resource):
                     flag=flag,
                     founded=founded,
                     country_id=country_id,
-                    league_id=league_id,
                 )
 
                 new_team.save()
