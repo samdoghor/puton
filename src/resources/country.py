@@ -68,9 +68,12 @@ class CountryResource(Resource):
                             "code": 200,
                             "code_message": "Successful",
                             "data": {
+                                "country id": new_country.id,
                                 "name": name,
                                 "abbreviation": abbr,
-                                "flag": flag
+                                "flag": flag,
+                                "created at": new_country.created_at,
+                                "updated at": new_country.updated_at,
                             },
                         }
                     ),
@@ -118,10 +121,12 @@ class CountryResource(Resource):
                 for country in countries:
                     countries_record.append(
                         {
-                            "country_id": country.id,
+                            "country id": country.id,
                             "name": country.name,
                             "abbreviation": country.abbr,
                             "flag": country.flag,
+                            "created at": country.created_at,
+                            "updated at": country.updated_at,
                         }
                     )
 
@@ -178,6 +183,8 @@ class CountryResource(Resource):
                     "name": country.name,
                     "abbreviation": country.abbr,
                     "flag": country.flag,
+                    "created at": country.created_at,
+                    "updated at": country.updated_at,
                 }
 
                 return (
@@ -253,6 +260,8 @@ class CountryResource(Resource):
                     "name": country.name,
                     "abbreviation": country.abbr,
                     "flag": country.flag,
+                    "created at": country.created_at,
+                    "updated at": country.updated_at,
                 }
 
                 return (

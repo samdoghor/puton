@@ -77,9 +77,12 @@ class SeasonResource(Resource):
                             "code": 200,
                             "code_message": "Successful",
                             "data": {
-                                "start_date": start_date,
-                                "end_date": end_date,
-                                "current_season": current_season,
+                                "season id": new_season.id,
+                                "start date": start_date,
+                                "end date": end_date,
+                                "current season": current_season,
+                                "created at": new_season.created_at,
+                                "updated at": new_season.updated_at,
                             },
                         }
                     ),
@@ -127,10 +130,12 @@ class SeasonResource(Resource):
                 for season in seasons:
                     seasons_record.append(
                         {
-                            "season_id": season.id,
-                            "start_date": season.start_date.year,
-                            "end_date": season.end_date.year,
-                            "current_season": season.current_season,
+                            "season id": season.id,
+                            "start date": season.start_date.year,
+                            "end date": season.end_date.year,
+                            "current season": season.current_season,
+                            "created at": season.created_at,
+                            "updated at": season.updated_at
                         }
                     )
 
@@ -183,10 +188,12 @@ class SeasonResource(Resource):
 
             if season:
                 season_record = {
-                    "season_id": season.id,
-                    "start_date": season.start_date.year,
-                    "end_date": season.end_date.year,
-                    "current_season": season.current_season,
+                    "season id": season.id,
+                    "start date": season.start_date.year,
+                    "end date": season.end_date.year,
+                    "current season": season.current_season,
+                    "created at": season.created_at,
+                    "updated at": season.updated_at
                 }
 
                 return (
@@ -267,10 +274,12 @@ class SeasonResource(Resource):
                 season.save()
 
                 update_season = {
-                    "season_id": season.id,
-                    "start_date": season.start_date.year,
-                    "end_date": season.end_date.year,
-                    "current_season": season.current_season,
+                    "season id": season.id,
+                    "start date": season.start_date.year,
+                    "end date": season.end_date.year,
+                    "current season": season.current_season,
+                    "created at": season.created_at,
+                    "updated at": season.updated_at
                 }
 
                 return (

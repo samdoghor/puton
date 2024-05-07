@@ -71,10 +71,13 @@ class CoachEmployResource(Resource):
                         "code": 200,
                         "code_message": "Successful",
                         "data": {
+                            "coach employment id": new_coach_employment.id,
                             "employment type": employment_type,
                             "coach id": coach_id,
                             "season id": season_id,
                             "team id": team_id,
+                            "created at": new_coach_employment.created_at,
+                            "updated at": new_coach_employment.updated_at,
                         },
                     }
                 ),
@@ -134,6 +137,8 @@ class CoachEmployResource(Resource):
                             "coach id": coach.coach_id,
                             "season id": coach.season_id,
                             "team id": coach.team_id,
+                            "created at": coach.created_at,
+                            "updated at": coach.updated_at,
                         }
                     )
 
@@ -191,6 +196,8 @@ class CoachEmployResource(Resource):
                     "coach id": coach_employment.coach_id,
                     "season id": coach_employment.season_id,
                     "team id": coach_employment.team_id,
+                    "created at": coach_employment.created_at,
+                    "updated at": coach_employment.updated_at,
                 }
 
                 return (
@@ -286,6 +293,8 @@ class CoachEmployResource(Resource):
                     "coach id": coach_employment.coach_id,
                     "season id": coach_employment.season_id,
                     "team id": coach_employment.team_id,
+                    "created at": coach_employment.created_at,
+                    "updated at": coach_employment.updated_at,
                 }
 
                 return (

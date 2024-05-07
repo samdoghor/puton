@@ -85,6 +85,8 @@ class GameEventResource(Resource):
                             "game id": game_id,
                             "game player id": game_player_id,
                             "game team id": game_team_id,
+                            "created at": new_game_event.created_at,
+                            "updated at": new_game_event.updated_at,
                         },
                     }
                 ),
@@ -139,6 +141,8 @@ class GameEventResource(Resource):
                             "game id": game_event.game_id,
                             "game player id": game_event.game_player_id,
                             "game team id": game_event.game_team_id,
+                            "created at": game_event.created_at,
+                            "updated at": game_event.updated_at,
                         }
                     )
 
@@ -198,6 +202,8 @@ class GameEventResource(Resource):
                     "game id": game_event.game_id,
                     "game player id": game_event.game_player_id,
                     "game team id": game_event.game_team_id,
+                    "created at": game_event.created_at,
+                    "updated at": game_event.updated_at,
                 }
 
                 return (
@@ -310,6 +316,8 @@ class GameEventResource(Resource):
                     "game id": game_event.game_id,
                     "game player id": game_event.game_player_id,
                     "game team id": game_event.game_team_id,
+                    "created at": game_event.created_at,
+                    "updated at": game_event.updated_at,
                 }
 
                 return (

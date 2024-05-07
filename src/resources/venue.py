@@ -83,11 +83,14 @@ class VenueResource(Resource):
                             "code": 200,
                             "code_message": "Successful",
                             "data": {
+                                "venue id": new_venue.id,
                                 "name": name,
                                 "address": address,
                                 "city": city,
                                 "capacity": capacity,
                                 "team id": team_id,
+                                "created at": new_venue.created_at,
+                                "updated at": new_venue.updated_at,
                             },
                         }
                     ),
@@ -141,6 +144,8 @@ class VenueResource(Resource):
                             "city": venue.city,
                             "capacity": venue.capacity,
                             "team id": venue.team_id,
+                            "created at": venue.created_at,
+                            "updated at": venue.updated_at,
                         }
                     )
 
@@ -199,6 +204,8 @@ class VenueResource(Resource):
                     "city": venue.city,
                     "capacity": venue.capacity,
                     "team id": venue.team_id,
+                    "created at": venue.created_at,
+                    "updated at": venue.updated_at,
                 }
 
                 return (
@@ -292,6 +299,8 @@ class VenueResource(Resource):
                     "city": venue.city,
                     "capacity": venue.capacity,
                     "team id": venue.team_id,
+                    "created at": venue.created_at,
+                    "updated at": venue.updated_at,
                 }
 
                 return (

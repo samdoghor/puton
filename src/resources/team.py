@@ -48,14 +48,8 @@ class TeamResource(Resource):
             required=True,
             help="The country to which the club belong",
         ),
-        Argument(
-            "league_id",
-            location="json",
-            required=True,
-            help="The league to which the club belong",
-        ),
     )
-    def create(name, abbr, flag, founded, country_id, league_id):
+    def create(name, abbr, flag, founded, country_id):
         """creates a new club"""
 
         try:
@@ -80,7 +74,6 @@ class TeamResource(Resource):
                     flag=flag,
                     founded=founded,
                     country_id=country_id,
-                    league_id=league_id,
                 )
 
                 new_team.save()
@@ -91,11 +84,14 @@ class TeamResource(Resource):
                             "code": 200,
                             "code_message": "Successful",
                             "data": {
+                                "team id": new_team.id,
                                 "name": name,
                                 "abbreviation": abbr,
                                 "flag": flag,
                                 "founded": founded,
                                 "country id": country_id,
+                                "created at": new_team.created_at,
+                                "updated at": new_team.updated_at,
                             },
                         }
                     ),
@@ -149,6 +145,8 @@ class TeamResource(Resource):
                             "flag": team.flag,
                             "founded": team.founded,
                             "country id": team.country_id,
+                            "created at": team.created_at,
+                            "updated at": team.updated_at,
                         }
                     )
 
@@ -207,6 +205,8 @@ class TeamResource(Resource):
                     "flag": team.flag,
                     "founded": team.founded,
                     "country id": team.country_id,
+                    "created at": team.created_at,
+                    "updated at": team.updated_at,
                 }
 
                 return (
@@ -299,6 +299,8 @@ class TeamResource(Resource):
                     "flag": team.flag,
                     "founded": team.founded,
                     "country id": team.country_id,
+                    "created at": team.created_at,
+                    "updated at": team.updated_at,
                 }
 
                 return (

@@ -18,6 +18,14 @@ database_username='postgres'
 database_password=''
 database_name=''
 
+# production database
+
+production_database_user='' 
+production_database_password='' 
+production_database_host='' 
+production_database_port=5432 
+production_database_name=''
+
 # environment
 
 environment='dev'

@@ -92,6 +92,8 @@ class PlayerTransferResource(Resource):
                             "player id": player_id,
                             "season id": season_id,
                             "team id": team_id,
+                            "created at": new_player_transfer.created_at,
+                            "updated at": new_player_transfer.updated_at,
                         },
                     }
                 ),
@@ -153,6 +155,8 @@ class PlayerTransferResource(Resource):
                             "player id": player_transfer.player_id,
                             "season id": player_transfer.season_id,
                             "team id": player_transfer.team_id,
+                            "created at": player_transfer.created_at,
+                            "updated at": player_transfer.updated_at,
                         }
                     )
 
@@ -213,6 +217,8 @@ class PlayerTransferResource(Resource):
                     "player id": player_transfer.player_id,
                     "season id": player_transfer.season_id,
                     "team id": player_transfer.team_id,
+                    "created at": player_transfer.created_at,
+                    "updated at": player_transfer.updated_at,
                 }
 
                 return (
@@ -327,6 +333,8 @@ class PlayerTransferResource(Resource):
                     "player id": player_transfer.player_id,
                     "season id": player_transfer.season_id,
                     "team id": player_transfer.team_id,
+                    "created at": player_transfer.created_at,
+                    "updated at": player_transfer.updated_at,
                 }
 
                 return (

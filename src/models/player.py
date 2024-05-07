@@ -31,6 +31,7 @@ class PlayerModel(db.Model, BaseModel, metaclass=MetaBaseModel):
     rating = db.Column(db.Integer, nullable=False)
     postion = db.Column(db.String(50), nullable=False)
     injury = db.Column(db.Boolean, nullable=False, default=False)
+    footed = db.Column(db.String(50), nullable=False)
 
     created_at = db.Column(
         db.DateTime(), default=datetime.utcnow, nullable=False)
