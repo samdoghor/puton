@@ -84,14 +84,14 @@ class TeamResource(Resource):
                             "code": 200,
                             "code_message": "Successful",
                             "data": {
-                                "team id": new_team.id,
+                                "team_id": new_team.id,
                                 "name": name,
                                 "abbreviation": abbr,
                                 "flag": flag,
                                 "founded": founded,
-                                "country id": country_id,
-                                "created at": new_team.created_at,
-                                "updated at": new_team.updated_at,
+                                "country_id": country_id,
+                                "created_at": new_team.created_at,
+                                "updated_at": new_team.updated_at,
                             },
                         }
                     ),
@@ -132,21 +132,21 @@ class TeamResource(Resource):
                     ),
                     404,
                 )
-
+            # TODO - Uncomment the below
             if teams:
                 teams_record = []
 
                 for team in teams:
                     teams_record.append(
                         {
-                            "team id": team.id,
+                            "team_id": team.id,
                             "name": team.name,
-                            "abbreviation": team.abbr,
-                            "flag": team.flag,
-                            "founded": team.founded,
-                            "country id": team.country_id,
-                            "created at": team.created_at,
-                            "updated at": team.updated_at,
+                            # "abbreviation": team.abbr,
+                            # "flag": team.flag,
+                            # "founded": team.founded,
+                            # "country_id": team.country_id,
+                            # "created_at": team.created_at,
+                            # "updated_at": team.updated_at,
                         }
                     )
 
@@ -155,6 +155,7 @@ class TeamResource(Resource):
                         {
                             "code": 200,
                             "code_mesaage": "Successful",
+                            "count": len(teams),
                             "data": teams_record,
                         }
                     ),
@@ -199,14 +200,14 @@ class TeamResource(Resource):
 
             if team:
                 team_record = {
-                    "team id": team.id,
+                    "team_id": team.id,
                     "name": team.name,
                     "abbreviation": team.abbr,
                     "flag": team.flag,
                     "founded": team.founded,
-                    "country id": team.country_id,
-                    "created at": team.created_at,
-                    "updated at": team.updated_at,
+                    "country_id": team.country_id,
+                    "created_at": team.created_at,
+                    "updated_at": team.updated_at,
                 }
 
                 return (
@@ -222,7 +223,7 @@ class TeamResource(Resource):
 
         except DataError:
             return {
-                "error message": "Wrong ID format",
+                "error_message": "Wrong ID format",
                 "message": "The Id you are trying to retrieve is invalid, check UUID correct format.",  # noqa
             }, 500
 
@@ -293,14 +294,14 @@ class TeamResource(Resource):
                 team.save()
 
                 update_team = {
-                    "team id": team.id,
+                    "team_id": team.id,
                     "name": team.name,
                     "abbreviation": team.abbr,
                     "flag": team.flag,
                     "founded": team.founded,
-                    "country id": team.country_id,
-                    "created at": team.created_at,
-                    "updated at": team.updated_at,
+                    "country_id": team.country_id,
+                    "created_at": team.created_at,
+                    "updated_at": team.updated_at,
                 }
 
                 return (
@@ -364,7 +365,7 @@ class TeamResource(Resource):
 
         except DataError:
             return {
-                "error message": "Wrong ID format",
+                "error_message": "Wrong ID format",
                 "message": "The Id you are trying to retrieve is invalid, check UUID correct format.",  # noqa
             }, 500
 

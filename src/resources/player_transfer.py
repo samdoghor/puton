@@ -11,6 +11,7 @@ from flask_restful.reqparse import Argument
 from sqlalchemy.exc import DataError, IntegrityError
 
 from models import PlayerTransferModel
+from resources.player import PlayerResource
 from utils import (Conflict, DataNotFound, Forbidden,
                    InternalServerError, parse_params)
 
@@ -78,6 +79,8 @@ class PlayerTransferResource(Resource):
             )
 
             new_player_transfer.save()
+
+            PlayerResource.update(team_id)
 
             return (
                 jsonify(

@@ -21,8 +21,8 @@ class TeamModel(db.Model, BaseModel, metaclass=MetaBaseModel):
     __tablename__ = "teams"
 
     id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid4)
-    name = db.Column(db.String(50), nullable=False)
-    abbr = db.Column(db.String(10), nullable=False)
+    name = db.Column(db.String(), nullable=False)
+    abbr = db.Column(db.String(), nullable=False)
     flag = db.Column(db.String(), nullable=True)
     founded = db.Column(db.Integer, nullable=False)
 

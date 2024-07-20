@@ -154,6 +154,7 @@ class VenueResource(Resource):
                         {
                             "code": 200,
                             "code_mesaage": "Successful",
+                            "count": len(venues),
                             "data": venues_record,
                         }
                     ),

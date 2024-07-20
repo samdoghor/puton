@@ -23,6 +23,7 @@ class GameModel(db.Model, BaseModel, metaclass=MetaBaseModel):
     id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid4)
     game_time = db.Column(db.Time(), nullable=False)
     game_date = db.Column(db.Date(), nullable=False)
+    game_week = db.Column(db.Integer, nullable=False)
     weather = db.Column(db.String(50), nullable=False)
 
     created_at = db.Column(
