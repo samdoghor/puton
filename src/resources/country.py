@@ -12,7 +12,7 @@ from sqlalchemy.exc import DataError
 
 from models import CountryModel
 from utils import (Conflict, DataNotFound, Forbidden,
-                   InternalServerError, parse_params)
+                     InternalServerError, parse_params)
 
 
 class CountryResource(Resource):
@@ -114,7 +114,7 @@ class CountryResource(Resource):
                     ),
                     404,
                 )
-
+            # TODO - Uncomment the below
             if countries:
                 countries_record = []
 
@@ -123,10 +123,10 @@ class CountryResource(Resource):
                         {
                             "country id": country.id,
                             "name": country.name,
-                            "abbreviation": country.abbr,
-                            "flag": country.flag,
-                            "created at": country.created_at,
-                            "updated at": country.updated_at,
+                            # "abbreviation": country.abbr,
+                            # "flag": country.flag,
+                            # "created at": country.created_at,
+                            # "updated at": country.updated_at,
                         }
                     )
 
@@ -135,6 +135,7 @@ class CountryResource(Resource):
                         {
                             "code": 200,
                             "code_mesaage": "Successful",
+                            "count": len(countries),
                             "data": countries_record,
                         }
                     ),

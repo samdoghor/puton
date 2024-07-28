@@ -14,7 +14,7 @@ from sqlalchemy.exc import DataError, IntegrityError
 
 from models import CoachModel
 from utils import (Conflict, DataNotFound, Forbidden,
-                   InternalServerError, parse_params)
+                     InternalServerError, parse_params)
 
 
 class CoachResource(Resource):
@@ -54,11 +54,11 @@ class CoachResource(Resource):
         ),
     )
     def create(
-        first_name: str,
-        last_name: str,
-        middle_name: str,
-        country_id: uuid,
-        team_id: uuid,
+            first_name: str,
+            last_name: str,
+            middle_name: str,
+            country_id: uuid,
+            team_id: uuid,
     ):
         """creates a new coach"""
 

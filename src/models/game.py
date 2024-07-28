@@ -6,7 +6,7 @@ Return: Game's id, first_name, last_name, middle_name, country_id, team_id,
 created_at, updated_at
 """
 
-from datetime import datetime
+from datetime import datetime, timezone
 from uuid import uuid4
 
 from sqlalchemy import UUID
@@ -23,12 +23,13 @@ class GameModel(db.Model, BaseModel, metaclass=MetaBaseModel):
     id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid4)
     game_time = db.Column(db.Time(), nullable=False)
     game_date = db.Column(db.Date(), nullable=False)
+    game_week = db.Column(db.Integer, nullable=False)
     weather = db.Column(db.String(50), nullable=False)
 
     created_at = db.Column(
-        db.DateTime(), default=datetime.utcnow, nullable=False)
-    updated_at = db.Column(db.DateTime(), onupdate=datetime.utcnow,
-                           default=datetime.utcnow, nullable=False)
+        db.DateTime(), default=datetime.now(timezone.utc), nullable=False)
+    updated_at = db.Column(db.DateTime(), onupdate=datetime.now(timezone.utc),
+                           default=datetime.now(timezone.utc), nullable=False)
 
     # foreign keys
 

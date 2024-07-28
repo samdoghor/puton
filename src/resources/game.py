@@ -12,7 +12,7 @@ from sqlalchemy.exc import DataError
 
 from models import GameModel
 from utils import (Conflict, DataNotFound, Forbidden,
-                   InternalServerError, parse_params)
+                     InternalServerError, parse_params)
 
 
 class GameResource(Resource):
@@ -31,6 +31,12 @@ class GameResource(Resource):
             location="json",
             required=True,
             help="The date of the game",
+        ),
+        Argument(
+            "game_week",
+            location="json",
+            required=True,
+            help="The week of the game",
         ),
         Argument(
             "weather",
@@ -63,7 +69,7 @@ class GameResource(Resource):
             help="The venue where the game was held",
         ),
     )
-    def create(game_time, game_date, weather, league_id, referee_id,
+    def create(game_time, game_date, game_week, weather, league_id, referee_id,
                season_id, venue_id):
         """creates a new game"""
 
@@ -72,6 +78,7 @@ class GameResource(Resource):
             new_game = GameModel(
                 game_time=game_time,
                 game_date=game_date,
+                game_week=game_week,
                 weather=weather,
                 league_id=league_id,
                 referee_id=referee_id,
@@ -87,16 +94,17 @@ class GameResource(Resource):
                         "code": 200,
                         "code_message": "Successful",
                         "data": {
-                            "game id": new_game.id,
-                            "game time": game_time,
-                            "game date": game_date,
+                            "game_id": new_game.id,
+                            "game_time": game_time,
+                            "game_date": game_date,
+                            "game_week": game_week,
                             "weather": weather,
-                            "league id": league_id,
-                            "referee id": referee_id,
-                            "season id": season_id,
-                            "venue id": venue_id,
-                            "created at": new_game.created_at,
-                            "updated at": new_game.updated_at,
+                            "league_id": league_id,
+                            "referee_id": referee_id,
+                            "season_id": season_id,
+                            "venue_id": venue_id,
+                            "created_at": new_game.created_at,
+                            "updated_at": new_game.updated_at,
                         },
                     }
                 ),
@@ -144,16 +152,17 @@ class GameResource(Resource):
                 for game in games:
                     games_record.append(
                         {
-                            "game id": game.id,
-                            "game time": game.game_time.strftime("%H:%M"),
-                            "game date": game.game_date.strftime("%Y-%m-%d"),
+                            "game_id": game.id,
+                            "game_time": game.game_time.strftime("%H:%M"),
+                            "game_date": game.game_date.strftime("%Y-%m-%d"),
+                            "game_week": game.game_week,
                             "weather": game.weather,
-                            "league id": game.league_id,
-                            "referee id": game.referee_id,
-                            "season id": game.season_id,
-                            "venue id": game.venue_id,
-                            "created at": game.created_at,
-                            "updated at": game.updated_at,
+                            "league-id": game.league_id,
+                            "referee_id": game.referee_id,
+                            "season_id": game.season_id,
+                            "venue_id": game.venue_id,
+                            "created_at": game.created_at,
+                            "updated_at": game.updated_at,
                         }
                     )
 
@@ -206,16 +215,17 @@ class GameResource(Resource):
 
             if game:
                 game_record = {
-                    "game id": game.id,
-                    "game time": game.game_time.strftime("%H:%M"),
-                    "game date": game.game_date.strftime("%Y-%m-%d"),
+                    "game_id": game.id,
+                    "game_time": game.game_time.strftime("%H:%M"),
+                    "game_date": game.game_date.strftime("%Y-%m-%d"),
+                    "game_week": game.game_week,
                     "weather": game.weather,
-                    "league id": game.league_id,
-                    "referee id": game.referee_id,
-                    "season id": game.season_id,
-                    "venue id": game.venue_id,
-                    "created at": game.created_at,
-                    "updated at": game.updated_at,
+                    "league_id": game.league_id,
+                    "referee_id": game.referee_id,
+                    "season_id": game.season_id,
+                    "venue_id": game.venue_id,
+                    "created_at": game.created_at,
+                    "updated_at": game.updated_at,
                 }
 
                 return (
@@ -260,6 +270,11 @@ class GameResource(Resource):
             "game_date",
             location="json",
             help="The date of the game",
+        ),
+        Argument(
+            "game_week",
+            location="json",
+            help="The week of the game",
         ),
         Argument(
             "weather",
@@ -312,6 +327,9 @@ class GameResource(Resource):
                 if "game_date" in args and args["game_date"] is not None:
                     game.game_date = args["game_date"]
 
+                if "game_week" in args and args["game_week"] is not None:
+                    game.game_week = args["game_week"]
+
                 if "weather" in args and args["weather"] is not None:
                     game.weather = args["weather"]
 
@@ -330,16 +348,17 @@ class GameResource(Resource):
                 game.save()
 
                 update_game = {
-                    "game id": game.id,
-                    "game time": game.game_time.strftime("%H:%M"),
-                    "game date": game.game_date.strftime("%Y-%m-%d"),
+                    "game_id": game.id,
+                    "game_time": game.game_time.strftime("%H:%M"),
+                    "game_date": game.game_date.strftime("%Y-%m-%d"),
+                    "game_week": game.game_week,
                     "weather": game.weather,
-                    "league id": game.league_id,
-                    "referee id": game.referee_id,
-                    "season id": game.season_id,
-                    "venue id": game.venue_id,
-                    "created at": game.created_at,
-                    "updated at": game.updated_at,
+                    "league_id": game.league_id,
+                    "referee_id": game.referee_id,
+                    "season_id": game.season_id,
+                    "venue_id": game.venue_id,
+                    "created_at": game.created_at,
+                    "updated_at": game.updated_at,
                 }
 
                 return (

@@ -10,9 +10,9 @@ from flask_restful import Resource
 from flask_restful.reqparse import Argument
 from sqlalchemy.exc import DataError, IntegrityError
 
-from models import PlayerTransferModel
-from utils import (Conflict, DataNotFound, Forbidden,
-                   InternalServerError, parse_params)
+from models import PlayerTransferModel, PlayerModel, TeamModel
+from utils import (Conflict, DataNotFound, Forbidden, InternalServerError,
+                   parse_params)
 
 
 class PlayerTransferResource(Resource):
@@ -58,12 +58,12 @@ class PlayerTransferResource(Resource):
         )
     )
     def create(
-        amount,
-        transfer_window,
-        transfer_type,
-        player_id,
-        season_id,
-        team_id,
+            amount,
+            transfer_window,
+            transfer_type,
+            player_id,
+            season_id,
+            team_id,
     ):
         """creates a new player transfer"""
 
@@ -79,21 +79,32 @@ class PlayerTransferResource(Resource):
 
             new_player_transfer.save()
 
+            player = PlayerModel.query.filter_by(id=player_id).first()
+            if player:
+                player.team_id = new_player_transfer.team_id
+                player.save()
+
+            team = TeamModel.query.filter_by(id=team_id).first()
+            if team:
+                if team.name == "Retired":
+                    player.retired = True
+                    player.save()
+
             return (
                 jsonify(
                     {
                         "code": 200,
                         "code_message": "Successful",
                         "data": {
-                            "player transfer id": new_player_transfer.id,
+                            "player_transfer_id": new_player_transfer.id,
                             "amount": amount,
-                            "transfer window": transfer_window,
-                            "transfer type": transfer_type,
-                            "player id": player_id,
-                            "season id": season_id,
-                            "team id": team_id,
-                            "created at": new_player_transfer.created_at,
-                            "updated at": new_player_transfer.updated_at,
+                            "transfer_window": transfer_window,
+                            "transfer_type": transfer_type,
+                            "player_id": player_id,
+                            "season_id": season_id,
+                            "team_id": team_id,
+                            "created_at": new_player_transfer.created_at,
+                            "updated_at": new_player_transfer.updated_at,
                         },
                     }
                 ),
@@ -148,15 +159,15 @@ class PlayerTransferResource(Resource):
                 for player_transfer in players_transfer:
                     players_transfer_record.append(
                         {
-                            "player transfer id": player_transfer.id,
+                            "player_transfer_id": player_transfer.id,
                             "amount": player_transfer.amount,
-                            "transfer window": player_transfer.transfer_window,
-                            "transfer type": player_transfer.transfer_type,
-                            "player id": player_transfer.player_id,
-                            "season id": player_transfer.season_id,
-                            "team id": player_transfer.team_id,
-                            "created at": player_transfer.created_at,
-                            "updated at": player_transfer.updated_at,
+                            "transfer_window": player_transfer.transfer_window,
+                            "transfer_type": player_transfer.transfer_type,
+                            "player_id": player_transfer.player_id,
+                            "season_id": player_transfer.season_id,
+                            "team_id": player_transfer.team_id,
+                            "created_at": player_transfer.created_at,
+                            "updated_at": player_transfer.updated_at,
                         }
                     )
 
@@ -165,6 +176,7 @@ class PlayerTransferResource(Resource):
                         {
                             "code": 200,
                             "code_mesaage": "Successful",
+                            "count": len(players_transfer_record),
                             "data": players_transfer_record,
                         }
                     ),
@@ -210,15 +222,15 @@ class PlayerTransferResource(Resource):
 
             if player_transfer:
                 player_transfer_record = {
-                    "player transfer id": player_transfer.id,
+                    "player_transfer_id": player_transfer.id,
                     "amount": player_transfer.amount,
-                    "transfer window": player_transfer.transfer_window,
-                    "transfer type": player_transfer.transfer_type,
-                    "player id": player_transfer.player_id,
-                    "season id": player_transfer.season_id,
-                    "team id": player_transfer.team_id,
-                    "created at": player_transfer.created_at,
-                    "updated at": player_transfer.updated_at,
+                    "transfer_window": player_transfer.transfer_window,
+                    "transfer_type": player_transfer.transfer_type,
+                    "player_id": player_transfer.player_id,
+                    "season_id": player_transfer.season_id,
+                    "team_id": player_transfer.team_id,
+                    "created_at": player_transfer.created_at,
+                    "updated_at": player_transfer.updated_at,
                 }
 
                 return (
@@ -326,15 +338,15 @@ class PlayerTransferResource(Resource):
                 player_transfer.save()
 
                 update_player_transfer = {
-                    "player transfer id": player_transfer.id,
+                    "player_transfer_id": player_transfer.id,
                     "amount": player_transfer.amount,
-                    "transfer window": player_transfer.transfer_window,
-                    "transfer type": player_transfer.transfer_type,
-                    "player id": player_transfer.player_id,
-                    "season id": player_transfer.season_id,
-                    "team id": player_transfer.team_id,
-                    "created at": player_transfer.created_at,
-                    "updated at": player_transfer.updated_at,
+                    "transfer_window": player_transfer.transfer_window,
+                    "transfer_type": player_transfer.transfer_type,
+                    "player_id": player_transfer.player_id,
+                    "season_id": player_transfer.season_id,
+                    "team_id": player_transfer.team_id,
+                    "created_at": player_transfer.created_at,
+                    "updated_at": player_transfer.updated_at,
                 }
 
                 return (

@@ -11,8 +11,8 @@ from flask_restful.reqparse import Argument
 from sqlalchemy.exc import DataError, IntegrityError
 
 from models import PlayerModel
-from utils import (Conflict, DataNotFound, Forbidden,
-                   InternalServerError, parse_params)
+from utils import (Conflict, DataNotFound, Forbidden, InternalServerError,
+                   parse_params)
 
 
 class PlayerResource(Resource):
@@ -93,6 +93,11 @@ class PlayerResource(Resource):
             required=True,
             help="The team of the player"
         ),
+        Argument(
+            "retired",
+            location="json", type=bool,
+            help="Is the player retired"
+        ),
     )
     def create(
         first_name,
@@ -107,6 +112,7 @@ class PlayerResource(Resource):
         footed,
         country_id,
         team_id,
+        retired
     ):
         """creates a new player"""
 
@@ -124,6 +130,7 @@ class PlayerResource(Resource):
                 footed=footed,
                 country_id=country_id,
                 team_id=team_id,
+                retired=retired
             )
 
             new_player.save()
@@ -134,21 +141,22 @@ class PlayerResource(Resource):
                         "code": 200,
                         "code_message": "Successful",
                         "data": {
-                            "player id": new_player.id,
-                            "first name": first_name,
-                            "last name": last_name,
-                            "middle name": middle_name,
-                            "date of birth": date_of_birth,
+                            "player_id": new_player.id,
+                            "first_name": first_name,
+                            "last_name": last_name,
+                            "middle_name": middle_name,
+                            "date_of_birth": date_of_birth,
                             "height": height,
                             "weight": weight,
                             "rating": rating,
                             "postion": postion,
                             "injury": injury,
                             "footed": footed,
-                            "country id": country_id,
-                            "team id": team_id,
-                            "created at": new_player.created_at,
-                            "updated at": new_player.updated_at,
+                            "country_id": country_id,
+                            "team_id": team_id,
+                            "retired": new_player.retired,
+                            "created_at": new_player.created_at,
+                            "updated_at": new_player.updated_at,
                         },
                     }
                 ),
@@ -197,29 +205,31 @@ class PlayerResource(Resource):
                     404,
                 )
 
+            # TODO - Uncomment the below
             if players:
                 players_record = []
 
                 for player in players:
                     players_record.append(
                         {
-                            "player id": player.id,
-                            "first name": player.first_name,
-                            "last name": player.last_name,
-                            "middle name": player.middle_name,
-                            "date of birth": player.date_of_birth.strftime(
-                                "%Y-%m-%d"
-                            ),  # noqa
-                            "height": player.height,
-                            "weight": player.weight,
-                            "rating": player.rating,
-                            "postion": player.postion,
-                            "injury": player.injury,
-                            "footed": player.footed,
-                            "country id": player.country_id,
-                            "team id": player.team_id,
-                            "created at": player.created_at,
-                            "updated at": player.updated_at,
+                            "player_id": player.id,
+                            "first_name": player.first_name,
+                            "last_name": player.last_name,
+                            # "middle_name": player.middle_name,
+                            # "date_of_birth": player.date_of_birth.strftime(
+                            #     "%Y-%m-%d"
+                            # ),  # noqa
+                            # "height": player.height,
+                            # "weight": player.weight,
+                            # "rating": player.rating,
+                            # "postion": player.postion,
+                            # "injury": player.injury,
+                            # "footed": player.footed,
+                            "country_id": player.country_id,
+                            "team_id": player.team_id,
+                            "retired": player.retired,
+                            # "created_at": player.created_at,
+                            # "updated_at": player.updated_at,
                         }
                     )
 
@@ -228,6 +238,7 @@ class PlayerResource(Resource):
                         {
                             "code": 200,
                             "code_mesaage": "Successful",
+                            "count": len(players),
                             "data": players_record,
                         }
                     ),
@@ -272,21 +283,22 @@ class PlayerResource(Resource):
 
             if player:
                 player_record = {
-                    "player id": player.id,
-                    "first name": player.first_name,
-                    "last name": player.last_name,
-                    "middle name": player.middle_name,
-                    "date of birth": player.date_of_birth.strftime("%Y-%m-%d"),
+                    "player_id": player.id,
+                    "first_name": player.first_name,
+                    "last_name": player.last_name,
+                    "middle_name": player.middle_name,
+                    "date_of_birth": player.date_of_birth.strftime("%Y-%m-%d"),
                     "height": player.height,
                     "weight": player.weight,
                     "rating": player.rating,
                     "postion": player.postion,
                     "injury": player.injury,
                     "footed": player.footed,
-                    "country id": player.country_id,
-                    "team id": player.team_id,
-                    "created at": player.created_at,
-                    "updated at": player.updated_at,
+                    "country_id": player.country_id,
+                    "team_id": player.team_id,
+                    "retired": player.retired,
+                    "created_at": player.created_at,
+                    "updated_at": player.updated_at,
                 }
 
                 return (
@@ -375,6 +387,10 @@ class PlayerResource(Resource):
             "team_id",
             location="json",
             help="The team of the player"),
+        Argument(
+            "retired",
+            location="json", type=bool,
+            help="Check if the player is retired"),
     )
     def update(id=None, **args):
         """retrieves a player by id and update the player"""
@@ -431,24 +447,28 @@ class PlayerResource(Resource):
                 if "team_id" in args and args["team_id"] is not None:
                     player.team_id = args["team_id"]
 
+                if "retired" in args and args["retired"] is not None:
+                    player.retired = args["retired"]
+
                 player.save()
 
                 update_player = {
-                    "player id": player.id,
-                    "first name": player.first_name,
-                    "last name": player.last_name,
-                    "middle name": player.middle_name,
-                    "date of birth": player.date_of_birth.strftime("%Y-%m-%d"),
+                    "player_id": player.id,
+                    "first_name": player.first_name,
+                    "last_name": player.last_name,
+                    "middle_name": player.middle_name,
+                    "date_of_birth": player.date_of_birth.strftime("%Y-%m-%d"),
                     "height": player.height,
                     "weight": player.weight,
                     "rating": player.rating,
                     "postion": player.postion,
                     "injury": player.injury,
                     "footed": player.footed,
-                    "country id": player.country_id,
-                    "team id": player.team_id,
-                    "created at": player.created_at,
-                    "updated at": player.updated_at,
+                    "country_id": player.country_id,
+                    "team_id": player.team_id,
+                    "retired": player.retired,
+                    "created_at": player.created_at,
+                    "updated_at": player.updated_at,
                 }
 
                 return (

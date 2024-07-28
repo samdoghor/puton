@@ -75,10 +75,16 @@ class BaseModel:
         }
 
     def save(self):
+        """
+        This function persist addition and updating of data in the database
+        """
         db.session.add(self)
         db.session.commit()
         return self
 
     def delete(self):
+        """
+        This function persist removal of data from the database
+        """
         db.session.delete(self)
         db.session.commit()

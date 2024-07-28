@@ -5,7 +5,7 @@ argument -- db.Model, BaseModel, metaclass=MetaBaseModel
 Return: Country's id, name, abbr, flag, teams, leauges, created_at, updated_at
 """
 
-from datetime import datetime
+from datetime import datetime, timezone
 from uuid import uuid4
 
 from sqlalchemy import UUID
@@ -25,9 +25,9 @@ class CountryModel(db.Model, BaseModel, metaclass=MetaBaseModel):
     flag = db.Column(db.String(), nullable=True)
 
     created_at = db.Column(
-        db.DateTime(), default=datetime.utcnow, nullable=False)
-    updated_at = db.Column(db.DateTime(), onupdate=datetime.utcnow,
-                           default=datetime.utcnow, nullable=False)
+        db.DateTime(), default=datetime.now(timezone.utc), nullable=False)
+    updated_at = db.Column(db.DateTime(), onupdate=datetime.now(timezone.utc),
+                           default=datetime.now(timezone.utc), nullable=False)
 
     # relationships
 

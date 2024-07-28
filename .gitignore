@@ -136,3 +136,5 @@ mbs.db
 # others
 
 test.py
+posters/
+notes.md

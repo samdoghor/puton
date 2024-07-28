@@ -83,14 +83,14 @@ class VenueResource(Resource):
                             "code": 200,
                             "code_message": "Successful",
                             "data": {
-                                "venue id": new_venue.id,
+                                "venue_id": new_venue.id,
                                 "name": name,
                                 "address": address,
                                 "city": city,
                                 "capacity": capacity,
-                                "team id": team_id,
-                                "created at": new_venue.created_at,
-                                "updated at": new_venue.updated_at,
+                                "team_id": team_id,
+                                "created_at": new_venue.created_at,
+                                "updated_at": new_venue.updated_at,
                             },
                         }
                     ),
@@ -138,14 +138,14 @@ class VenueResource(Resource):
                 for venue in venues:
                     venues_record.append(
                         {
-                            "venue id": venue.id,
+                            "venue_id": venue.id,
                             "name": venue.name,
                             "address": venue.address,
                             "city": venue.city,
                             "capacity": venue.capacity,
-                            "team id": venue.team_id,
-                            "created at": venue.created_at,
-                            "updated at": venue.updated_at,
+                            "team_id": venue.team_id,
+                            "created_at": venue.created_at,
+                            "updated_at": venue.updated_at,
                         }
                     )
 
@@ -154,6 +154,7 @@ class VenueResource(Resource):
                         {
                             "code": 200,
                             "code_mesaage": "Successful",
+                            "count": len(venues),
                             "data": venues_record,
                         }
                     ),
@@ -198,14 +199,14 @@ class VenueResource(Resource):
 
             if venue:
                 venue_record = {
-                    "venue id": venue.id,
+                    "venue_id": venue.id,
                     "name": venue.name,
                     "address": venue.address,
                     "city": venue.city,
                     "capacity": venue.capacity,
-                    "team id": venue.team_id,
-                    "created at": venue.created_at,
-                    "updated at": venue.updated_at,
+                    "team_id": venue.team_id,
+                    "created_at": venue.created_at,
+                    "updated_at": venue.updated_at,
                 }
 
                 return (
@@ -221,7 +222,7 @@ class VenueResource(Resource):
 
         except DataError:
             return {
-                "error message": "Wrong ID format",
+                "error_message": "Wrong ID format",
                 "message": "The Id you are trying to retrieve is invalid, check UUID correct format.",  # noqa
             }, 500
 
@@ -293,14 +294,14 @@ class VenueResource(Resource):
                 venue.save()
 
                 update_venue = {
-                    "venue id": venue.id,
+                    "venue_id": venue.id,
                     "name": venue.name,
                     "address": venue.address,
                     "city": venue.city,
                     "capacity": venue.capacity,
-                    "team id": venue.team_id,
-                    "created at": venue.created_at,
-                    "updated at": venue.updated_at,
+                    "team_id": venue.team_id,
+                    "created_at": venue.created_at,
+                    "updated_at": venue.updated_at,
                 }
 
                 return (

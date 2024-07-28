@@ -11,8 +11,8 @@ from flask_restful.reqparse import Argument
 from sqlalchemy.exc import DataError
 
 from models import GameTeamModel
-from utils import (Conflict, DataNotFound, Forbidden,
-                   InternalServerError, parse_params)
+from utils import (Conflict, DataNotFound, Forbidden, InternalServerError,
+                   parse_params)
 
 
 class GameTeamResource(Resource):
@@ -57,12 +57,12 @@ class GameTeamResource(Resource):
                         "code": 200,
                         "code_message": "Successful",
                         "data": {
-                            "game team id": new_game_player.id,
-                            "home team": is_home,
-                            "game id": game_id,
-                            "team id": team_id,
-                            "created at": new_game_player.created_at,
-                            "updated at": new_game_player.updated_at,
+                            "game_team id": new_game_player.id,
+                            "home_team": is_home,
+                            "game_id": game_id,
+                            "team_id": team_id,
+                            "created_at": new_game_player.created_at,
+                            "updated_at": new_game_player.updated_at,
                         },
                     }
                 ),
@@ -110,12 +110,12 @@ class GameTeamResource(Resource):
                 for game_team in game_teams:
                     game_teams_record.append(
                         {
-                            "game team id": game_team.id,
-                            "home team": game_team.is_home,
-                            "game id": game_team.game_id,
-                            "team id": game_team.team_id,
-                            "created at": game_team.created_at,
-                            "updated at": game_team.updated_at,
+                            "game_team id": game_team.id,
+                            "home_team": game_team.is_home,
+                            "game_id": game_team.game_id,
+                            "team_id": game_team.team_id,
+                            "created_at": game_team.created_at,
+                            "updated_at": game_team.updated_at,
                         }
                     )
 
@@ -168,12 +168,12 @@ class GameTeamResource(Resource):
 
             if game_team:
                 game_team_record = {
-                    "game team id": game_team.id,
-                    "home team": game_team.is_home,
-                    "game id": game_team.game_id,
-                    "team id": game_team.team_id,
-                    "created at": game_team.created_at,
-                    "updated at": game_team.updated_at,
+                    "game_team_id": game_team.id,
+                    "home_team": game_team.is_home,
+                    "game_id": game_team.game_id,
+                    "team_id": game_team.team_id,
+                    "created_at": game_team.created_at,
+                    "updated_at": game_team.updated_at,
                 }
 
                 return (
@@ -189,7 +189,7 @@ class GameTeamResource(Resource):
 
         except DataError:
             return {
-                "error message": "Wrong ID format",
+                "error_message": "Wrong ID format",
                 "message": "The Id you are trying to retrieve is invalid, check UUID correct format.",  # noqa
             }, 500
 
@@ -256,12 +256,12 @@ class GameTeamResource(Resource):
                 game_team.save()
 
                 update_game_team = {
-                    "game team id": game_team.id,
-                    "home team": game_team.is_home,
-                    "game id": game_team.game_id,
-                    "team id": game_team.team_id,
-                    "created at": game_team.created_at,
-                    "updated at": game_team.updated_at,
+                    "game_team_id": game_team.id,
+                    "home_team": game_team.is_home,
+                    "game_id": game_team.game_id,
+                    "team_id": game_team.team_id,
+                    "created_at": game_team.created_at,
+                    "updated_at": game_team.updated_at,
                 }
 
                 return (
@@ -333,7 +333,7 @@ class GameTeamResource(Resource):
 
         except DataError:
             return {
-                "error message": "Wrong ID format",
+                "error_message": "Wrong ID format",
                 "message": "The Id you are trying to retrieve is invalid, check UUID correct format.",  # noqa
             }, 500
 

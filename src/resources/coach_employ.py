@@ -14,7 +14,7 @@ from sqlalchemy.exc import DataError, IntegrityError
 
 from models import CoachEmployModel
 from utils import (Conflict, DataNotFound, Forbidden,
-                   InternalServerError, parse_params)
+                     InternalServerError, parse_params)
 
 
 class CoachEmployResource(Resource):
@@ -48,10 +48,10 @@ class CoachEmployResource(Resource):
         )
     )
     def create(
-        employment_type: str,
-        coach_id: uuid,
-        season_id: uuid,
-        team_id: uuid,
+            employment_type: str,
+            coach_id: uuid,
+            season_id: uuid,
+            team_id: uuid,
     ):
         """creates a new coach employment"""
 
@@ -350,7 +350,8 @@ class CoachEmployResource(Resource):
                     {
                         "code": 200,
                         "code_mesaage": "Successful",
-                        "message": f"The coach employment with id {id} was found in the database and was deleted",  # noqa
+                        "message": f"The coach employment with id {id} was found in the database and was deleted",
+                        # noqa
                     }
                 ),
                 200,

@@ -6,7 +6,7 @@ Return: Referee's id, first_name, last_name, middle_name, country_id, team_id,
 created_at, updated_at
 """
 
-from datetime import datetime
+from datetime import datetime, timezone
 from uuid import uuid4
 
 from sqlalchemy import UUID
@@ -26,9 +26,9 @@ class RefereeModel(db.Model, BaseModel, metaclass=MetaBaseModel):
     middle_name = db.Column(db.String(50), nullable=True)
 
     created_at = db.Column(
-        db.DateTime(), default=datetime.utcnow, nullable=False)
-    updated_at = db.Column(db.DateTime(), onupdate=datetime.utcnow,
-                           default=datetime.utcnow, nullable=False)
+        db.DateTime(), default=datetime.now(timezone.utc), nullable=False)
+    updated_at = db.Column(db.DateTime(), onupdate=datetime.now(timezone.utc),
+                           default=datetime.now(timezone.utc), nullable=False)
 
     # foreign keys
 
