@@ -15,30 +15,20 @@ env_var = dotenv.dotenv_values('.env')  # noqa - sets env file to load env varia
 
 # security
 
-application_secret_key = env_var["secret_key"]
+application_secret_key = env_var["SECRET_KEY"]
 
 #  ai configuration
 
-ai_api_key = env_var["ai_api_key"]
-ai_model = env_var["ai_model"]
+ai_api_key = env_var["AI_API_KEY"]
+ai_model = env_var["AI_MODEL"]
 
-# databases
+# database
 
-# local database
-
-# database_username = env_var["database_username"]
-# database_password = env_var["database_password"]
-# database_host = env_var["database_host"]
-# database_port = int(env_var["database_port"])
-# database_name = env_var["database_name"]
-
-# production database
-
-database_username = env_var["production_database_user"]
-database_password = env_var["production_database_password"]
-database_host = env_var["production_database_host"]
-database_port = int(env_var["production_database_port"])
-database_name = env_var["production_database_name"]
+database_username = env_var["DATABASE_USERNAME"]
+database_password = env_var["DATABASE_PASSWORD"]
+database_host = env_var["DATABASE_HOST"]
+database_port = int(env_var["DATABASE_PORT"])
+database_name = env_var["DATABASE_NAME"]
 
 database_uri = f"postgresql+psycopg://{database_username}:{database_password}@{database_host}:{database_port}/{database_name}"  # noqa
 
@@ -46,12 +36,12 @@ database_tracker = False
 
 # application configurations
 
-application_root = env_var["apiApplication_root"]
-application_host = env_var["application_host"]
-application_port = int(env_var["application_port"])
-application_path = env_var["apiApplication_path"]
+application_root = env_var["APPLICATION_ROOT"]
+application_host = env_var["APPLICATION_HOST"]
+application_port = int(env_var["APPLICATION_PORT"])
+application_path = env_var["APPLICATION_PATH"]
 
 # application running environment
 
-application_environment = env_var["environment"]
-application_debug = True
+application_environment = env_var["ENVIRONMENT"]
+application_debug = env_var["APPLICATION_DEBUG"]

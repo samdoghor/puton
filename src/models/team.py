@@ -6,7 +6,7 @@ Return: Team's id, name, abbr, flag, founded, country_id, league_id, games,
 venues, created_at, updated_at
 """
 
-from datetime import datetime
+from datetime import datetime, timezone
 from uuid import uuid4
 
 from sqlalchemy import UUID
@@ -27,9 +27,9 @@ class TeamModel(db.Model, BaseModel, metaclass=MetaBaseModel):
     founded = db.Column(db.Integer, nullable=False)
 
     created_at = db.Column(
-        db.DateTime(), default=datetime.utcnow, nullable=False)
-    updated_at = db.Column(db.DateTime(), onupdate=datetime.utcnow,
-                           default=datetime.utcnow, nullable=False)
+        db.DateTime(), default=datetime.now(timezone.utc), nullable=False)
+    updated_at = db.Column(db.DateTime(), onupdate=datetime.now(timezone.utc),
+                           default=datetime.now(timezone.utc), nullable=False)
 
     # foreign keys
 

@@ -11,8 +11,8 @@ from flask_restful.reqparse import Argument
 from sqlalchemy.exc import DataError, IntegrityError
 
 from models import PlayerModel
-from utils import (Conflict, DataNotFound, Forbidden,
-                   InternalServerError, parse_params)
+from utils import (Conflict, DataNotFound, Forbidden, InternalServerError,
+                   parse_params)
 
 
 class PlayerResource(Resource):

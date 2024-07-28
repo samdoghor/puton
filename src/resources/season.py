@@ -77,12 +77,12 @@ class SeasonResource(Resource):
                             "code": 200,
                             "code_message": "Successful",
                             "data": {
-                                "season id": new_season.id,
-                                "start date": start_date,
-                                "end date": end_date,
-                                "current season": current_season,
-                                "created at": new_season.created_at,
-                                "updated at": new_season.updated_at,
+                                "season_id": new_season.id,
+                                "start_date": start_date,
+                                "end_date": end_date,
+                                "current_season": current_season,
+                                "created_at": new_season.created_at,
+                                "updated_at": new_season.updated_at,
                             },
                         }
                     ),
@@ -130,12 +130,12 @@ class SeasonResource(Resource):
                 for season in seasons:
                     seasons_record.append(
                         {
-                            "season id": season.id,
-                            "start date": season.start_date.year,
-                            "end date": season.end_date.year,
-                            "current season": season.current_season,
-                            "created at": season.created_at,
-                            "updated at": season.updated_at
+                            "season_id": season.id,
+                            "start_date": season.start_date.year,
+                            "end_date": season.end_date.year,
+                            "current_season": season.current_season,
+                            "created_at": season.created_at,
+                            "updated_at": season.updated_at
                         }
                     )
 
@@ -188,12 +188,12 @@ class SeasonResource(Resource):
 
             if season:
                 season_record = {
-                    "season id": season.id,
-                    "start date": season.start_date.year,
-                    "end date": season.end_date.year,
-                    "current season": season.current_season,
-                    "created at": season.created_at,
-                    "updated at": season.updated_at
+                    "season_id": season.id,
+                    "start_date": season.start_date.year,
+                    "end_date": season.end_date.year,
+                    "current_season": season.current_season,
+                    "created_at": season.created_at,
+                    "updated_at": season.updated_at
                 }
 
                 return (
@@ -266,20 +266,20 @@ class SeasonResource(Resource):
                     season.end_date = args["end_date"]
 
                 if (
-                    "current_season" in args
-                    and args["current_season"] is not None  # noqa
+                        "current_season" in args
+                        and args["current_season"] is not None  # noqa
                 ):
                     season.current_season = args["current_season"]
 
                 season.save()
 
                 update_season = {
-                    "season id": season.id,
-                    "start date": season.start_date.year,
-                    "end date": season.end_date.year,
-                    "current season": season.current_season,
-                    "created at": season.created_at,
-                    "updated at": season.updated_at
+                    "season_id": season.id,
+                    "start_date": season.start_date.year,
+                    "end_date": season.end_date.year,
+                    "current_season": season.current_season,
+                    "created_at": season.created_at,
+                    "updated_at": season.updated_at
                 }
 
                 return (

@@ -12,7 +12,7 @@ from sqlalchemy.exc import DataError
 
 from models import GameModel
 from utils import (Conflict, DataNotFound, Forbidden,
-                   InternalServerError, parse_params)
+                     InternalServerError, parse_params)
 
 
 class GameResource(Resource):

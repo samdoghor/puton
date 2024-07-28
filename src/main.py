@@ -34,4 +34,7 @@ for blueprint in vars(routes).values():
 
 if __name__ == "__main__":
     server.debug = True
-    server.run(host=config.application_host, port=config.application_port)
+    server.run(
+        host=config.application_host,
+        port=config.application_port
+    )
